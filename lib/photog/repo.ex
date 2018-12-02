@@ -1,5 +1,5 @@
 defmodule Photog.Repo do
-  use Ecto.Repo, otp_app: :photog
+  use Ecto.Repo, otp_app: :photog, adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the
