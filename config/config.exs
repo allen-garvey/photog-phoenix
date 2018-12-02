@@ -13,9 +13,7 @@ config :photog,
 config :photog, PhotogWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "ml22C48NmRSK+oG0JxrGewaqVbjVJSpVDMMwy7jYo/sZmgUWjP7S39vPLfr90sae",
-  render_errors: [view: PhotogWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Photog.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: PhotogWeb.ErrorView, accepts: ~w(html json)]
 
 # Configures Elixir's Logger
 config :logger, :console,
