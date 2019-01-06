@@ -21,6 +21,6 @@ defmodule Photog.Api.Person do
     |> unique_constraint(:apple_photos_id)
     |> unique_constraint(:name)
     |> assoc_constraint(:image)
-    |> foreign_key_constraint(:cover_image_id)
+    |> assoc_constraint(:cover_image)
   end
 end

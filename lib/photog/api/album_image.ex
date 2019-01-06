@@ -18,9 +18,7 @@ defmodule Photog.Api.AlbumImage do
     |> cast(attrs, [:image_order, :album_id, :image_id])
     |> validate_required([:image_order, :album_id, :image_id])
     |> assoc_constraint(:image)
-    |> foreign_key_constraint(:image_id)
     |> assoc_constraint(:album)
-    |> foreign_key_constraint(:album_id)
     |> unique_constraint(:album_images_unique_composite, name: :album_images_unique_composite)
   end
 end

@@ -22,8 +22,7 @@ defmodule Photog.Api.Album do
     |> validate_required([:apple_photos_id, :name, :folder_order, :folder_id, :cover_image_id])
     |> unique_constraint(:apple_photos_id)
     |> assoc_constraint(:folder)
-    |> foreign_key_constraint(:folder_id)
     |> assoc_constraint(:image)
-    |> foreign_key_constraint(:cover_image_id)
+    |> assoc_constraint(:cover_image)
   end
 end
