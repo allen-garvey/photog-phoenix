@@ -6,16 +6,18 @@ defmodule Mix.Tasks.Shutterbug do
   """
 
   @shortdoc "Imports images from given folder"
-  def run([directory_name]) do
+  def run([source_directory_name, target_directory_name]) do
   	cond do
-  		!File.exists?(directory_name) -> bad_arguments_exit("#{directory_name} does not exist")
-  		!File.dir?(directory_name)    -> bad_arguments_exit("#{directory_name} is not a directory")
-  		true						  -> import_images_from_directory(directory_name)
+  		!File.exists?(source_directory_name) -> bad_arguments_exit("#{source_directory_name} does not exist")
+  		!File.dir?(source_directory_name)    -> bad_arguments_exit("#{source_directory_name} is not a directory")
+  		!File.exists?(target_directory_name) -> bad_arguments_exit("#{target_directory_name} does not exist")
+  		!File.dir?(target_directory_name)    -> bad_arguments_exit("#{target_directory_name} is not a directory")
+  		true						  -> import_images_from_directory(source_directory_name, target_directory_name)
   	end
   end
 
   def run(_args) do
-  	bad_arguments_exit("usage: mix shutterbug <image_source_directory>")
+  	bad_arguments_exit("usage: mix shutterbug <image_source_directory> <image_library_destination_directory>")
   end
 
   def bad_arguments_exit(error_message) do
@@ -39,8 +41,8 @@ defmodule Mix.Tasks.Shutterbug do
   @doc """
   Imports image files from directory
   """
-  def import_images_from_directory(directory_name) do
-  	image_files = get_image_files(directory_name)
+  def import_images_from_directory(source_directory_name, target_directory_name) do
+  	image_files = get_image_files(source_directory_name)
   	for image_file <- image_files do
   		IO.puts image_file
   	end
