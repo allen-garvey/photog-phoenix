@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Shutterbug do
   Possibly in the future use `mimetype` command instead, but that will be less portable
   """
   def is_image_filename(filename) do
-  	!File.dir?(filename) and Regex.match?(~r/^.(jpg|jpeg|png)$/, Path.extname(filename))
+  	!File.dir?(filename) and Regex.match?(~r/^\.(jpg|jpeg|png)$/, Path.extname(filename))
   end
 
   @doc """
