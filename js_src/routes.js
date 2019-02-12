@@ -92,6 +92,24 @@ export default {
             },
         },
         { 
+            path: '/images/uncategorized',
+            name: 'imagesNotInAlbumIndex', 
+            component: ThumbnailList,
+            props: (route) => {
+                return {
+                    apiPath: '/images/?in_album=false',
+                    showRouteFor: (item)=>{
+                        return {
+                            name: 'imagesShow',
+                            params: {
+                                id: item.id,
+                            },
+                        };
+                    },
+                }; 
+            },
+        },
+        { 
             path: '/albums/:id',
             name: 'albumsShow', 
             component: ThumbnailList,
