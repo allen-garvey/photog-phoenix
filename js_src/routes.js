@@ -67,6 +67,7 @@ export default {
                             name: 'imagesShow',
                             params: {
                                 id: item.id,
+                                image_id: item.id,
                             },
                         };
                     },
@@ -85,6 +86,7 @@ export default {
                             name: 'imagesShow',
                             params: {
                                 id: item.id,
+                                image_id: item.id,
                             },
                         };
                     },
@@ -103,6 +105,7 @@ export default {
                             name: 'imagesShow',
                             params: {
                                 id: item.id,
+                                image_id: item.id,
                             },
                         };
                     },
@@ -175,7 +178,7 @@ export default {
             props: (route) => {
                 return {
                     modelApiPath: `/images/${route.params.id}`,
-                    imageId: parseInt(route.params.image_id),
+                    imageId: parseInt(route.params.id),
                 }; 
             },
         },
