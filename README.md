@@ -7,6 +7,7 @@ Turn your Apple Photos library into a web application
 * node >= 6
 * npm
 * elixir >= 1.4
+* exiftool
 
 ## Getting Started
 
