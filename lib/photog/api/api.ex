@@ -149,6 +149,25 @@ defmodule Photog.Api do
     |> Repo.all
     |> Repo.preload(:albums)
   end
+
+  @doc """
+  Returns the list of images that are not in any albums
+
+  ## Examples
+
+      iex> list_images_not_in_album()
+      [%Image{}, ...]
+
+  """
+  def list_images_not_in_album() do
+    from(
+        image in Image,
+        left_join: album_image in assoc(image, :album_images),
+        where: is_nil(album_image.image_id),
+        order_by: [desc: image.creation_time, desc: image.id]
+    )
+    |> Repo.all
+    |> Repo.preload(:albums)
   end
 
   @doc """

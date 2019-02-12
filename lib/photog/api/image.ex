@@ -13,6 +13,8 @@ defmodule Photog.Api.Image do
 
     timestamps()
 
+    has_many :album_images, Photog.Api.AlbumImage
+
     many_to_many :albums, Photog.Api.Album, join_through: "album_images"
     many_to_many :persons, Photog.Api.Person, join_through: "person_images"
   end
