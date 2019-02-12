@@ -21,7 +21,7 @@ defmodule Photog.Api.Image do
   def changeset(image, attrs) do
     image
     |> cast(attrs, [:apple_photos_id, :creation_time, :master_path, :thumbnail_path, :mini_thumbnail_path, :is_favorite])
-    |> validate_required([:apple_photos_id, :creation_time, :master_path, :thumbnail_path, :mini_thumbnail_path, :is_favorite])
+    |> validate_required([:creation_time, :master_path, :thumbnail_path, :mini_thumbnail_path, :is_favorite])
     |> unique_constraint(:master_path)
     |> unique_constraint(:apple_photos_id)
   end
