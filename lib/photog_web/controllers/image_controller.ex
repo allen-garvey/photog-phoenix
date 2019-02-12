@@ -7,11 +7,7 @@ defmodule PhotogWeb.ImageController do
   action_fallback PhotogWeb.FallbackController
 
   def index(conn, %{"favorites" => is_favorite_param}) do
-    is_favorite = case is_favorite_param do
-      "true" -> true
-      _ -> false
-    end
-    images = Api.list_image_favorites(is_favorite)
+    images = Api.list_image_favorites(is_favorite_param == "true")
     render(conn, "index.json", images: images)
   end
 
