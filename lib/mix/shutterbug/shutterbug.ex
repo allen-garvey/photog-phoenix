@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Shutterbug do
   	cond do
   		!File.exists?(directory_name) -> bad_arguments_exit("#{directory_name} does not exist")
   		!File.dir?(directory_name)    -> bad_arguments_exit("#{directory_name} is not a directory")
-  		true						  -> get_image_files(directory_name)
+  		true						  -> import_images_from_directory(directory_name)
   	end
   end
 
@@ -24,9 +24,25 @@ defmodule Mix.Tasks.Shutterbug do
   end
 
   def get_image_files(directory_name) do
-  	files = File.ls!(directory_name)
-  	for file <- files do
-  		IO.puts file
+  	File.ls!(directory_name)
+  	|> Enum.filter(&is_image_filename/1)
+  end
+
+  @doc """
+  Checks file extension to see if file is image
+  Possibly in the future use `mimetype` command instead, but that will be less portable
+  """
+  def is_image_filename(filename) do
+  	!File.dir?(filename) and Regex.match?(~r/^.(jpg|jpeg|png)$/, Path.extname(filename))
+  end
+
+  @doc """
+  Imports image files from directory
+  """
+  def import_images_from_directory(directory_name) do
+  	image_files = get_image_files(directory_name)
+  	for image_file <- image_files do
+  		IO.puts image_file
   	end
   end
 end
