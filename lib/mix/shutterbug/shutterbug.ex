@@ -43,6 +43,11 @@ defmodule Mix.Tasks.Shutterbug do
   """
   def import_images_from_directory(source_directory_name, target_directory_name) do
   	image_files = get_image_files(source_directory_name)
+  	
+  	if Enum.empty?(image_files) do
+  		IO.puts :stderr, "No image files found in #{source_directory_name}"
+  		exit(:no_images_in_source_directory)	
+  	end
   	for image_file <- image_files do
   		IO.puts image_file
   	end
