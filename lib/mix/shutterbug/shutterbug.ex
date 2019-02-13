@@ -42,7 +42,14 @@ defmodule Mix.Tasks.Shutterbug do
     masters_path = Directory.masters_path(target_directory_name, now)
     thumbnails_path = Directory.thumbnails_path(target_directory_name, now)
 
+    if File.exists?(masters_path) do
+      exit_with_error("#{masters_path} already exists", :masters_directory_exists)
+    end
     File.mkdir_p!(masters_path)
+
+    if File.exists?(thumbnails_path) do
+      exit_with_error("#{thumbnails_path} already exists", :thumbnails_directory_exists)
+    end
     File.mkdir_p!(thumbnails_path)
 
     #start app so repo is available
