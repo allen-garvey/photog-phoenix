@@ -8,21 +8,21 @@ defmodule Mix.Tasks.Shutterbug do
   @shortdoc "Imports images from given folder"
   def run([source_directory_name, target_directory_name]) do
   	cond do
-  		!File.exists?(source_directory_name) -> bad_arguments_exit("#{source_directory_name} does not exist")
-  		!File.dir?(source_directory_name)    -> bad_arguments_exit("#{source_directory_name} is not a directory")
-  		!File.exists?(target_directory_name) -> bad_arguments_exit("#{target_directory_name} does not exist")
-  		!File.dir?(target_directory_name)    -> bad_arguments_exit("#{target_directory_name} is not a directory")
+  		!File.exists?(source_directory_name) -> exit_with_error("#{source_directory_name} does not exist")
+  		!File.dir?(source_directory_name)    -> exit_with_error("#{source_directory_name} is not a directory")
+  		!File.exists?(target_directory_name) -> exit_with_error("#{target_directory_name} does not exist")
+  		!File.dir?(target_directory_name)    -> exit_with_error("#{target_directory_name} is not a directory")
   		true						  -> import_images_from_directory(source_directory_name, target_directory_name)
   	end
   end
 
   def run(_args) do
-  	bad_arguments_exit("usage: mix shutterbug <image_source_directory> <image_library_destination_directory>")
+  	exit_with_error("usage: mix shutterbug <image_source_directory> <image_library_destination_directory>")
   end
 
-  def bad_arguments_exit(error_message) do
+  def exit_with_error(error_message, reason \\ :invalid_commandline_arguments) do
   	IO.puts :stderr, error_message
-  	exit(:invalid_commandline_arguments)
+  	exit(reason)
   end
 
   def get_image_files(directory_name) do
