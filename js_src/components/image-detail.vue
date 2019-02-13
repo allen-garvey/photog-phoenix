@@ -54,6 +54,14 @@
                 </li>
             </ul>
         </div>
+        <div class="image-show-albums" v-if="image.persons && image.persons.length > 0">
+            <h3 class="subsection-title">Persons</h3>
+            <ul class="image-show-album-list">
+                <li class="image-container" v-for="person in image.persons" :key="person.id">
+                    <router-link :to="{name: 'personsShow', params: {id: person.id}}">{{person.name}}</router-link>
+                </li>
+            </ul>
+        </div>
     </main>
 </template>
 
