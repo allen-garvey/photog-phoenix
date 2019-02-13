@@ -27,24 +27,11 @@ defmodule Mix.Tasks.Shutterbug do
   	exit(reason)
   end
 
-  def get_image_files(directory_name) do
-  	File.ls!(directory_name)
-  	|> Enum.filter(&is_image_filename/1)
-  end
-
-  @doc """
-  Checks file extension to see if file is image
-  Possibly in the future use `mimetype` command instead, but that will be less portable
-  """
-  def is_image_filename(filename) do
-  	!File.dir?(filename) and Regex.match?(~r/^\.(jpg|jpeg|png)$/, Path.extname(filename))
-  end
-
   @doc """
   Imports image files from directory
   """
   def import_images_from_directory(source_directory_name, target_directory_name) do
-  	image_files = get_image_files(source_directory_name)
+  	image_files = Photog.Shutterbug.File.get_image_files(source_directory_name)
 
   	if Enum.empty?(image_files) do
   		exit_with_error("No image files found in #{source_directory_name}", :no_images_in_source_directory)
