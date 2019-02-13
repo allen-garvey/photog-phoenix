@@ -7,6 +7,8 @@ defmodule Photog.Api.Import do
     field :import_time, :utc_datetime
 
     timestamps()
+
+    has_many :images, Photog.Api.Image
   end
 
   @doc false
