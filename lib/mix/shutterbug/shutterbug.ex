@@ -39,6 +39,7 @@ defmodule Mix.Tasks.Shutterbug do
 
     #create directories for masters and thumbnails
     now = DateTime.utc_now()
+    target_relative_path = Directory.import_relative_path(now)
     masters_path = Directory.masters_path(target_directory_name, now)
     thumbnails_path = Directory.thumbnails_path(target_directory_name, now)
 
@@ -68,11 +69,27 @@ defmodule Mix.Tasks.Shutterbug do
       Photog.Shutterbug.File.safe_copy(image_source_path, image_master_path)
 
       #create thumbnails
-      image_thumbnail_path = Path.join(thumbnails_path, Photog.Shutterbug.Image.thumbnail_name(image_file))
-      image_mini_thumbnail_path = Path.join(thumbnails_path, Photog.Shutterbug.Image.mini_thumbnail_name(image_file))
+      thumbnail_name = Photog.Shutterbug.Image.thumbnail_name(image_file)
+      mini_thumbnail_name = Photog.Shutterbug.Image.mini_thumbnail_name(image_file)
+
+      image_thumbnail_path = Path.join(thumbnails_path, thumbnail_name)
+      image_mini_thumbnail_path = Path.join(thumbnails_path, mini_thumbnail_name)
 
       Photog.Shutterbug.File.resize_image(image_source_path, image_thumbnail_path, 768)
       Photog.Shutterbug.File.resize_image(image_source_path, image_mini_thumbnail_path, 250)
+
+      #get paths needed when creating image resource
+      image_thumbnail_relative_path = Path.join(target_relative_path, thumbnail_name)
+      image_mini_thumbnail_relative_path = Path.join(target_relative_path, mini_thumbnail_name)
+      image_master_relative_path = Path.join(target_relative_path, image_file)
+
+      Photog.Shutterbug.Image.create_image!(%{
+        master_path: image_master_relative_path,
+        mini_thumbnail_path: image_mini_thumbnail_relative_path,
+        thumbnail_path: image_thumbnail_relative_path,
+        import_id: import_id,
+        creation_time: now, #use now for now, but should update to creation time from image master exif
+      })
 
   	end
   end
