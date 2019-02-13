@@ -20,6 +20,15 @@ export default {
             },
         },
         { 
+            path: '/imports',
+            name: 'importsIndex', 
+            component: TextList,
+            props: {
+                itemShowRouteName: 'importsShow',
+                itemsListKey: null,
+            },
+        },
+        { 
             path: '/albums',
             name: 'albumsIndex', 
             component: ThumbnailList,
@@ -172,6 +181,26 @@ export default {
             },
         },
         { 
+            path: '/imports/:id',
+            name: 'importsShow', 
+            component: ThumbnailList,
+            props: (route) => {
+                return {
+                    apiPath: route.path,
+                    itemsListKey: 'images',
+                    showRouteFor: (item)=>{
+                        return {
+                            name: 'importImagesShow',
+                            params: {
+                                import_id: route.params.id,
+                                image_id: item.id,
+                            },
+                        };
+                    },
+                }; 
+            },
+        },
+        { 
             path: '/images/:id',
             name: 'imagesShow', 
             component: ImageDetail,
@@ -220,6 +249,29 @@ export default {
                                 name: 'personImagesShow',
                                 params: {
                                     person_id: route.params.person_id,
+                                    image_id: item.id,
+                                },
+                            };
+                        },
+                    },
+                }; 
+            },
+        },
+        { 
+            path: '/imports/:import_id/images/:image_id',
+            name: 'importImagesShow', 
+            component: ImageDetail,
+            props: (route) => {
+                return {
+                    modelApiPath: `/imports/${route.params.import_id}`,
+                    imageId: parseInt(route.params.image_id),
+                    parent: {
+                        parentRouteName: 'importsShow',
+                        showRouteFor: (item)=>{
+                            return {
+                                name: 'importImagesShow',
+                                params: {
+                                    import_id: route.params.import_id,
                                     image_id: item.id,
                                 },
                             };
