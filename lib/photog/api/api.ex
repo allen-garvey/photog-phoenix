@@ -711,7 +711,10 @@ defmodule Photog.Api do
       ** (Ecto.NoResultsError)
 
   """
-  def get_import!(id), do: Repo.get!(Import, id)
+  def get_import!(id) do 
+    Repo.get!(Import, id)
+    |> Repo.preload(images: from(Image, order_by: :id))
+  end
 
   @doc """
   Creates a import.
