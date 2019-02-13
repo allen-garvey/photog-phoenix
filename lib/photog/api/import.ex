@@ -15,6 +15,7 @@ defmodule Photog.Api.Import do
   def changeset(import, attrs) do
     import
     |> cast(attrs, [:import_time])
+    |> Photog.ModelHelpers.Date.default_date_today(:import_time)
     |> validate_required([:import_time])
   end
 end
