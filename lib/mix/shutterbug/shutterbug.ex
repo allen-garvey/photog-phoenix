@@ -1,6 +1,8 @@
 defmodule Mix.Tasks.Shutterbug do
   use Mix.Task
 
+  alias Photog.Shutterbug.Directory
+
   @moduledoc """
   Given a directory of images, will copy image files to masters directory, create thumbnails, and add image resources to database
   """
@@ -43,12 +45,34 @@ defmodule Mix.Tasks.Shutterbug do
   """
   def import_images_from_directory(source_directory_name, target_directory_name) do
   	image_files = get_image_files(source_directory_name)
-  	
+
   	if Enum.empty?(image_files) do
   		exit_with_error("No image files found in #{source_directory_name}", :no_images_in_source_directory)
-  	end
-  	for image_file <- image_files do
-  		IO.puts image_file
+    end
+
+    #create directories for masters and thumbnails
+    now = DateTime.utc_now()
+    masters_path = Directory.masters_path(target_directory_name, now)
+    thumbnails_path = Directory.thumbnails_path(target_directory_name, now)
+
+    File.mkdir_p!(masters_path)
+    File.mkdir_p!(thumbnails_path)
+
+    #start app so repo is available
+    Mix.Task.run "app.start", []
+
+    #create import
+    import_id = Photog.Shutterbug.Import.create_import()
+
+    for image_file <- image_files do
+      IO.puts image_file
+
+      #get image full source path
+      image_source_path = Path.join(source_directory_name, image_file)
+      # copy image master
+      image_master_path = Path.join(masters_path, image_file)
+      File.cp!(image_source_path, image_master_path, fn _,  _ -> exit_with_error("#{image_master_path} already exists", :image_master_already_exists) end)
+
   	end
   end
 end
