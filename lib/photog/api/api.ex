@@ -710,7 +710,7 @@ defmodule Photog.Api do
 
   """
   def list_imports do
-    Repo.all(Import, order_by: [desc: :id])
+    Repo.all(from(Import, order_by: [desc: :id]))
   end
 
   @doc """
