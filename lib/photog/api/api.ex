@@ -303,7 +303,7 @@ defmodule Photog.Api do
     images_query = from image in Image,
                       join: album_image in AlbumImage, on: image.id == album_image.image_id,
                       where: album_image.album_id == ^id,
-                      preload: [albums: ^image_albums_query, persons: ^image_albums_query],
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query],
                       order_by: album_image.image_order
 
     Repo.one!(from album in Album,
