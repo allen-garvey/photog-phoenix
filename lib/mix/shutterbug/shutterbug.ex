@@ -46,6 +46,7 @@ defmodule Mix.Tasks.Shutterbug do
   	
   	if Enum.empty?(image_files) do
   		exit_with_error("No image files found in #{source_directory_name}", :no_images_in_source_directory)
+  	end
   	for image_file <- image_files do
   		IO.puts image_file
   	end
