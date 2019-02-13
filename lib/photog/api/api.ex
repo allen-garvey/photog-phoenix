@@ -123,6 +123,14 @@ defmodule Photog.Api do
   alias Photog.Api.Image
 
   @doc """
+  Default preloads when getting retrieving images
+  """
+  def image_default_preloads(results) do
+    results
+    |> Repo.preload(albums: from(Album, order_by: :name))
+  end
+
+  @doc """
   Returns the list of images.
 
   ## Examples
@@ -132,7 +140,8 @@ defmodule Photog.Api do
 
   """
   def list_images do
-    Repo.all(Image) |> Repo.preload(:albums)
+    Repo.all(Image) 
+    |> image_default_preloads
   end
 
   @doc """
@@ -147,7 +156,7 @@ defmodule Photog.Api do
   def list_image_favorites(is_favorite) do
     from(image in Image, where: image.is_favorite == ^is_favorite, order_by: [desc: :creation_time, desc: :id])
     |> Repo.all
-    |> Repo.preload(:albums)
+    |> image_default_preloads
   end
 
   @doc """
@@ -167,7 +176,7 @@ defmodule Photog.Api do
         order_by: [desc: image.creation_time, desc: image.id]
     )
     |> Repo.all
-    |> Repo.preload(:albums)
+    |> image_default_preloads
   end
 
   @doc """
@@ -185,9 +194,8 @@ defmodule Photog.Api do
 
   """
   def get_image!(id) do
-    image_albums_query = (from album in Album, order_by: album.name)
     Repo.get!(Image, id)
-      |> Repo.preload(albums: image_albums_query)
+    |> image_default_preloads
   end
 
   @doc """
