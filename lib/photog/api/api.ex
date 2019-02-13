@@ -12,6 +12,7 @@ defmodule Photog.Api do
   alias Photog.Api.PersonImage
   alias Photog.Api.Image
   alias Photog.Api.Person
+  alias Photog.Api.Import
 
   @doc """
   Returns the list of folders.
@@ -123,6 +124,15 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Preloads image import
+  """
+  def image_preload_import(query) do
+    query
+    |> join(:left, [image], import in assoc(image, :import))
+    |> preload([image, import], [import: import])
+  end
+
+  @doc """
   Default preloads when getting retrieving images
   """
   def image_default_preloads(results) do
@@ -141,7 +151,9 @@ defmodule Photog.Api do
 
   """
   def list_images do
-    Repo.all(Image) 
+    from(Image, order_by: [desc: :creation_time, desc: :id])
+    |> image_preload_import
+    |> Repo.all
     |> image_default_preloads
   end
 
@@ -156,6 +168,7 @@ defmodule Photog.Api do
   """
   def list_image_favorites(is_favorite) do
     from(image in Image, where: image.is_favorite == ^is_favorite, order_by: [desc: :creation_time, desc: :id])
+    |> image_preload_import
     |> Repo.all
     |> image_default_preloads
   end
@@ -176,6 +189,7 @@ defmodule Photog.Api do
         where: is_nil(album_image.image_id),
         order_by: [desc: image.creation_time, desc: image.id]
     )
+    |> image_preload_import
     |> Repo.all
     |> image_default_preloads
   end
@@ -195,7 +209,9 @@ defmodule Photog.Api do
 
   """
   def get_image!(id) do
-    Repo.get!(Image, id)
+    from(image in Image, where: image.id == ^id)
+    |> image_preload_import
+    |> Repo.one!
     |> image_default_preloads
   end
 
@@ -301,9 +317,10 @@ defmodule Photog.Api do
     image_albums_query = from(Album, order_by: :name)
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
-                      join: album_image in AlbumImage, on: image.id == album_image.image_id,
+                      join: album_image in assoc(image, :album_images),
+                      left_join: import in assoc(image, :import),
                       where: album_image.album_id == ^id,
-                      preload: [albums: ^image_albums_query, persons: ^image_persons_query],
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: album_image.image_order
 
     Repo.one!(from album in Album,
@@ -418,8 +435,9 @@ defmodule Photog.Api do
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
                       join: person_image in assoc(image, :person_images),
+                      left_join: import in assoc(image, :import),
                       where: person_image.person_id == ^id,
-                      preload: [albums: ^image_albums_query, persons: ^image_persons_query],
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: [desc: image.creation_time]
 
     Repo.one! from person in Person,
@@ -681,8 +699,6 @@ defmodule Photog.Api do
   def change_album_image(%AlbumImage{} = album_image) do
     AlbumImage.changeset(album_image, %{})
   end
-
-  alias Photog.Api.Import
 
   @doc """
   Returns the list of imports.
