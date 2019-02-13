@@ -10,6 +10,8 @@ defmodule Photog.Api do
   alias Photog.Api.Album
   alias Photog.Api.AlbumImage
   alias Photog.Api.PersonImage
+  alias Photog.Api.Image
+  alias Photog.Api.Person
 
   @doc """
   Returns the list of folders.
@@ -120,14 +122,13 @@ defmodule Photog.Api do
     Folder.changeset(folder, %{})
   end
 
-  alias Photog.Api.Image
-
   @doc """
   Default preloads when getting retrieving images
   """
   def image_default_preloads(results) do
     results
     |> Repo.preload(albums: from(Album, order_by: :name))
+    |> Repo.preload(persons: from(Person, order_by: :name))
   end
 
   @doc """
@@ -297,11 +298,12 @@ defmodule Photog.Api do
   """
   def get_album!(id) do
     # for some reason, if you put subquery directly in preload, it causes an error
-    image_albums_query = (from album in Album, order_by: album.name)
+    image_albums_query = from(Album, order_by: :name)
+    image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
                       join: album_image in AlbumImage, on: image.id == album_image.image_id,
                       where: album_image.album_id == ^id,
-                      preload: [albums: ^image_albums_query],
+                      preload: [albums: ^image_albums_query, persons: ^image_albums_query],
                       order_by: album_image.image_order
 
     Repo.one!(from album in Album,
@@ -376,8 +378,6 @@ defmodule Photog.Api do
     Album.changeset(album, %{})
   end
 
-  alias Photog.Api.Person
-
   @doc """
   Returns the list of persons.
 
@@ -414,11 +414,12 @@ defmodule Photog.Api do
     #better than using separate preload, since only uses 1 query
     #https://hexdocs.pm/ecto/Ecto.Query.html#preload/3
     # for some reason, if you put subquery directly in preload, it causes an error
-    image_albums_query = (from album in Album, order_by: album.name)
+    image_albums_query = from(Album, order_by: :name)
+    image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
                       join: person_image in PersonImage, on: image.id == person_image.image_id,
                       where: person_image.person_id == ^id,
-                      preload: [albums: ^image_albums_query],
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query],
                       order_by: [desc: image.creation_time]
 
     Repo.one! from person in Person,
