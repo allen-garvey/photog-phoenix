@@ -417,7 +417,7 @@ defmodule Photog.Api do
     image_albums_query = from(Album, order_by: :name)
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
-                      join: person_image in PersonImage, on: image.id == person_image.image_id,
+                      join: person_image in assoc(image, :person_images),
                       where: person_image.person_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query],
                       order_by: [desc: image.creation_time]

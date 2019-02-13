@@ -16,6 +16,7 @@ defmodule Photog.Api.Image do
     belongs_to :import, Photog.Api.Import
 
     has_many :album_images, Photog.Api.AlbumImage
+    has_many :person_images, Photog.Api.PersonImage
 
     many_to_many :albums, Photog.Api.Album, join_through: "album_images"
     many_to_many :persons, Photog.Api.Person, join_through: "person_images"
