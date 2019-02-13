@@ -28,4 +28,11 @@ defmodule PhotogWeb.PersonView do
       },
     }
   end
+
+  def person_excerpt_mini_to_map(person) do
+    %{
+      id: person.id,
+      name: person.name,
+    }
+  end
 end

@@ -86,6 +86,7 @@ defmodule PhotogWeb.ImageView do
       mini_thumbnail_path: image.mini_thumbnail_path,
       is_favorite: image.is_favorite,
       albums: Enum.map(image.albums, &PhotogWeb.AlbumView.album_excerpt_mini_to_map/1),
+      persons: Enum.map(image.persons, &PhotogWeb.PersonView.person_excerpt_mini_to_map/1),
     }
   end
 end
