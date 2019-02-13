@@ -59,7 +59,7 @@ defmodule Mix.Tasks.Shutterbug do
     import_id = Photog.Shutterbug.Import.create_import()
 
     for image_file <- image_files do
-      IO.puts image_file
+      IO.puts "Importing #{image_file}"
 
       #get image full source path
       image_source_path = Path.join(source_directory_name, image_file)
