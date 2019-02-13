@@ -8,6 +8,7 @@
                 <li><router-link :to="{name: 'personsIndex'}">Persons</router-link></li>
                 <li><router-link :to="{name: 'imageFavoritesIndex'}">Favorites</router-link></li>
                 <li><router-link :to="{name: 'imagesNotInAlbumIndex'}">Uncategorized Images</router-link></li>
+                <li><router-link :to="{name: 'importsIndex'}">Imports</router-link></li>
             </ul>
         </nav>
     </header>
