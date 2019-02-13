@@ -34,7 +34,11 @@
                 <dd>{{image.is_favorite ? 'true' : 'false'}}</dd>
                 <template v-if="image.import">
                     <dt>Import</dt>
-                    <dd>{{image.import.name}}</dd>
+                    <dd>
+                        <router-link :to="{name: 'importsShow', params: {id: image.import.id}}" class="preview-container">
+                             {{image.import.name}}
+                        </router-link>
+                    </dd>
                 </template>
             </dl>
         </div>
