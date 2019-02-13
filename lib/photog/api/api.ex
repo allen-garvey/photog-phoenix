@@ -728,8 +728,18 @@ defmodule Photog.Api do
 
   """
   def get_import!(id) do 
+    # for some reason, if you put subquery directly in preload, it causes an error
+    image_albums_query = from(Album, order_by: :name)
+    image_persons_query = from(Person, order_by: :name)
+    images_query = from image in Image,
+                      #can use join here instead of left join since we know it has to have an import
+                      join: import in assoc(image, :import),
+                      where: image.import_id == ^id,
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
+                      order_by: [image.creation_time, image.id]
+
     Repo.get!(Import, id)
-    |> Repo.preload(images: from(Image, order_by: :id))
+    |> Repo.preload(images: images_query)
   end
 
   @doc """
