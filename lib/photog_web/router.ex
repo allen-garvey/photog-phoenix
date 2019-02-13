@@ -17,12 +17,13 @@ defmodule PhotogWeb.Router do
   scope "/api", PhotogWeb do
     pipe_through :api
 
-    resources "/folders", FolderController, only: [:index, :show]
-    resources "/images", ImageController, only: [:index, :show]
-    resources "/albums", AlbumController, only: [:index, :show]
-    resources "/persons", PersonController, only: [:index, :show]
-    resources "/person_images", PersonImageController, only: [:index, :show]
-    resources "/album_images", AlbumImageController, only: [:index, :show]
+    resources "/folders", FolderController,             only: [:index, :show]
+    resources "/images", ImageController,               only: [:index, :show]
+    resources "/albums", AlbumController,               only: [:index, :show]
+    resources "/persons", PersonController,             only: [:index, :show]
+    resources "/person_images", PersonImageController,  only: [:index, :show]
+    resources "/album_images", AlbumImageController,    only: [:index, :show]
+    resources "/imports", ImportController,             only: [:index, :show]
 
     get "/images/:id/exif", ImageController, :exif_for
   end

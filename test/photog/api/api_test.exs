@@ -378,4 +378,63 @@ defmodule Photog.ApiTest do
       assert %Ecto.Changeset{} = Api.change_album_image(album_image)
     end
   end
+
+  describe "imports" do
+    alias Photog.Api.Import
+
+    @valid_attrs %{import_time: ~N[2010-04-17 14:00:00]}
+    @update_attrs %{import_time: ~N[2011-05-18 15:01:01]}
+    @invalid_attrs %{import_time: nil}
+
+    def import_fixture(attrs \\ %{}) do
+      {:ok, import} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Api.create_import()
+
+      import
+    end
+
+    test "list_imports/0 returns all imports" do
+      import = import_fixture()
+      assert Api.list_imports() == [import]
+    end
+
+    test "get_import!/1 returns the import with given id" do
+      import = import_fixture()
+      assert Api.get_import!(import.id) == import
+    end
+
+    test "create_import/1 with valid data creates a import" do
+      assert {:ok, %Import{} = import} = Api.create_import(@valid_attrs)
+      assert import.import_time == ~N[2010-04-17 14:00:00]
+    end
+
+    test "create_import/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Api.create_import(@invalid_attrs)
+    end
+
+    test "update_import/2 with valid data updates the import" do
+      import = import_fixture()
+      assert {:ok, %Import{} = import} = Api.update_import(import, @update_attrs)
+      assert import.import_time == ~N[2011-05-18 15:01:01]
+    end
+
+    test "update_import/2 with invalid data returns error changeset" do
+      import = import_fixture()
+      assert {:error, %Ecto.Changeset{}} = Api.update_import(import, @invalid_attrs)
+      assert import == Api.get_import!(import.id)
+    end
+
+    test "delete_import/1 deletes the import" do
+      import = import_fixture()
+      assert {:ok, %Import{}} = Api.delete_import(import)
+      assert_raise Ecto.NoResultsError, fn -> Api.get_import!(import.id) end
+    end
+
+    test "change_import/1 returns a import changeset" do
+      import = import_fixture()
+      assert %Ecto.Changeset{} = Api.change_import(import)
+    end
+  end
 end

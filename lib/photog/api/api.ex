@@ -681,4 +681,100 @@ defmodule Photog.Api do
   def change_album_image(%AlbumImage{} = album_image) do
     AlbumImage.changeset(album_image, %{})
   end
+
+  alias Photog.Api.Import
+
+  @doc """
+  Returns the list of imports.
+
+  ## Examples
+
+      iex> list_imports()
+      [%Import{}, ...]
+
+  """
+  def list_imports do
+    Repo.all(Import)
+  end
+
+  @doc """
+  Gets a single import.
+
+  Raises `Ecto.NoResultsError` if the Import does not exist.
+
+  ## Examples
+
+      iex> get_import!(123)
+      %Import{}
+
+      iex> get_import!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_import!(id), do: Repo.get!(Import, id)
+
+  @doc """
+  Creates a import.
+
+  ## Examples
+
+      iex> create_import(%{field: value})
+      {:ok, %Import{}}
+
+      iex> create_import(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_import(attrs \\ %{}) do
+    %Import{}
+    |> Import.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a import.
+
+  ## Examples
+
+      iex> update_import(import, %{field: new_value})
+      {:ok, %Import{}}
+
+      iex> update_import(import, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_import(%Import{} = import, attrs) do
+    import
+    |> Import.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Import.
+
+  ## Examples
+
+      iex> delete_import(import)
+      {:ok, %Import{}}
+
+      iex> delete_import(import)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_import(%Import{} = import) do
+    Repo.delete(import)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking import changes.
+
+  ## Examples
+
+      iex> change_import(import)
+      %Ecto.Changeset{source: %Import{}}
+
+  """
+  def change_import(%Import{} = import) do
+    Import.changeset(import, %{})
+  end
 end
