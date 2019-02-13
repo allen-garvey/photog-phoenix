@@ -32,6 +32,10 @@
                 <dd>{{image.creation_time.formatted.us_date}} {{image.creation_time.formatted.time}}</dd>
                 <dt>Favorite</dt>
                 <dd>{{image.is_favorite ? 'true' : 'false'}}</dd>
+                <template v-if="image.import">
+                    <dt>Import</dt>
+                    <dd>{{image.import.name}}</dd>
+                </template>
             </dl>
         </div>
         <div class="image-show-info-section" v-if="imageExif">
