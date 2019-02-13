@@ -67,6 +67,13 @@ defmodule Mix.Tasks.Shutterbug do
       image_master_path = Path.join(masters_path, image_file)
       Photog.Shutterbug.File.safe_copy(image_source_path, image_master_path)
 
+      #create thumbnails
+      image_thumbnail_path = Path.join(thumbnails_path, Photog.Shutterbug.Image.thumbnail_name(image_file))
+      image_mini_thumbnail_path = Path.join(thumbnails_path, Photog.Shutterbug.Image.mini_thumbnail_name(image_file))
+
+      Photog.Shutterbug.File.resize_image(image_source_path, image_thumbnail_path, 1024)
+      Photog.Shutterbug.File.resize_image(image_source_path, image_mini_thumbnail_path, 360)
+
   	end
   end
 end
