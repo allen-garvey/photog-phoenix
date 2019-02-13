@@ -71,7 +71,7 @@ defmodule Mix.Tasks.Shutterbug do
       image_source_path = Path.join(source_directory_name, image_file)
       # copy image master
       image_master_path = Path.join(masters_path, image_file)
-      File.cp!(image_source_path, image_master_path, fn _,  dest -> exit_with_error("#{dest} already exists", :dest_file_already_exists) end)
+      Photog.Shutterbug.File.safe_copy(image_source_path, image_master_path)
 
   	end
   end
