@@ -15,7 +15,7 @@ defmodule PhotogWeb.ImportController do
     with {:ok, %Import{} = import} <- Api.create_import(import_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.import_path(conn, :show, import))
+      |> put_resp_header("location", import_path(conn, :show, import))
       |> render("show.json", import: import)
     end
   end
