@@ -54,8 +54,8 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List heading="Albums" item-route-name="albumsShow" :items="image.albums" />
-        <Image-Items-List heading="Persons" item-route-name="personsShow" :items="image.persons" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" />
     </main>
 </template>
 

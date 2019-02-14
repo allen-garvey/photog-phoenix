@@ -5,3 +5,14 @@
 .image-show-text-list li{
     margin-bottom: 0.5em;
 }
+
+.image-show-add-items-list{
+    margin-top: 1em;
+    display: flex;
+    flex-wrap: wrap;
+
+    li{
+        margin-bottom: 0.5em;
+        flex-basis: 25%;
+    }
+}
