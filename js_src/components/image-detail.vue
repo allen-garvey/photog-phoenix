@@ -54,26 +54,14 @@
                     </dl>
                 </template>
         </div>
-        <div class="image-show-text-list-container" v-if="image.albums && image.albums.length > 0">
-            <h3 class="subsection-title">Albums</h3>
-            <ul class="image-show-text-list">
-                <li class="image-container" v-for="album in image.albums" :key="album.id">
-                    <router-link :to="{name: 'albumsShow', params: {id: album.id}}">{{album.name}}</router-link>
-                </li>
-            </ul>
-        </div>
-        <div class="image-show-text-list-container" v-if="image.persons && image.persons.length > 0">
-            <h3 class="subsection-title">Persons</h3>
-            <ul class="image-show-text-list">
-                <li class="image-container" v-for="person in image.persons" :key="person.id">
-                    <router-link :to="{name: 'personsShow', params: {id: person.id}}">{{person.name}}</router-link>
-                </li>
-            </ul>
-        </div>
+        <Image-Items-List heading="Albums" item-name="album" item-route-name="albumsShow" :items="image.albums" />
+        <Image-Items-List heading="Persons" item-name="person" item-route-name="personsShow" :items="image.persons" />
     </main>
 </template>
 
 <script>
+import ImageItemsList from './image-items-list.vue';
+
 //from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 function capitalizeFirstLetter(string){
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -106,6 +94,9 @@ export default {
         parent: {
             type: Object,
         },
+    },
+    components: {
+        'Image-Items-List': ImageItemsList,
     },
     directives: {
         scrollToSelectedItem: {
