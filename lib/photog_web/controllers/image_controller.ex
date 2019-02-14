@@ -37,12 +37,20 @@ defmodule PhotogWeb.ImageController do
 
   @spec exif_for(Plug.Conn.t(), map()) :: Plug.Conn.t()
   @doc """
-  Gets a the exif data from an image's master image
+  Gets the exif data from an image's master image
   """
   def exif_for(conn, %{"id" => id}) do
     image = Api.get_image!(id)
     exif_map = Photog.Image.Exif.exif_for(image)
     render(conn, "exif.json", exif: exif_map, image: image)
+  end
+
+  @doc """
+  Gets the albums unused by an image
+  """
+  def albums_for(conn, %{"id" => id, "unused" => "true"}) do
+    albums = Api.list_image_albums_unused(id)
+    render(conn, "albums.json", albums: albums)
   end
 
   def update(conn, %{"id" => id, "image" => image_params}) do

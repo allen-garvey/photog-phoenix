@@ -216,6 +216,27 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Gets albums not used by an image given by id
+  """
+  def list_image_albums_unused(image_id) do
+    album_images_suquery = from(
+                                album_image in AlbumImage,
+                                where: album_image.image_id == ^image_id,
+                                distinct: album_image.album_id,
+                                select: %{album_id: album_image.album_id}
+                            )
+
+    from(
+        album in Album,
+        left_join: album_image in subquery(album_images_suquery),
+        on: album.id == album_image.album_id,
+        where: is_nil(album_image.album_id),
+        order_by: [album.name, album.id]
+    )
+    |> Repo.all
+  end
+
+  @doc """
   Creates a image.
 
   ## Examples
@@ -727,7 +748,7 @@ defmodule Photog.Api do
       ** (Ecto.NoResultsError)
 
   """
-  def get_import!(id) do 
+  def get_import!(id) do
     # for some reason, if you put subquery directly in preload, it causes an error
     image_albums_query = from(Album, order_by: :name)
     image_persons_query = from(Person, order_by: :name)

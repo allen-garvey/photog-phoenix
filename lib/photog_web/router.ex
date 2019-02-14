@@ -26,6 +26,7 @@ defmodule PhotogWeb.Router do
     resources "/imports", ImportController,             only: [:index, :show]
 
     get "/images/:id/exif", ImageController, :exif_for
+    get "/images/:id/albums", ImageController, :albums_for
   end
 
   scope "/", PhotogWeb do
