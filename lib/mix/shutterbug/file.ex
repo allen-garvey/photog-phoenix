@@ -33,9 +33,11 @@ defmodule Photog.Shutterbug.File do
   Resize on largest side from: https://www.imagemagick.org/discourse-server/viewtopic.php?t=13175
   """
   def resize_image(image_source_path, image_destination_path, size) when is_integer(size) do
-    case System.cmd("convert", [image_source_path, "-resize", "#{size}^>", "-quality", "80%", image_destination_path]) do
-      {_, 0} -> true
-      _      -> Shutterbug.exit_with_error("Error creating #{image_destination_path} using convert", :error_creating_thumbnail)
+    with {_, 0} <- System.cmd("convert", [image_source_path, "-resize", "#{size}^>", "-quality", "80%", image_destination_path]) do
+      # not sure if we need to do this, because don't know if imagemagick copies file permissions
+      File.chmod!(image_destination_path, 0o644)
+    else
+      _ -> Shutterbug.exit_with_error("Error creating #{image_destination_path} using convert", :error_creating_thumbnail)
     end
   end
 
