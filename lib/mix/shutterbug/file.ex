@@ -34,7 +34,7 @@ defmodule Photog.Shutterbug.File do
   """
   def resize_image(image_source_path, image_destination_path, size) when is_integer(size) do
     with {_, 0} <- System.cmd("convert", [image_source_path, "-resize", "#{size}^>", "-quality", "80%", image_destination_path]) do
-      # not sure if we need to do this, because don't know if imagemagick copies file permissions
+      # file permissions should be correct (tested with convert command and permissions are +r) but set permissions just in case
       File.chmod!(image_destination_path, 0o644)
     else
       _ -> Shutterbug.exit_with_error("Error creating #{image_destination_path} using convert", :error_creating_thumbnail)
