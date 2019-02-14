@@ -24,6 +24,8 @@ defmodule Photog.Shutterbug.File do
   """
   def safe_copy(source_path, destination_path) do
     File.cp!(source_path, destination_path, fn _,  dest -> Shutterbug.exit_with_error("#{dest} already exists", :dest_file_already_exists) end)
+    # make sure permissions are good, since some devices (such as phones) can have too restrictive permissions which won't allow web server to serve image file
+    File.chmod!(destination_path, 0o644)
   end
 
   @doc """
