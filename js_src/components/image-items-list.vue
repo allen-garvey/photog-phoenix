@@ -1,10 +1,12 @@
 <template>
     <div class="image-show-text-list-container">
-        <h3 class="subsection-title">{{heading}}</h3>
-        <div>
-            <button :disabled="isAddMode" @click="editItemsButtonAction">{{editButtonText}}</button>
-            <button :disabled="isEditMode" @click="addItemsButtonAction">{{addButtonText}}</button>
-            <button v-if="isAddMode" @click="saveAddItems">Save</button>
+        <div class="image-show-text-list-heading">
+            <h3 class="image-show-text-list-title">{{heading}}</h3>
+            <div class="button-container">
+                <button :disabled="isAddMode" @click="editItemsButtonAction">{{editButtonText}}</button>
+                <button :disabled="isEditMode" @click="addItemsButtonAction">{{addButtonText}}</button>
+                <button v-if="isAddMode" @click="saveAddItems">Save</button>
+            </div>
         </div>
         <div v-if="isAddMode">
             <ul class="image-show-add-items-list">
