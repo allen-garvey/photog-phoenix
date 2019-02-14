@@ -2,7 +2,8 @@
     <div class="image-show-text-list-container">
         <h3 class="subsection-title">{{heading}}</h3>
         <div>
-            <button @click="addItemsButtonAction">{{addButtonText}}</button>
+            <button :disabled="isAddMode" @click="editItemsButtonAction">{{editButtonText}}</button>
+            <button :disabled="isEditMode" @click="addItemsButtonAction">{{addButtonText}}</button>
             <button v-if="isAddMode" @click="saveAddItems">Save</button>
         </div>
         <div v-if="isAddMode">
@@ -16,6 +17,7 @@
         <ul class="image-show-text-list" v-if="items.length > 0">
             <li class="image-container" v-for="(item, index) in items" :key="item.id">
                 <router-link :to="{name: itemRouteName, params: {id: item.id}}">{{item.name}}</router-link>
+                <button v-if="isEditMode" @click="deleteItem(item, index)">Delete</button>
             </li>
         </ul>
     </div>
@@ -24,9 +26,9 @@
 <script>
 import { fetchJson } from '../request-helpers.js';
 
-const MODE_ADD = 'add';
-const MODE_DEFAULT = 'default';
-const MODE_EDIT = 'edit';
+const MODE_ADD = 1;
+const MODE_DEFAULT = 2;
+const MODE_EDIT = 3;
 
 export default {
     name: 'Image-Items-List',
@@ -65,8 +67,17 @@ export default {
         addButtonText(){
             return this.isAddMode ? 'Cancel' : 'Add';
         },
+        editButtonText(){
+            return this.isEditMode ? 'Cancel' : 'Edit';
+        },
         isAddMode(){
             return this.mode === MODE_ADD;
+        },
+        isEditMode(){
+            return this.mode === MODE_EDIT;
+        },
+        isDefaultMode(){
+            return this.mode === MODE_DEFAULT;
         },
     },
     watch: {
@@ -75,6 +86,14 @@ export default {
     methods: {
         idForItemToBeAdded(item, index){
             return `checkbox_${this.heading}_${index}_${item.id}`;
+        },
+        editItemsButtonAction(){
+            if(this.isEditMode){
+                this.mode = MODE_DEFAULT;
+            }
+            else{
+                this.mode = MODE_EDIT;
+            }
         },
         addItemsButtonAction(){
             if(this.isAddMode){
@@ -94,6 +113,9 @@ export default {
         saveAddItems(){
             console.log(this.itemsThatCanBeAddedSelected);
             this.mode = MODE_DEFAULT;
+        },
+        deleteItem(item, index){
+            console.log(item);
         },
     }
 }
