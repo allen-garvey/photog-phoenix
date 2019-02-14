@@ -16,6 +16,10 @@ defmodule PhotogWeb.ImageView do
     %{data: render_many(albums, PhotogWeb.AlbumView, "album_excerpt_mini.json")}
   end
 
+  def render("persons.json", %{persons: persons}) do
+    %{data: render_many(persons, PhotogWeb.PersonView, "person_excerpt_mini.json")}
+  end
+
   def render("image.json", %{image: image}) do
     image_full_to_map(image)
   end

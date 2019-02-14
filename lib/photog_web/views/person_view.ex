@@ -29,6 +29,10 @@ defmodule PhotogWeb.PersonView do
     }
   end
 
+  def render("person_excerpt_mini.json", %{person: person}) do
+    person_excerpt_mini_to_map(person)
+  end
+
   def person_excerpt_mini_to_map(person) do
     %{
       id: person.id,

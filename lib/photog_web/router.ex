@@ -27,6 +27,7 @@ defmodule PhotogWeb.Router do
 
     get "/images/:id/exif", ImageController, :exif_for
     get "/images/:id/albums", ImageController, :albums_for
+    get "/images/:id/persons", ImageController, :persons_for
   end
 
   scope "/", PhotogWeb do

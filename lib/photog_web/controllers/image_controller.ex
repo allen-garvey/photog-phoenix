@@ -53,6 +53,14 @@ defmodule PhotogWeb.ImageController do
     render(conn, "albums.json", albums: albums)
   end
 
+  @doc """
+  Gets the persons unused by an image
+  """
+  def persons_for(conn, %{"id" => id, "unused" => "true"}) do
+    persons = Api.list_image_persons_unused(id)
+    render(conn, "persons.json", persons: persons)
+  end
+
   def update(conn, %{"id" => id, "image" => image_params}) do
     image = Api.get_image!(id)
 
