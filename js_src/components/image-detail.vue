@@ -131,25 +131,25 @@ export default {
         }
     },
     computed: {
-        isModelLoaded: function(){
+        isModelLoaded(){
             return this.model && this.image;
         },
-        masterUrl: function(){
+        masterUrl(){
             return this.generateImageUrl(this.image.master_path);
         },
-        image: function(){
+        image(){
             if(this.parent){
                 return this.imageModel;
             }
             return this.model;
         },
-        previousImage: function(){
+        previousImage(){
             if(!this.parent || this.modelIndex < 0 || this.modelIndex === 0){
                 return null;
             }
             return this.model.images[this.modelIndex-1];
         },
-        nextImage: function(){
+        nextImage(){
             if(!this.parent || this.modelIndex < 0 || this.model.images.length <= this.modelIndex){
                 return null;
             }
@@ -162,7 +162,7 @@ export default {
         }
     },
     methods: {
-        loadModel: function(modelPath){
+        loadModel(modelPath){
             this.imageModel = null;
             this.modelIndex = -1;
 
@@ -189,10 +189,10 @@ export default {
                 this.imageExif = imageExif.exif;
             });
         },
-        thumbnailUrlFor: function(thumbnailPath){
+        thumbnailUrlFor(thumbnailPath){
             return `/media/thumbnails/${encodeURI(thumbnailPath)}`;
         },
-        generateImageUrl: function(rawUrl){
+        generateImageUrl(rawUrl){
             return `/media/images/${encodeURI(rawUrl)}`;
         },
         keyLeftAction(){
