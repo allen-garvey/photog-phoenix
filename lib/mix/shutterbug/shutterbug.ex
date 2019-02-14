@@ -88,7 +88,8 @@ defmodule Mix.Tasks.Shutterbug do
       exif_map = Exif.exif_for(image_master_path)
       creation_datetime = case Exif.exif_creation_time_as_datetime(exif_map) do
         {:ok, datetime, _} -> datetime
-        _                  -> now
+        {:error, reason}   -> exit_with_error("Image exif creation date is in the wrong format because #{reason}", :image_exif_creation_date_wrong_format)
+        nil                -> now
       end
 
       Photog.Shutterbug.Image.create_image!(%{

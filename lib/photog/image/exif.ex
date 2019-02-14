@@ -33,7 +33,8 @@ defmodule Photog.Image.Exif do
   Gets creation datetime as datetime
   Uses utc timezone as exif does not contain timezone information
   Returns nil if creation date is not in exif map
-  otherwise {:ok, datetime, calendar_utc_offset_integer}
+  retuns {:ok, datetime, calendar_utc_offset_integer} if datetime is valid
+  return {:error, :reason} if datetime string is not valid
   """
   def exif_creation_time_as_datetime(exif_map) do
     exif_map
