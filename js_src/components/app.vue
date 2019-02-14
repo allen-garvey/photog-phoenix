@@ -1,7 +1,7 @@
 <template>
     <div>
         <Photog-Header></Photog-Header>
-        <router-view :get-model="get" ref="routerView" :get-exif="getExif"></router-view>
+        <router-view :get-model="get" ref="routerView" :get-exif="getExif" :csrf-token="csrfToken"></router-view>
         <Photog-Footer></Photog-Footer>
     </div>
 </template>
@@ -16,6 +16,10 @@ const API_URL_BASE = '/api';
 export default {
     name: 'Photog-App',
     props: {
+        csrfToken: {
+            type: String,
+            required: true,
+        },
     },
     components: {
         'Photog-Header': PhotogHeader,

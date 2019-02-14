@@ -22,6 +22,10 @@ const THUMBNAIL_CHUNK_LENGTH = 60;
 export default {
     name: 'Thumbnail-List',
     props: {
+        csrfToken: {
+            type: String,
+            required: true,
+        },
         getModel: {
             type: Function,
             required: true,

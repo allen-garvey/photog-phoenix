@@ -83,6 +83,10 @@ function capitalizeFirstLetter(string){
 export default {
     name: 'Image-Detail',
     props: {
+        csrfToken: {
+            type: String,
+            required: true,
+        },
         getModel: {
             type: Function,
             required: true,
