@@ -3,9 +3,9 @@
         <h3 class="subsection-title">{{heading}}</h3>
         <div>
             <button @click="addItemsButtonAction">{{addButtonText}}</button>
-            <button v-if="showAddItems" @click="saveAddItems">Save</button>
+            <button v-if="isAddMode" @click="saveAddItems">Save</button>
         </div>
-        <div v-if="showAddItems">
+        <div v-if="isAddMode">
             <ul class="image-show-add-items-list">
                 <li v-for="(item, index) in itemsThatCanBeAdded" :key="index">
                     <input type="checkbox" :id="idForItemToBeAdded(item, index)" v-model="itemsThatCanBeAddedSelected[index]" />
@@ -23,6 +23,10 @@
 
 <script>
 import { fetchJson } from '../request-helpers.js';
+
+const MODE_ADD = 'add';
+const MODE_DEFAULT = 'default';
+const MODE_EDIT = 'edit';
 
 export default {
     name: 'Image-Items-List',
@@ -54,12 +58,15 @@ export default {
         return {
             itemsThatCanBeAdded: [],
             itemsThatCanBeAddedSelected: [],
-            showAddItems: false,
+            mode: MODE_DEFAULT,
         }
     },
     computed: {
         addButtonText(){
-            return this.showAddItems ? 'Cancel' : 'Add';
+            return this.isAddMode ? 'Cancel' : 'Add';
+        },
+        isAddMode(){
+            return this.mode === MODE_ADD;
         },
     },
     watch: {
@@ -70,8 +77,8 @@ export default {
             return `checkbox_${this.heading}_${index}_${item.id}`;
         },
         addItemsButtonAction(){
-            if(this.showAddItems){
-                this.showAddItems = false;
+            if(this.isAddMode){
+                this.mode = MODE_DEFAULT;
             }
             else{
                 this.fetchAddItems();
@@ -81,12 +88,12 @@ export default {
             fetchJson(this.unusedItemsApiUrl).then((items) => {
                 this.itemsThatCanBeAdded = items;
                 this.itemsThatCanBeAddedSelected = this.itemsThatCanBeAdded.map(()=>false);
-                this.showAddItems = true;
+                this.mode = MODE_ADD;
             });
         },
         saveAddItems(){
             console.log(this.itemsThatCanBeAddedSelected);
-            this.showAddItems = false;
+            this.mode = MODE_DEFAULT;
         },
     }
 }
