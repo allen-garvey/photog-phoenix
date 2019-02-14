@@ -2,6 +2,7 @@ defmodule Mix.Tasks.Shutterbug do
   use Mix.Task
 
   alias Photog.Shutterbug.Directory
+  alias Photog.Image.Exif
 
   @moduledoc """
   Given a directory of images, will copy image files to masters directory, create thumbnails, and add image resources to database
@@ -83,12 +84,19 @@ defmodule Mix.Tasks.Shutterbug do
       image_mini_thumbnail_relative_path = Path.join(target_relative_path, mini_thumbnail_name)
       image_master_relative_path = Path.join(target_relative_path, image_file)
 
+      #get exif data for creation_time
+      exif_map = Exif.exif_for(image_master_path)
+      creation_datetime = case Exif.exif_creation_time_as_datetime(exif_map) do
+        {:ok, datetime, _} -> datetime
+        _                  -> now
+      end
+
       Photog.Shutterbug.Image.create_image!(%{
         master_path: image_master_relative_path,
         mini_thumbnail_path: image_mini_thumbnail_relative_path,
         thumbnail_path: image_thumbnail_relative_path,
         import_id: import_id,
-        creation_time: now, #use now for now, but should update to creation time from image master exif
+        creation_time: creation_datetime,
       })
 
   	end

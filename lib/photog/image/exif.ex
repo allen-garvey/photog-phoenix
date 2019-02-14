@@ -19,4 +19,38 @@ defmodule Photog.Image.Exif do
       |> Enum.at(0)
     end
   end
+
+  @doc """
+  Gets creation datetime string for an image from exif_map returned from exif_for/1
+  example return is:
+  "2010:08:29 15:44:22"
+  """
+  def exif_creation_time(exif_map) do
+    exif_map["CreateDate"]
+  end
+
+  @doc """
+  Gets creation datetime as datetime
+  Uses utc timezone as exif does not contain timezone information
+  Returns nil if creation date is not in exif map
+  otherwise {:ok, datetime, calendar_utc_offset_integer}
+  """
+  def exif_creation_time_as_datetime(exif_map) do
+    exif_map
+    |> exif_creation_time
+    |> creation_time_to_datetime
+  end
+
+  defp creation_time_to_datetime(nil) do
+    nil
+  end
+
+  defp creation_time_to_datetime(creation_time) do
+    datetime_split = creation_time
+    |> String.split(" ")
+    |> Enum.flat_map(fn s -> String.split(s, ":") end)
+
+    "#{Enum.at(datetime_split, 0)}-#{Enum.at(datetime_split, 1)}-#{Enum.at(datetime_split, 2)}T#{Enum.at(datetime_split, 3)}:#{Enum.at(datetime_split, 4)}:#{Enum.at(datetime_split, 5)}Z"
+    |> DateTime.from_iso8601
+  end
 end

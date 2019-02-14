@@ -2,6 +2,7 @@ defmodule PhotogWeb.ImageView do
   use PhotogWeb, :view
   alias PhotogWeb.ImageView
   alias PhotogWeb.DatetimeHelpers
+  alias Photog.Image.Exif
 
   def render("index.json", %{images: images}) do
     %{data: render_many(images, ImageView, "image.json")}
@@ -31,7 +32,7 @@ defmodule PhotogWeb.ImageView do
         },
         file: %{
           megapixels: exif["Megapixels"],
-          creation_time: exif["CreateDate"],
+          creation_time: Exif.exif_creation_time(exif),
           file_type: exif["FileType"],
           mime_type: exif["MIMEType"],
           size: exif["FileSize"],
