@@ -332,12 +332,10 @@ defmodule Photog.Api do
 
   """
   def list_albums do
-    #better than using separate preload, since only uses 1 query
-    #https://hexdocs.pm/ecto/Ecto.Query.html#preload/3
     Repo.all from album in Album,
           join: cover_image in assoc(album, :cover_image),
           preload: [cover_image: cover_image],
-          order_by: :id
+          order_by: [desc: :id]
   end
 
   @doc """
