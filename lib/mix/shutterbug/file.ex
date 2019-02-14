@@ -12,6 +12,8 @@ defmodule Photog.Shutterbug.File do
   @doc """
   Checks file extension to see if file is image
   Possibly in the future use `mimetype` command instead, but that will be less portable
+  Not checking for .tiff since not all browsers can show them
+  Could potentially add .gif in future, but no need for it now
   """
   def is_image_filename(filename) do
   	!File.dir?(filename) and Regex.match?(~r/^\.(jpg|jpeg|png)$/, Path.extname(filename))
