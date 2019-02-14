@@ -17,10 +17,6 @@ export default {
             type: String,
             required: true,
         },
-        itemName: {
-            type: String,
-            required: true,
-        },
         itemRouteName: {
             type: String,
             required: true,

@@ -54,8 +54,8 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List heading="Albums" item-name="album" item-route-name="albumsShow" :items="image.albums" />
-        <Image-Items-List heading="Persons" item-name="person" item-route-name="personsShow" :items="image.persons" />
+        <Image-Items-List heading="Albums" item-route-name="albumsShow" :items="image.albums" />
+        <Image-Items-List heading="Persons" item-route-name="personsShow" :items="image.persons" />
     </main>
 </template>
 
