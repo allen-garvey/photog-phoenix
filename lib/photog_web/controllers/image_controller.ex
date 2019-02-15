@@ -82,9 +82,9 @@ defmodule PhotogWeb.ImageController do
     |> put_view(PhotogWeb.GenericView)
     |> (&(
       if Enum.empty?(errors) do
-        render(&1, "mixed_response.json", message: albums_added, error: errors)
-      else
         render(&1, "ok.json", message: albums_added)
+      else
+        render(&1, "mixed_response.json", message: albums_added, error: errors)
       end
     )).()
   end
