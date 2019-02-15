@@ -5,7 +5,7 @@
             <div class="button-container">
                 <button :disabled="isAddMode" @click="editItemsButtonAction" class="btn btn-sm btn-secondary" v-if="hasItems && !isAddMode">{{editButtonText}}</button>
                 <button :disabled="isEditMode" @click="addItemsButtonAction" class="btn btn-sm" :class="addButtonCssClass" v-if="!isEditMode">{{addButtonText}}</button>
-                <button v-if="isAddMode" @click="saveAddItems" class="btn btn-sm btn-success">Save</button>
+                <button :disabled="!areAnyItemsToBeAddedSelected" v-if="isAddMode" @click="saveAddItems" class="btn btn-sm btn-success">Save</button>
             </div>
         </div>
         <div v-if="isAddMode">
@@ -86,6 +86,9 @@ export default {
         },
         isDefaultMode(){
             return this.mode === MODE_DEFAULT;
+        },
+        areAnyItemsToBeAddedSelected(){
+            return this.itemsThatCanBeAddedSelected.some((isSelected)=>isSelected);
         },
     },
     watch: {
