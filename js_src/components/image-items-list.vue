@@ -158,6 +158,7 @@ export default {
                 const itemsThatHaveBeenAdded = itemsToBeAdded.filter((item)=>{
                     return itemsAddedSet.has(item.id);
                 });
+                //note that the items won't be sorted correctly, but not a big deal for now
                 const newItems = this.items.concat(itemsThatHaveBeenAdded);
                 this.itemsUpdatedCallback(newItems);
                 this.mode = MODE_DEFAULT;
