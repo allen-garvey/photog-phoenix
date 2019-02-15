@@ -67,6 +67,10 @@ export default {
             type: String,
             required: true,
         },
+        itemsUpdatedCallback: {
+            type: Function,
+            required: true,
+        },
     },
     created(){
     },
@@ -135,17 +139,27 @@ export default {
         },
         saveAddItems(){
             const itemIds = [];
+            const itemsToBeAdded = [];
             this.itemsThatCanBeAddedSelected.forEach((isSelected, i)=>{
                 if(isSelected){
-                    itemIds.push(this.itemsThatCanBeAdded[i].id);
+                    const itemToAdd = this.itemsThatCanBeAdded[i];
+                    itemIds.push(itemToAdd.id);
+                    itemsToBeAdded.push(itemToAdd);
                 }
             });
             const data = {};
             data[this.itemsApiName] = itemIds.join(',');
 
             sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
-                //add items to array
                 //display error message if any
+                
+                //add items to array
+                const itemsAddedSet = new Set(response.data);
+                const itemsThatHaveBeenAdded = itemsToBeAdded.filter((item)=>{
+                    return itemsAddedSet.has(item.id);
+                });
+                const newItems = this.items.concat(itemsThatHaveBeenAdded);
+                this.itemsUpdatedCallback(newItems);
                 this.mode = MODE_DEFAULT;
             });
         },

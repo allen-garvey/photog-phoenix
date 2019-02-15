@@ -54,8 +54,8 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" />
-        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
     </main>
 </template>
 
@@ -199,6 +199,13 @@ export default {
         formatExifPropertyName(s){
             return capitalizeFirstLetter(s).replace(/_/g, ' ');
         },
+        imageItemsUpdatedBuilder(itemsKey){
+            //because image is cached should really have callback on app to update cache,
+            //but just mutating it directly should be OK for now
+            return (updatedItems)=>{
+                this.image[itemsKey] = updatedItems; 
+            };
+        }
     }
 }
 </script>
