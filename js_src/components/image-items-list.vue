@@ -4,7 +4,7 @@
             <h3 class="image-show-text-list-title">{{heading}}</h3>
             <div class="button-container">
                 <button :disabled="isAddMode" @click="editItemsButtonAction" class="btn btn-sm btn-secondary" v-if="hasItems && !isAddMode">{{editButtonText}}</button>
-                <button :disabled="isEditMode" @click="addItemsButtonAction" class="btn btn-sm" :class="addButtonCssClass" v-if="!isEditMode">{{addButtonText}}</button>
+                <button :disabled="isEditMode" @click="addItemsButtonAction" class="btn btn-sm" :class="addButtonCssClass" v-if="!isEditMode || !hasItems">{{addButtonText}}</button>
                 <button :disabled="!areAnyItemsToBeAddedSelected" v-if="isAddMode" @click="saveAddItems" class="btn btn-sm btn-success">Save</button>
             </div>
         </div>
