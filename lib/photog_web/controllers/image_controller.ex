@@ -1,8 +1,10 @@
 defmodule PhotogWeb.ImageController do
   use PhotogWeb, :controller
 
+  alias Photog.Repo
   alias Photog.Api
   alias Photog.Api.Image
+  alias Photog.Api.AlbumImage
 
   action_fallback PhotogWeb.FallbackController
 
@@ -59,6 +61,61 @@ defmodule PhotogWeb.ImageController do
   def persons_for(conn, %{"id" => id, "unused" => "true"}) do
     persons = Api.list_image_persons_unused(id)
     render(conn, "persons.json", persons: persons)
+  end
+
+  @doc """
+  Adds albums to an image
+  tags comma-delimited list of album ids
+  """
+  def add_albums(conn, %{"id" => image_id, "albums" => albums}) do
+    results = String.split(albums, ",")
+    |> Enum.map(fn album_id ->
+      case Api.create_album_image(%{"image_id" => image_id, "album_id" => album_id}) do
+        {:ok, %AlbumImage{} = _album_image} -> {:ok, album_id}
+        _                                   -> {:error, album_id}
+
+      end
+    end)
+
+    errors = Enum.flat_map(results, fn item ->
+      case item do
+        {:ok, _album_id} -> []
+        {:error, album_id} -> [album_id]
+      end
+    end)
+
+    albums_added = Enum.flat_map(results, fn item ->
+      case item do
+        {:ok, album_id} -> [album_id]
+        {:error, _album_id} -> []
+      end
+    end)
+
+    conn
+    |> put_view(PhotogWeb.GenericView)
+    |> (&(
+      if Enum.empty?(errors) do
+        render(&1, "mixed_response.json", message: albums_added, error: errors)
+      else
+        render(&1, "ok.json", message: albums_added)
+      end
+    )).()
+  end
+
+  @doc """
+  Removes a album from an image
+  """
+  def remove_album(conn, %{"id" => image_id, "album_id" => album_id}) do
+    album_image = Repo.get_by!(Artour.PostTag, image_id: image_id, album_id: album_id)
+
+    # Here we use delete! (with a bang) because we expect
+    # it to always work (and if it does not, it will raise).
+    Repo.delete!(album_image)
+
+    # send_resp(conn, :no_content, "")
+    conn
+    |> put_view(PhotogWeb.GenericView)
+    |> render("ok.json", message: "Album removed")
   end
 
   def update(conn, %{"id" => id, "image" => image_params}) do
