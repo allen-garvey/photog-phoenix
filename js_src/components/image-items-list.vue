@@ -169,6 +169,9 @@ export default {
 
             sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
                 //remove item from array
+                const newItems = this.items.slice();
+                newItems.splice(index, 1);
+                this.itemsUpdatedCallback(newItems);
             });
         },
     }
