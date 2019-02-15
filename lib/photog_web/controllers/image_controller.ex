@@ -68,28 +68,15 @@ defmodule PhotogWeb.ImageController do
   tags comma-delimited list of album ids
   """
   def add_albums(conn, %{"id" => image_id, "albums" => albums}) do
-    results = String.split(albums, ",")
-    |> Enum.map(fn album_id ->
-      case Api.create_album_image(%{"image_id" => image_id, "album_id" => album_id}) do
-        {:ok, %AlbumImage{} = _album_image} -> {:ok, album_id}
-        _                                   -> {:error, album_id}
+    {albums_added, errors} =
+      String.split(albums, ",")
+      |> Enum.reduce({[], []}, fn album_id, {albums_added, errors} ->
+        case Api.create_album_image(%{"image_id" => image_id, "album_id" => album_id}) do
+          {:ok, %AlbumImage{} = _album_image} -> { [album_id | albums_added], errors }
+          _                                   -> { albums_added, [album_id | errors] }
 
-      end
-    end)
-
-    errors = Enum.flat_map(results, fn item ->
-      case item do
-        {:ok, _album_id} -> []
-        {:error, album_id} -> [album_id]
-      end
-    end)
-
-    albums_added = Enum.flat_map(results, fn item ->
-      case item do
-        {:ok, album_id} -> [album_id]
-        {:error, _album_id} -> []
-      end
-    end)
+        end
+      end)
 
     conn
     |> put_view(PhotogWeb.GenericView)
