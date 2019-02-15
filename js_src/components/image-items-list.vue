@@ -27,6 +27,7 @@
 
 <script>
 import { fetchJson, sendJson } from '../request-helpers.js';
+import { arrayRemove } from '../array-util.js';
 
 const MODE_ADD = 1;
 const MODE_DEFAULT = 2;
@@ -169,9 +170,7 @@ export default {
 
             sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
                 //remove item from array
-                const newItems = this.items.slice();
-                newItems.splice(index, 1);
-                this.itemsUpdatedCallback(newItems);
+                this.itemsUpdatedCallback(arrayRemove(this.items, index));
             });
         },
     }
