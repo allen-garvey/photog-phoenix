@@ -54,8 +54,8 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" />
-        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" />
+        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" />
     </main>
 </template>
 
@@ -198,7 +198,7 @@ export default {
         },
         formatExifPropertyName(s){
             return capitalizeFirstLetter(s).replace(/_/g, ' ');
-        }
+        },
     }
 }
 </script>

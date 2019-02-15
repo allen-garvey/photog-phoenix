@@ -93,7 +93,7 @@ defmodule PhotogWeb.ImageController do
   Removes a album from an image
   """
   def remove_album(conn, %{"id" => image_id, "album_id" => album_id}) do
-    album_image = Repo.get_by!(Artour.PostTag, image_id: image_id, album_id: album_id)
+    album_image = Repo.get_by!(AlbumImage, image_id: image_id, album_id: album_id)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).

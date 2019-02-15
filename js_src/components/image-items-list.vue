@@ -63,6 +63,10 @@ export default {
             type: String,
             required: true,
         },
+        removeItemApiUrlBase: {
+            type: String,
+            required: true,
+        },
     },
     created(){
     },
@@ -140,11 +144,17 @@ export default {
             data[this.itemsApiName] = itemIds.join(',');
 
             sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
+                //add items to array
+                //display error message if any
                 this.mode = MODE_DEFAULT;
             });
         },
         deleteItem(item, index){
-            console.log(item);
+            const removeItemUrl = this.removeItemApiUrlBase + item.id;
+
+            sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
+                //remove item from array
+            });
         },
     }
 }
