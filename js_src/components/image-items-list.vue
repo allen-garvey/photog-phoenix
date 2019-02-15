@@ -17,9 +17,9 @@
             </ul>
         </div>
         <ul class="image-show-text-list" v-if="hasItems">
-            <li class="image-container" v-for="(item, index) in items" :key="item.id">
+            <li v-for="(item, index) in items" :key="item.id">
                 <router-link :to="{name: itemRouteName, params: {id: item.id}}">{{item.name}}</router-link>
-                <button v-if="isEditMode" @click="deleteItem(item, index)" class="btn btn-xs btn-outline-danger">Delete</button>
+                <button :style="{visibility: isEditMode ? 'visible' : 'hidden'}" @click="deleteItem(item, index)" class="btn btn-xs btn-outline-danger">Delete</button>
             </li>
         </ul>
     </div>
