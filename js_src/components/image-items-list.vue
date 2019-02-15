@@ -3,9 +3,9 @@
         <div class="image-show-text-list-heading">
             <h3 class="image-show-text-list-title">{{heading}}</h3>
             <div class="button-container">
-                <button :disabled="isAddMode" @click="editItemsButtonAction" v-if="hasItems">{{editButtonText}}</button>
-                <button :disabled="isEditMode" @click="addItemsButtonAction">{{addButtonText}}</button>
-                <button v-if="isAddMode" @click="saveAddItems">Save</button>
+                <button :disabled="isAddMode" @click="editItemsButtonAction" class="btn btn-sm btn-secondary" v-if="hasItems">{{editButtonText}}</button>
+                <button :disabled="isEditMode" @click="addItemsButtonAction" class="btn btn-sm" :class="addButtonCssClass" v-if="!isEditMode">{{addButtonText}}</button>
+                <button v-if="isAddMode" @click="saveAddItems" class="btn btn-sm btn-success">Save</button>
             </div>
         </div>
         <div v-if="isAddMode">
@@ -19,7 +19,7 @@
         <ul class="image-show-text-list" v-if="hasItems">
             <li class="image-container" v-for="(item, index) in items" :key="item.id">
                 <router-link :to="{name: itemRouteName, params: {id: item.id}}">{{item.name}}</router-link>
-                <button v-if="isEditMode" @click="deleteItem(item, index)">Delete</button>
+                <button v-if="isEditMode" @click="deleteItem(item, index)" class="btn btn-xs btn-outline-danger">Delete</button>
             </li>
         </ul>
     </div>
@@ -71,6 +71,9 @@ export default {
         },
         addButtonText(){
             return this.isAddMode ? 'Cancel' : 'Add';
+        },
+        addButtonCssClass(){
+            return this.isAddMode ? 'btn-outline-secondary' : 'btn-primary';
         },
         editButtonText(){
             return this.isEditMode ? 'Cancel' : 'Edit';
