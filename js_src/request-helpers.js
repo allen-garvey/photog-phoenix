@@ -14,5 +14,4 @@ export function sendJson(url, csrfToken='', method='POST', data={}){
             },
 
         }).then(data=>data.json())
-        .then(json => json.data)
 }

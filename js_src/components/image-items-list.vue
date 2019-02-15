@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { fetchJson } from '../request-helpers.js';
+import { fetchJson, sendJson } from '../request-helpers.js';
 
 const MODE_ADD = 1;
 const MODE_DEFAULT = 2;
@@ -51,7 +51,15 @@ export default {
             type: Array,
             required: true,
         },
+        itemsApiName: {
+            type: String,
+            required: true,
+        },
         unusedItemsApiUrl: {
+            type: String,
+            required: true,
+        },
+        addItemsApiUrl: {
             type: String,
             required: true,
         },
@@ -122,8 +130,18 @@ export default {
             });
         },
         saveAddItems(){
-            console.log(this.itemsThatCanBeAddedSelected);
-            this.mode = MODE_DEFAULT;
+            const itemIds = [];
+            this.itemsThatCanBeAddedSelected.forEach((isSelected, i)=>{
+                if(isSelected){
+                    itemIds.push(this.itemsThatCanBeAdded[i].id);
+                }
+            });
+            const data = {};
+            data[this.itemsApiName] = itemIds.join(',');
+
+            sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
+                this.mode = MODE_DEFAULT;
+            });
         },
         deleteItem(item, index){
             console.log(item);
