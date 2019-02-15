@@ -73,7 +73,7 @@ defmodule PhotogWeb.ImageController do
       String.split(albums, ",")
       |> Enum.reduce({[], []}, fn album_id, {albums_added, errors} ->
         case Api.create_album_image(%{"image_id" => image_id, "album_id" => album_id}) do
-          {:ok, %AlbumImage{} = _album_image} -> { [album_id | albums_added], errors }
+          {:ok, %AlbumImage{} = album_image} -> { [album_image.album_id | albums_added], errors }
           {:error, _changeset}                -> { albums_added, [ album_id | errors] }
 
         end
@@ -115,7 +115,7 @@ defmodule PhotogWeb.ImageController do
       String.split(persons, ",")
       |> Enum.reduce({[], []}, fn person_id, {persons_added, errors} ->
         case Api.create_person_image(%{"image_id" => image_id, "person_id" => person_id}) do
-          {:ok, %PersonImage{} = _person_image} -> { [person_id | persons_added], errors }
+          {:ok, %PersonImage{} = person_image} -> { [person_image.person_id | persons_added], errors }
           {:error, _changeset}                  -> { persons_added, [ person_id | errors] }
 
         end
