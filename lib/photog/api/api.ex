@@ -361,7 +361,7 @@ defmodule Photog.Api do
                       left_join: import in assoc(image, :import),
                       where: album_image.album_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
-                      order_by: album_image.image_order
+                      order_by: [album_image.image_order, album_image.id]
 
     Repo.one!(from album in Album,
                       join: image in assoc(album, :images),
