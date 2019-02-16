@@ -11,15 +11,6 @@ export default {
             redirect: '/albums' 
         },
         { 
-            path: '/folders',
-            name: 'foldersIndex', 
-            component: TextList,
-            props: {
-                itemShowRouteName: 'foldersShow',
-                itemsListKey: null,
-            },
-        },
-        { 
             path: '/tags',
             name: 'tagsIndex', 
             component: TextList,
@@ -171,25 +162,6 @@ export default {
                             params: {
                                 person_id: route.params.id,
                                 image_id: item.id,
-                            },
-                        };
-                    },
-                }; 
-            },
-        },
-        { 
-            path: '/folders/:id',
-            name: 'foldersShow', 
-            component: ThumbnailList,
-            props: (route) => {
-                return {
-                    apiPath: route.path,
-                    itemsListKey: 'albums',
-                    showRouteFor: (item)=>{
-                        return {
-                            name: 'albumsShow',
-                            params: {
-                                id: item.id,
                             },
                         };
                     },
