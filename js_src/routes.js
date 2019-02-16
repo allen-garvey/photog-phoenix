@@ -113,6 +113,7 @@ export default {
             props: (route) => {
                 return {
                     apiPath: '/images/?in_album=false',
+                    enableHasPersonFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
