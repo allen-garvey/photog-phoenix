@@ -15,6 +15,9 @@ defmodule Photog.Api.Album do
 
     has_many :album_images, Photog.Api.AlbumImage
     many_to_many :images, Photog.Api.Image, join_through: "album_images"
+
+    has_many :album_tags, Photog.Api.AlbumTag
+    many_to_many :tags, Photog.Api.Tag, join_through: "album_tags"
   end
 
   @doc false

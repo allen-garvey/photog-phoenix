@@ -8,6 +8,9 @@ defmodule Photog.Api.Tag do
     field :name, :string
 
     timestamps()
+
+    has_many :album_tags, Photog.Api.AlbumTag
+    many_to_many :albums, Photog.Api.Album, join_through: "album_tags"
   end
 
   @doc false
