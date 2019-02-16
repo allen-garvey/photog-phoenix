@@ -27,7 +27,7 @@
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" @mousedown="dragSelectMultipleStart" @mouseup="dragSelectMultipleEnd" @mouseleave="dragSelectMultipleEnd" @mousemove="dragSelectMultipleMouseMove">
             <div class="drag-select-overlay" v-if="isCurrentlyDragSelecting" :style="{height: dragOverlayHeight, width: dragOverlayWidth, left: dragOverlayLeft, top: dragOverlayTop}"></div>
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" @mouseenter="listItemMouseEnter(item, i)" :class="{'drag-selected': dragSelectedItems[i]}">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" @mouseenter="listItemMouseEnter(item, i)" @mouseleave="listItemMouseLeave(item, i, $event)" :class="{'drag-selected': dragSelectedItems[i]}">
                 <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
@@ -115,6 +115,8 @@ export default {
             dragSelectStartCoordinate: null,
             dragSelectCurrentCoordinate: null,
             dragSelectedItems: [],
+            dragSelectMouseLeftDirection: true,
+            dragSelectMouseUpDirection: true,
         }
     },
     computed: {
@@ -245,10 +247,13 @@ export default {
             if(!this.isCurrentlyDragSelecting){
                 return;
             }
-            this.dragSelectCurrentCoordinate = {
+            const coordinate = {
                 x: event.pageX,
                 y: event.pageY,
             };
+            this.dragSelectMouseLeftDirection = coordinate.x < this.dragSelectCurrentCoordinate.x;
+            this.dragSelectMouseUpDirection = coordinate.y < this.dragSelectCurrentCoordinate.y;
+            this.dragSelectCurrentCoordinate = coordinate;
         },
         dragSelectMultipleEnd(event){
             if(!this.isCurrentlyDragSelecting){
@@ -261,8 +266,19 @@ export default {
         },
         listItemMouseEnter(item, index){
             if(this.isCurrentlyDragSelecting){
-                console.log('drag entered');
-                vue.set(this.dragSelectedItems, index, !this.dragSelectedItems[index]);
+                console.log('enter');
+                vue.set(this.dragSelectedItems, index, true);
+            }
+        },
+        listItemMouseLeave(item, index, event){
+            if(this.isCurrentlyDragSelecting){
+                //use coordinates to determine if we need to deselect item
+                const x = event.pageX;
+                const y = event.pageY;
+
+                if((this.dragSelectMouseLeftDirection && x > this.dragSelectStartCoordinate.x) || (!this.dragSelectMouseLeftDirection && x < this.dragSelectStartCoordinate.x) || (this.dragSelectMouseUpDirection && y > this.dragSelectStartCoordinate.y) || (!this.dragSelectMouseUpDirection && y < this.dragSelectStartCoordinate.y)){
+                    vue.set(this.dragSelectedItems, index, false);
+                }
             }
         },
     }
