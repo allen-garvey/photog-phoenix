@@ -13,6 +13,8 @@ defmodule Photog.Api do
   alias Photog.Api.Image
   alias Photog.Api.Person
   alias Photog.Api.Import
+  alias Photog.Api.Tag
+  alias Photog.Api.AlbumTag
 
   @doc """
   Returns the list of folders.
@@ -847,8 +849,6 @@ defmodule Photog.Api do
     Import.changeset(import, %{})
   end
 
-  alias Photog.Api.Tag
-
   @doc """
   Returns the list of tags.
 
@@ -876,7 +876,17 @@ defmodule Photog.Api do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tag!(id), do: Repo.get!(Tag, id)
+  def get_tag!(id) do
+    albums_query = from album in Album,
+                      join: cover_image in assoc(album, :cover_image),
+                      join: album_tag in AlbumTag,
+                      on: album_tag.tag_id == ^id and album_tag.album_id == album.id,
+                      order_by: [album_tag.album_order, album_tag.id],
+                      preload: [cover_image: cover_image]
+
+    Repo.get!(Tag, id)
+    |> Repo.preload(albums: albums_query)
+  end
 
   @doc """
   Creates a tag.
@@ -942,8 +952,6 @@ defmodule Photog.Api do
   def change_tag(%Tag{} = tag) do
     Tag.changeset(tag, %{})
   end
-
-  alias Photog.Api.AlbumTag
 
   @doc """
   Returns the list of album_tags.

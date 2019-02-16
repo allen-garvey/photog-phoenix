@@ -14,6 +14,7 @@ defmodule PhotogWeb.TagView do
     %{
       id: tag.id,
       name: tag.name,
+      albums: Enum.map(tag.albums, &PhotogWeb.AlbumView.album_excerpt_to_map/1)
     }
   end
 
