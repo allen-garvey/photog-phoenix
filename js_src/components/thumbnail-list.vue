@@ -27,7 +27,7 @@
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" @mousedown="dragSelectMultipleStart" @mouseup="dragSelectMultipleEnd" @mouseleave="dragSelectMultipleEnd" @mousemove="dragSelectMultipleMouseMove">
             <div class="drag-select-overlay" v-if="isCurrentlyDragSelecting" :style="{height: dragOverlayHeight, width: dragOverlayWidth, left: dragOverlayLeft, top: dragOverlayTop}"></div>
-            <li v-for="(item, i) in filteredThumbnailList" :key="i">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" @mouseenter="listItemMouseEnter(item, i)" :class="{'drag-selected': dragSelectedItems[i]}">
                 <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
@@ -40,6 +40,7 @@
 
 <script>
 import infiniteScroll from 'vue-infinite-scroll';
+import vue from 'vue';
 
 //amount of thumbnails to add each time vue infinite scroll is called
 const THUMBNAIL_CHUNK_LENGTH = 60;
@@ -253,6 +254,12 @@ export default {
         },
         resetDragSelectedItems(){
             this.dragSelectedItems = this.filteredThumbnailList.map(()=>false);
+        },
+        listItemMouseEnter(item, index){
+            if(this.isCurrentlyDragSelecting){
+                console.log('drag entered');
+                vue.set(this.dragSelectedItems, index, !this.dragSelectedItems[index]);
+            }
         },
     }
 }

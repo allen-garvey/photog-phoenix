@@ -12,6 +12,9 @@ $thumbnail_dimensions: 205px;
         flex-basis: $thumbnail_dimensions;
         margin-bottom: 25px;
     }
+    .drag-selected{
+        border: 4px solid #FF3919;
+    }
 }
 
 .thumbnail-image-container{
