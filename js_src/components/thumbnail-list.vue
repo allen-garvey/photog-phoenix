@@ -141,25 +141,25 @@ export default {
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y) - DRAG_OVERLAY_WHITESPACE}px`;
+            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y) + DRAG_OVERLAY_WHITESPACE}px`;
         },
         dragOverlayLeft(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x) - DRAG_OVERLAY_WHITESPACE}px`;
+            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x) + DRAG_OVERLAY_WHITESPACE}px`;
         },
         dragOverlayHeight(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y) - DRAG_OVERLAY_WHITESPACE}px`;
+            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y) - (DRAG_OVERLAY_WHITESPACE * 4)}px`;
         },
         dragOverlayWidth(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x) - DRAG_OVERLAY_WHITESPACE}px`;
+            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x) - (DRAG_OVERLAY_WHITESPACE * 4)}px`;
         },
     },
     watch: {
