@@ -89,10 +89,13 @@ export default {
     },
     created(){
         //initial setup of items, since $route watch method won't be called on initial load
-        this.loadModel(this.apiPath);
+        this.loadModel(this.apiPath).then(()=>{
+            this.isInitialLoadComplete = true;
+        });
     },
     data() {
         return {
+            isInitialLoadComplete: false,
             model: [],
             thumbnailList: [],
             albumFilterMode: ALBUM_FILTER_MODE_ALL,
@@ -112,7 +115,7 @@ export default {
 
         },
         isInfiniteScrollDisabled(){
-            return this.thumbnailList.length === this.thumnailListSource.length;
+            return !this.isInitialLoadComplete && this.thumbnailList.length === this.thumnailListSource.length;
         },
         filteredThumbnailList(){
             return this.thumbnailList.filter((item)=>{
@@ -128,7 +131,7 @@ export default {
     methods: {
         loadModel: function(modelPath){
             this.thumbnailList = [];
-            this.getModel(modelPath).then((itemsJson)=>{
+            return this.getModel(modelPath).then((itemsJson)=>{
                 this.model = itemsJson;
                 this.thumbnailList = this.thumnailListSource.slice(0, THUMBNAIL_CHUNK_LENGTH);
             });
