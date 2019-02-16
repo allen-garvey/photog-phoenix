@@ -12,6 +12,9 @@ defmodule PhotogWeb.AlbumTagView do
 
   def render("album_tag.json", %{album_tag: album_tag}) do
     %{id: album_tag.id,
-      album_order: album_tag.album_order}
+      album_order: album_tag.album_order,
+      album_id: album_tag.album_id,
+      tag_id: album_tag.tag_id,
+    }
   end
 end
