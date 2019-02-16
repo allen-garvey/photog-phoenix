@@ -53,6 +53,10 @@ const ALBUM_FILTER_MODE_ALL = 1;
 const ALBUM_FILTER_MODE_NO_ALBUMS = 2;
 const ALBUM_FILTER_MODE_HAS_ALBUMS = 3;
 
+//subtract a certain amount of pixels from drag overlay
+//otherwise it interferes with mounse enter/leave events on list items
+const DRAG_OVERLAY_WHITESPACE = 4;
+
 export default {
     name: 'Thumbnail-List',
     props: {
@@ -137,25 +141,25 @@ export default {
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y)}px`;
+            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y) - DRAG_OVERLAY_WHITESPACE}px`;
         },
         dragOverlayLeft(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x)}px`;
+            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x) - DRAG_OVERLAY_WHITESPACE}px`;
         },
         dragOverlayHeight(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y)}px`;
+            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y) - DRAG_OVERLAY_WHITESPACE}px`;
         },
         dragOverlayWidth(){
             if(!this.isCurrentlyDragSelecting){
                 return 0;
             }
-            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x)}px`;
+            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x) - DRAG_OVERLAY_WHITESPACE}px`;
         },
     },
     watch: {
