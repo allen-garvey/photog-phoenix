@@ -3,7 +3,7 @@
         <h2 v-if="model.name">{{model.name}}</h2>
         <div class="thumbnail-filter-controls-container">
             <fieldset v-if="enableHasAlbumFilter">
-                <legend>Album filter</legend>
+                <legend>Album</legend>
                 <label for="album_filter_mode_all">All</label>
                 <input id="album_filter_mode_all" type="radio" value="1" v-model="albumFilterMode" />
                 
@@ -14,7 +14,7 @@
                 <input id="album_filter_mode_has_albums" type="radio" value="3" v-model="albumFilterMode" />
             </fieldset>
             <fieldset v-if="enableHasPersonFilter">
-                <legend>Person filter</legend>
+                <legend>Person</legend>
                 <label for="persons_filter_mode_all">All</label>
                 <input id="persons_filter_mode_all" type="radio" value="1" v-model="personFilterMode" />
                 
