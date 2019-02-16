@@ -71,6 +71,8 @@ export default {
             props: (route) => {
                 return {
                     apiPath: route.path,
+                    enableHasAlbumFilter: true,
+                    enableHasPersonFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -90,6 +92,8 @@ export default {
             props: (route) => {
                 return {
                     apiPath: '/images/?favorites=true',
+                    enableHasAlbumFilter: true,
+                    enableHasPersonFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -129,6 +133,7 @@ export default {
                 return {
                     apiPath: route.path,
                     itemsListKey: 'images',
+                    enableHasPersonFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumImagesShow',
@@ -149,6 +154,7 @@ export default {
                 return {
                     apiPath: route.path,
                     itemsListKey: 'images',
+                    enableHasAlbumFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'personImagesShow',
@@ -188,6 +194,8 @@ export default {
                 return {
                     apiPath: route.path,
                     itemsListKey: 'images',
+                    enableHasAlbumFilter: true,
+                    enableHasPersonFilter: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'importImagesShow',

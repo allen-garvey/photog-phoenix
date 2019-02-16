@@ -1,8 +1,32 @@
 <template>
     <main class="main container">
         <h2 v-if="model.name">{{model.name}}</h2>
+        <div class="thumbnail-filter-controls-container">
+            <fieldset v-if="enableHasAlbumFilter">
+                <legend>Album filter</legend>
+                <label for="album_filter_mode_all">All</label>
+                <input id="album_filter_mode_all" type="radio" value="1" v-model="albumFilterMode" />
+                
+                <label for="album_filter_mode_no_albums">Uncategorized</label>
+                <input id="album_filter_mode_no_albums" type="radio" value="2" v-model="albumFilterMode" />
+                
+                <label for="album_filter_mode_has_albums">Categorized</label>
+                <input id="album_filter_mode_has_albums" type="radio" value="3" v-model="albumFilterMode" />
+            </fieldset>
+            <fieldset v-if="enableHasPersonFilter">
+                <legend>Person filter</legend>
+                <label for="persons_filter_mode_all">All</label>
+                <input id="persons_filter_mode_all" type="radio" value="1" v-model="personFilterMode" />
+                
+                <label for="persons_filter_mode_no_persons">Uncategorized</label>
+                <input id="persons_filter_mode_no_persons" type="radio" value="2" v-model="personFilterMode" />
+                
+                <label for="persons_filter_mode_has_persons">Categorized</label>
+                <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
+            </fieldset>
+        </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled">
-            <li v-for="(item, i) in thumbnailList" :key="i">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
@@ -18,6 +42,14 @@ import infiniteScroll from 'vue-infinite-scroll';
 
 //amount of thumbnails to add each time vue infinite scroll is called
 const THUMBNAIL_CHUNK_LENGTH = 60;
+
+const PERSON_FILTER_MODE_ALL = 1;
+const PERSON_FILTER_MODE_NO_PERSONS = 2;
+const PERSON_FILTER_MODE_HAS_PERSONS = 3;
+
+const ALBUM_FILTER_MODE_ALL = 1;
+const ALBUM_FILTER_MODE_NO_ALBUMS = 2;
+const ALBUM_FILTER_MODE_HAS_ALBUMS = 3;
 
 export default {
     name: 'Thumbnail-List',
@@ -41,6 +73,14 @@ export default {
         itemsListKey: {
             type: String,
         },
+        enableHasAlbumFilter: {
+            type: Boolean,
+            default: false,
+        },
+        enableHasPersonFilter: {
+            type: Boolean,
+            default: false,
+        },
     },
     directives: {
         infiniteScroll,
@@ -55,6 +95,8 @@ export default {
         return {
             model: [],
             thumbnailList: [],
+            albumFilterMode: ALBUM_FILTER_MODE_ALL,
+            personFilterMode: PERSON_FILTER_MODE_ALL,
         }
     },
     computed: {
@@ -71,6 +113,11 @@ export default {
         },
         isInfiniteScrollDisabled(){
             return this.thumbnailList.length === this.thumnailListSource.length;
+        },
+        filteredThumbnailList(){
+            return this.thumbnailList.filter((item)=>{
+                return this.shouldShowItem(item);
+            });
         },
     },
     watch: {
@@ -116,6 +163,25 @@ export default {
                 return `Thumbnail for ${item.name}`;
             }
             return `Thumbnail for image taken on ${item.creation_time.formatted.us_date}`;
+        },
+        shouldShowItem(item){
+            let albumValidation = true;
+            if(this.albumFilterMode == ALBUM_FILTER_MODE_NO_ALBUMS){
+                albumValidation = !item.albums || item.albums.length === 0;
+            }
+            else if(this.albumFilterMode == ALBUM_FILTER_MODE_HAS_ALBUMS){
+                albumValidation = item.albums && item.albums.length > 0;
+            }
+
+            let personValidation = true;
+            if(this.personFilterMode == PERSON_FILTER_MODE_NO_PERSONS){
+                personValidation = !item.persons || item.persons.length === 0;
+            }
+            else if(this.personFilterMode == PERSON_FILTER_MODE_HAS_PERSONS){
+                personValidation = item.persons && item.persons.length > 0;
+            }
+
+            return albumValidation && personValidation;
         },
     }
 }
