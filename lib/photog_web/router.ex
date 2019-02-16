@@ -17,7 +17,6 @@ defmodule PhotogWeb.Router do
   scope "/api", PhotogWeb do
     pipe_through :api
 
-    resources "/folders", FolderController,             only: [:index, :show]
     resources "/images", ImageController,               only: [:index, :show]
     resources "/albums", AlbumController,               only: [:index, :show]
     resources "/persons", PersonController,             only: [:index, :show]

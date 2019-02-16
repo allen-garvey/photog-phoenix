@@ -6,7 +6,6 @@ defmodule Photog.Api do
   import Ecto.Query, warn: false
   alias Photog.Repo
 
-  alias Photog.Api.Folder
   alias Photog.Api.Album
   alias Photog.Api.AlbumImage
   alias Photog.Api.PersonImage
@@ -15,115 +14,6 @@ defmodule Photog.Api do
   alias Photog.Api.Import
   alias Photog.Api.Tag
   alias Photog.Api.AlbumTag
-
-  @doc """
-  Returns the list of folders.
-
-  ## Examples
-
-      iex> list_folders()
-      [%Folder{}, ...]
-
-  """
-  def list_folders do
-    Repo.all(Folder)
-  end
-
-  @doc """
-  Gets a single folder.
-
-  Raises `Ecto.NoResultsError` if the Folder does not exist.
-
-  ## Examples
-
-      iex> get_folder!(123)
-      %Folder{}
-
-      iex> get_folder!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_folder!(id) do
-    #better than using separate preload, since only uses 1 query
-    #https://hexdocs.pm/ecto/Ecto.Query.html#preload/3
-
-    albums_query = from album in Album,
-                      join: cover_image in assoc(album, :cover_image),
-                      order_by: album.folder_order,
-                      preload: [cover_image: cover_image]
-
-    Repo.one! from folder in Folder,
-           join:  album in assoc(folder, :albums),
-           where: folder.id == ^id,
-           preload: [albums: ^albums_query],
-           limit: 1
-
-  end
-
-  @doc """
-  Creates a folder.
-
-  ## Examples
-
-      iex> create_folder(%{field: value})
-      {:ok, %Folder{}}
-
-      iex> create_folder(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_folder(attrs \\ %{}) do
-    %Folder{}
-    |> Folder.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a folder.
-
-  ## Examples
-
-      iex> update_folder(folder, %{field: new_value})
-      {:ok, %Folder{}}
-
-      iex> update_folder(folder, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_folder(%Folder{} = folder, attrs) do
-    folder
-    |> Folder.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Folder.
-
-  ## Examples
-
-      iex> delete_folder(folder)
-      {:ok, %Folder{}}
-
-      iex> delete_folder(folder)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_folder(%Folder{} = folder) do
-    Repo.delete(folder)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking folder changes.
-
-  ## Examples
-
-      iex> change_folder(folder)
-      %Ecto.Changeset{source: %Folder{}}
-
-  """
-  def change_folder(%Folder{} = folder) do
-    Folder.changeset(folder, %{})
-  end
 
   @doc """
   Preloads image import
