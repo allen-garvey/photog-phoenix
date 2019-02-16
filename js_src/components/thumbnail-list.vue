@@ -25,7 +25,8 @@
                 <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
             </fieldset>
         </div>
-        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled">
+        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" @mousedown="dragSelectMultipleStart" @mouseup="dragSelectMultipleEnd" @mouseleave="dragSelectMultipleEnd" @mousemove="dragSelectMultipleMouseMove">
+            <div class="drag-select-overlay" v-if="isCurrentlyDragSelecting" :style="{height: dragOverlayHeight, width: dragOverlayWidth, left: dragOverlayLeft, top: dragOverlayTop}"></div>
             <li v-for="(item, i) in filteredThumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
@@ -81,6 +82,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        enableDragSelectMultiple: {
+            type: Boolean,
+            default: true,
+        },
     },
     directives: {
         infiniteScroll,
@@ -100,6 +105,11 @@ export default {
             thumbnailList: [],
             albumFilterMode: ALBUM_FILTER_MODE_ALL,
             personFilterMode: PERSON_FILTER_MODE_ALL,
+            //following used for drag select multiple items
+            isCurrentlyDragSelecting: false,
+            dragSelectStartCoordinate: null,
+            dragSelectCurrentCoordinate: null,
+            dragSelectedItems: [],
         }
     },
     computed: {
@@ -122,11 +132,38 @@ export default {
                 return this.shouldShowItem(item);
             });
         },
+        dragOverlayTop(){
+            if(!this.isCurrentlyDragSelecting){
+                return 0;
+            }
+            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y)}px`;
+        },
+        dragOverlayLeft(){
+            if(!this.isCurrentlyDragSelecting){
+                return 0;
+            }
+            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x)}px`;
+        },
+        dragOverlayHeight(){
+            if(!this.isCurrentlyDragSelecting){
+                return 0;
+            }
+            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y)}px`;
+        },
+        dragOverlayWidth(){
+            if(!this.isCurrentlyDragSelecting){
+                return 0;
+            }
+            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x)}px`;
+        },
     },
     watch: {
         '$route'(to, from){
             this.loadModel(this.apiPath);
-        }
+        },
+        filteredThumbnailList(){
+            this.resetDragSelectedItems();
+        },
     },
     methods: {
         loadModel: function(modelPath){
@@ -185,6 +222,37 @@ export default {
             }
 
             return albumValidation && personValidation;
+        },
+        dragSelectMultipleStart(event){
+            if(!this.enableDragSelectMultiple){
+                return;
+            }
+            const coordinate = {
+                x: event.pageX,
+                y: event.pageY,
+            };
+            this.dragSelectStartCoordinate = coordinate;
+            this.dragSelectCurrentCoordinate = coordinate;
+            this.resetDragSelectedItems();
+            this.isCurrentlyDragSelecting = true;
+        },
+        dragSelectMultipleMouseMove(event){
+            if(!this.isCurrentlyDragSelecting){
+                return;
+            }
+            this.dragSelectCurrentCoordinate = {
+                x: event.pageX,
+                y: event.pageY,
+            };
+        },
+        dragSelectMultipleEnd(event){
+            if(!this.isCurrentlyDragSelecting){
+                return;
+            }
+            this.isCurrentlyDragSelecting = false;
+        },
+        resetDragSelectedItems(){
+            this.dragSelectedItems = this.filteredThumbnailList.map(()=>false);
         },
     }
 }

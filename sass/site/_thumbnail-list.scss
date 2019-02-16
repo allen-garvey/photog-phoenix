@@ -58,3 +58,11 @@ $thumbnail_dimensions: 205px;
         margin-right: 1em;
     }
 }
+
+.drag-select-overlay{
+    position: absolute;
+    z-index: 3000;
+    background-color: #0753FF;
+    border: 4px solid #0044FF;
+    opacity: 0.3;
+}
