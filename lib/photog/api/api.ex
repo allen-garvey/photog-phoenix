@@ -942,4 +942,100 @@ defmodule Photog.Api do
   def change_tag(%Tag{} = tag) do
     Tag.changeset(tag, %{})
   end
+
+  alias Photog.Api.AlbumTag
+
+  @doc """
+  Returns the list of album_tags.
+
+  ## Examples
+
+      iex> list_album_tags()
+      [%AlbumTag{}, ...]
+
+  """
+  def list_album_tags do
+    Repo.all(AlbumTag)
+  end
+
+  @doc """
+  Gets a single album_tag.
+
+  Raises `Ecto.NoResultsError` if the Album tag does not exist.
+
+  ## Examples
+
+      iex> get_album_tag!(123)
+      %AlbumTag{}
+
+      iex> get_album_tag!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_album_tag!(id), do: Repo.get!(AlbumTag, id)
+
+  @doc """
+  Creates a album_tag.
+
+  ## Examples
+
+      iex> create_album_tag(%{field: value})
+      {:ok, %AlbumTag{}}
+
+      iex> create_album_tag(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_album_tag(attrs \\ %{}) do
+    %AlbumTag{}
+    |> AlbumTag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a album_tag.
+
+  ## Examples
+
+      iex> update_album_tag(album_tag, %{field: new_value})
+      {:ok, %AlbumTag{}}
+
+      iex> update_album_tag(album_tag, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_album_tag(%AlbumTag{} = album_tag, attrs) do
+    album_tag
+    |> AlbumTag.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AlbumTag.
+
+  ## Examples
+
+      iex> delete_album_tag(album_tag)
+      {:ok, %AlbumTag{}}
+
+      iex> delete_album_tag(album_tag)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_album_tag(%AlbumTag{} = album_tag) do
+    Repo.delete(album_tag)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking album_tag changes.
+
+  ## Examples
+
+      iex> change_album_tag(album_tag)
+      %Ecto.Changeset{source: %AlbumTag{}}
+
+  """
+  def change_album_tag(%AlbumTag{} = album_tag) do
+    AlbumTag.changeset(album_tag, %{})
+  end
 end

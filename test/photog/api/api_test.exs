@@ -498,4 +498,63 @@ defmodule Photog.ApiTest do
       assert %Ecto.Changeset{} = Api.change_tag(tag)
     end
   end
+
+  describe "album_tags" do
+    alias Photog.Api.AlbumTag
+
+    @valid_attrs %{album_order: 42}
+    @update_attrs %{album_order: 43}
+    @invalid_attrs %{album_order: nil}
+
+    def album_tag_fixture(attrs \\ %{}) do
+      {:ok, album_tag} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Api.create_album_tag()
+
+      album_tag
+    end
+
+    test "list_album_tags/0 returns all album_tags" do
+      album_tag = album_tag_fixture()
+      assert Api.list_album_tags() == [album_tag]
+    end
+
+    test "get_album_tag!/1 returns the album_tag with given id" do
+      album_tag = album_tag_fixture()
+      assert Api.get_album_tag!(album_tag.id) == album_tag
+    end
+
+    test "create_album_tag/1 with valid data creates a album_tag" do
+      assert {:ok, %AlbumTag{} = album_tag} = Api.create_album_tag(@valid_attrs)
+      assert album_tag.album_order == 42
+    end
+
+    test "create_album_tag/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Api.create_album_tag(@invalid_attrs)
+    end
+
+    test "update_album_tag/2 with valid data updates the album_tag" do
+      album_tag = album_tag_fixture()
+      assert {:ok, %AlbumTag{} = album_tag} = Api.update_album_tag(album_tag, @update_attrs)
+      assert album_tag.album_order == 43
+    end
+
+    test "update_album_tag/2 with invalid data returns error changeset" do
+      album_tag = album_tag_fixture()
+      assert {:error, %Ecto.Changeset{}} = Api.update_album_tag(album_tag, @invalid_attrs)
+      assert album_tag == Api.get_album_tag!(album_tag.id)
+    end
+
+    test "delete_album_tag/1 deletes the album_tag" do
+      album_tag = album_tag_fixture()
+      assert {:ok, %AlbumTag{}} = Api.delete_album_tag(album_tag)
+      assert_raise Ecto.NoResultsError, fn -> Api.get_album_tag!(album_tag.id) end
+    end
+
+    test "change_album_tag/1 returns a album_tag changeset" do
+      album_tag = album_tag_fixture()
+      assert %Ecto.Changeset{} = Api.change_album_tag(album_tag)
+    end
+  end
 end

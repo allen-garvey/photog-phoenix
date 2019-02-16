@@ -25,6 +25,7 @@ defmodule PhotogWeb.Router do
     resources "/album_images", AlbumImageController,    only: [:index, :show]
     resources "/imports", ImportController,             only: [:index, :show]
     resources "/tags", TagController,                   only: [:index, :show]
+    resources "/album_tags", AlbumTagController,        only: [:index, :show]
 
     get "/images/:id/exif", ImageController, :exif_for
 
