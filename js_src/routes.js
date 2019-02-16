@@ -20,6 +20,15 @@ export default {
             },
         },
         { 
+            path: '/tags',
+            name: 'tagsIndex', 
+            component: TextList,
+            props: {
+                itemShowRouteName: 'tagsShow',
+                itemsListKey: null,
+            },
+        },
+        { 
             path: '/imports',
             name: 'importsIndex', 
             component: TextList,
@@ -171,6 +180,25 @@ export default {
         { 
             path: '/folders/:id',
             name: 'foldersShow', 
+            component: ThumbnailList,
+            props: (route) => {
+                return {
+                    apiPath: route.path,
+                    itemsListKey: 'albums',
+                    showRouteFor: (item)=>{
+                        return {
+                            name: 'albumsShow',
+                            params: {
+                                id: item.id,
+                            },
+                        };
+                    },
+                }; 
+            },
+        },
+        { 
+            path: '/tags/:id',
+            name: 'tagsShow', 
             component: ThumbnailList,
             props: (route) => {
                 return {
