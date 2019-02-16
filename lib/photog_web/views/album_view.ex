@@ -21,6 +21,7 @@ defmodule PhotogWeb.AlbumView do
   def render("album.json", %{album: album}) do
     %{id: album.id,
       name: album.name,
+      description: album.description,
       cover_image: PhotogWeb.ImageView.image_to_map(album.cover_image),
       images: Enum.map(album.images, &PhotogWeb.ImageView.image_full_to_map/1),
     }

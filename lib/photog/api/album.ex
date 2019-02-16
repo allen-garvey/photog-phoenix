@@ -6,6 +6,7 @@ defmodule Photog.Api.Album do
   schema "albums" do
     field :apple_photos_id, :integer
     field :name, :string
+    field :description, :string
 
     timestamps()
 
@@ -21,7 +22,7 @@ defmodule Photog.Api.Album do
   @doc false
   def changeset(album, attrs) do
     album
-    |> cast(attrs, [:apple_photos_id, :name, :cover_image_id])
+    |> cast(attrs, [:apple_photos_id, :name, :cover_image_id, :description])
     |> validate_required([:name, :cover_image_id])
     |> unique_constraint(:apple_photos_id)
     |> assoc_constraint(:cover_image)
