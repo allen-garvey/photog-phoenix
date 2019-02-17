@@ -35,6 +35,7 @@ export default {
             props: (route) => {
                 return {
                     apiPath: route.path,
+                    enableBatchSelectAlbums: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
@@ -73,6 +74,7 @@ export default {
                     apiPath: route.path,
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -94,6 +96,7 @@ export default {
                     apiPath: '/images/?favorites=true',
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -114,6 +117,7 @@ export default {
                 return {
                     apiPath: '/images/?in_album=false',
                     enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -135,6 +139,7 @@ export default {
                     apiPath: route.path,
                     itemsListKey: 'images',
                     enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumImagesShow',
@@ -156,6 +161,7 @@ export default {
                     apiPath: route.path,
                     itemsListKey: 'images',
                     enableHasAlbumFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'personImagesShow',
@@ -176,6 +182,7 @@ export default {
                 return {
                     apiPath: route.path,
                     itemsListKey: 'albums',
+                    enableBatchSelectAlbums: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
@@ -197,6 +204,7 @@ export default {
                     itemsListKey: 'images',
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'importImagesShow',
