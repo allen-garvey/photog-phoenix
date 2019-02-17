@@ -175,11 +175,11 @@ export default {
         thumbnailLinkEvent(){
             return this.isCurrentlyBatchSelect ? '' : 'click';
         },
-        anyItemsBatchSelected(){
-            return this.batchSelectedItems.some((isSelected)=>isSelected);
-        },
         shouldShowBatchResources(){
             return this.batchSelectResourceMode !== BATCH_RESOURCE_MODE_NONE;
+        },
+        anyItemsBatchSelected(){
+            return this.batchSelectedItems.some((isSelected)=>isSelected);
         },
         anyBatchResourcesSelected(){
             return this.batchResourcesSelected.some((isSelected)=>isSelected);
