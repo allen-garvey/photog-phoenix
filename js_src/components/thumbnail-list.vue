@@ -58,10 +58,6 @@ const ALBUM_FILTER_MODE_ALL = 1;
 const ALBUM_FILTER_MODE_NO_ALBUMS = 2;
 const ALBUM_FILTER_MODE_HAS_ALBUMS = 3;
 
-//subtract a certain amount of pixels from drag overlay
-//otherwise it interferes with mounse enter/leave events on list items
-const DRAG_OVERLAY_WHITESPACE = 4;
-
 export default {
     name: 'Thumbnail-List',
     props: {
