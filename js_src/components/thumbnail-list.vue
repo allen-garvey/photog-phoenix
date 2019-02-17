@@ -90,6 +90,10 @@ export default {
             type: String,
             required: true,
         },
+        putFlash: {
+            type: Function,
+            required: true,
+        },
         getModel: {
             type: Function,
             required: true,
@@ -340,12 +344,25 @@ export default {
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
             sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
+                const hasAtLeastOneThingSucceeded = response.data && response.data.length > 0;
+                const hasErrors = response.error && response.error.length > 0;
                 //don't do anything unless at 1 thing succeeded
-                if(response.data && response.data.length > 0){
+                if(hasAtLeastOneThingSucceeded){
                     this.toggleBatchSelect();
                     //model has to be refreshed or image details pages will show old data
                     this.refreshModel();
                 }
+                //show flash message based on results
+                if(hasAtLeastOneThingSucceeded && hasErrors){
+                    this.putFlash('Some updates succeeded and some failed', 'warning');
+                }
+                else if(hasAtLeastOneThingSucceeded){
+                    this.putFlash('All updates successful', 'info');
+                }
+                else{
+                    this.putFlash('All updates failed', 'danger');
+                }
+
             });
         },
     }
