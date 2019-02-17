@@ -42,7 +42,7 @@
                         <label :for="idForBatchResource(resource, index)">{{resource.name}}</label>
                     </li>
                 </ul>
-                <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected">Save</button>
+                <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected" @click="saveBatchSelected">Save</button>
             </div>
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
@@ -117,11 +117,11 @@ export default {
         //are mutually exclusive
         enableBatchSelectImages: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         enableBatchSelectAlbums: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
     directives: {
@@ -310,6 +310,29 @@ export default {
         },
         buttonClassForResourceMode(resourceMode){
             return resourceMode === this.batchSelectResourceMode ? 'btn-primary' : 'btn-secondary';
+        },
+        saveBatchSelected(){
+            //default is album_images
+            let apiUrl = '/api/album_images';
+            let resourcesKey = 'album_ids';
+            let thumbnailsKey = 'image_ids';
+
+            if(this.batchSelectResourceMode === BATCH_RESOURCE_MODE_PERSONS){
+                apiUrl = '/api/person_images';
+                resourcesKey = 'person_ids';
+            }
+            else if(this.batchSelectResourceMode === BATCH_RESOURCE_MODE_TAGS){
+                apiUrl = '/api/album_tags';
+                resourcesKey = 'tag_ids';
+                thumbnailsKey = 'album_ids';
+            }
+            const data = {};
+            data[thumbnailsKey] = this.filteredThumbnailList.map((item)=>item.id);
+            data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
+
+            sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
+                this.toggleBatchSelect();
+            });
         },
     }
 }
