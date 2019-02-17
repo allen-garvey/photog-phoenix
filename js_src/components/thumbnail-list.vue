@@ -1,7 +1,7 @@
 <template>
     <main class="main container">
         <h2 v-if="model.name">{{model.name}}</h2>
-        <div class="thumbnail-filter-controls-container">
+        <div class="thumbnail-filter-controls-container" :class="{invisible: isCurrentlyBatchSelect}">
             <fieldset v-if="enableHasAlbumFilter">
                 <legend>Album</legend>
                 <label for="album_filter_mode_all">All</label>
@@ -25,13 +25,19 @@
                 <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
             </fieldset>
         </div>
-        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled">
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': batchSelectedItems[i]}">
-                <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
+        <div class="thumbnail-batch-select-container" v-if="enableBatchSelectImages || enableBatchSelectAlbums">
+            <button class="btn" :class="{'btn-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch select'}}</button>
+            <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
+        </div>
+        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)">
+                <router-link :to="showRouteFor(item)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
                 </router-link>
-                <h3 class="thumbnail-title" :class="{'default-title': !('name' in item)}"><router-link :to="showRouteFor(item)">{{titleFor(item)}}</router-link></h3>
+                <h3 class="thumbnail-title" :class="{'default-title': !('name' in item)}">
+                    <router-link :to="showRouteFor(item)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'span' : 'a'">{{titleFor(item)}}</router-link>
+                </h3>
             </li>
         </ul>
     </main>
@@ -86,7 +92,13 @@ export default {
             type: Boolean,
             default: false,
         },
-        enableBatchSelectMultiple: {
+        //batchSelectImages and batchSelectAlbums
+        //are mutually exclusive
+        enableBatchSelectImages: {
+            type: Boolean,
+            default: true,
+        },
+        enableBatchSelectAlbums: {
             type: Boolean,
             default: true,
         },
@@ -110,7 +122,9 @@ export default {
             albumFilterMode: ALBUM_FILTER_MODE_ALL,
             personFilterMode: PERSON_FILTER_MODE_ALL,
             //following used for batch select multiple items
+            isCurrentlyBatchSelect: false,
             batchSelectedItems: [],
+            previouslySelectedBatchItemIndex: 0,
         }
     },
     computed: {
@@ -133,13 +147,17 @@ export default {
                 return this.shouldShowItem(item);
             });
         },
+        //so thumbnail links are disabled when we are in batch select mode
+        thumbnailLinkEvent(){
+            return this.isCurrentlyBatchSelect ? '' : 'click';
+        },
+        anyItemsBatchSelected(){
+            return this.batchSelectedItems.some((isSelected)=>isSelected);
+        },
     },
     watch: {
         '$route'(to, from){
             this.loadModel(this.apiPath);
-        },
-        filteredThumbnailList(){
-            this.resetBatchSelectMultipleItems();
         },
     },
     methods: {
@@ -200,8 +218,39 @@ export default {
 
             return albumValidation && personValidation;
         },
-        resetBatchSelectMultipleItems(){
-            this.batchSelectedItems = this.filteredThumbnailList.map(()=>false);
+        toggleBatchSelect(){
+            this.isCurrentlyBatchSelect = !this.isCurrentlyBatchSelect;
+            if(this.isCurrentlyBatchSelect){
+                this.batchSelectedItems = this.filteredThumbnailList.map(()=>false);
+                this.previouslySelectedBatchItemIndex = 0;
+            }
+        },
+        batchSelectItem(item, i, event){
+            if(!this.isCurrentlyBatchSelect){
+                return;
+            }
+            //if shift key is enabled, select all in range
+            if(event.shiftKey){
+                let startIndex = this.previouslySelectedBatchItemIndex;
+                let endIndex = i;
+                if(startIndex > endIndex){
+                    const temp = startIndex;
+                    startIndex = endIndex;
+                    endIndex = temp;
+                }
+                //for loop is inclusive
+                for(let index=startIndex;index<=endIndex;index++){
+                    vue.set(this.batchSelectedItems, index, true);
+                }
+            }
+            else{
+                vue.set(this.batchSelectedItems, i, !this.batchSelectedItems[i]);
+            }
+            this.previouslySelectedBatchItemIndex = i;
+        },
+        batchSelectAll(){
+            const anySelected = this.anyItemsBatchSelected;
+            this.batchSelectedItems = this.batchSelectedItems.map((isSelected)=>!anySelected);
         },
     }
 }
