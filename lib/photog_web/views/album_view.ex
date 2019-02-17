@@ -6,6 +6,10 @@ defmodule PhotogWeb.AlbumView do
     %{data: render_many(albums, AlbumView, "album_excerpt.json")}
   end
 
+  def render("index_excerpt.json", %{albums: albums}) do
+    %{data: render_many(albums, AlbumView, "album_excerpt_mini.json")}
+  end
+
   def render("show.json", %{album: album}) do
     %{data: render_one(album, AlbumView, "album.json")}
   end

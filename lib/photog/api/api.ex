@@ -231,6 +231,15 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Returns the list of albums.
+  Used for forms when we only need name and id
+  """
+  def list_albums_excerpt do
+    Repo.all from album in Album,
+          order_by: [desc: :id]
+  end
+
+  @doc """
   Gets a single album.
 
   Raises `Ecto.NoResultsError` if the Album does not exist.

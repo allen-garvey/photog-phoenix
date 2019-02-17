@@ -6,6 +6,11 @@ defmodule PhotogWeb.AlbumController do
 
   action_fallback PhotogWeb.FallbackController
 
+  def index(conn, %{"excerpt" => "true"}) do
+    albums = Api.list_albums_excerpt()
+    render(conn, "index_excerpt.json", albums: albums)
+  end
+
   def index(conn, _params) do
     albums = Api.list_albums()
     render(conn, "index.json", albums: albums)
