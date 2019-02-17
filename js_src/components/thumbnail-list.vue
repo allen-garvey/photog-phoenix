@@ -26,8 +26,24 @@
             </fieldset>
         </div>
         <div class="thumbnail-batch-select-container" v-if="enableBatchSelectImages || enableBatchSelectAlbums">
-            <button class="btn" :class="{'btn-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch select'}}</button>
+            <button class="btn" :class="{'btn-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
             <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
+            <div class="resource-buttons-container" v-if="isCurrentlyBatchSelect">
+                <div v-if="enableBatchSelectImages" class="btn-group">
+                    <button class="btn btn-primary" @click="setBatchResourceMode(1)" :class="buttonClassForResourceMode(1)">Add Albums</button>
+                    <button class="btn btn-primary" @click="setBatchResourceMode(2)" :class="buttonClassForResourceMode(2)">Add Persons</button>
+                </div>
+                <button class="btn btn-primary" @click="setBatchResourceMode(3)" :class="buttonClassForResourceMode(3)" v-if="enableBatchSelectAlbums">Add Tags</button>
+            </div>  
+            <div v-if="shouldShowBatchResources">
+                <ul class="batch-resources-list">
+                    <li v-for="(resource, index) in batchResources" :key="resource.id">
+                        <input type="checkbox" :id="idForBatchResource(resource, index)" v-model="batchResourcesSelected[index]" />
+                        <label :for="idForBatchResource(resource, index)">{{resource.name}}</label>
+                    </li>
+                </ul>
+                <button class="btn btn-success" :disabled="!anyBatchResourcesSelected">Save</button>
+            </div>
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)">
@@ -47,9 +63,12 @@
 import infiniteScroll from 'vue-infinite-scroll';
 import vue from 'vue';
 
+import { fetchJson, sendJson } from '../request-helpers.js';
+
 //amount of thumbnails to add each time vue infinite scroll is called
 const THUMBNAIL_CHUNK_LENGTH = 60;
 
+//thumbnail filtering
 const PERSON_FILTER_MODE_ALL = 1;
 const PERSON_FILTER_MODE_NO_PERSONS = 2;
 const PERSON_FILTER_MODE_HAS_PERSONS = 3;
@@ -57,6 +76,12 @@ const PERSON_FILTER_MODE_HAS_PERSONS = 3;
 const ALBUM_FILTER_MODE_ALL = 1;
 const ALBUM_FILTER_MODE_NO_ALBUMS = 2;
 const ALBUM_FILTER_MODE_HAS_ALBUMS = 3;
+
+//thumbnail batch select
+const BATCH_RESOURCE_MODE_NONE = 0;
+const BATCH_RESOURCE_MODE_ALBUMS = 1;
+const BATCH_RESOURCE_MODE_PERSONS = 2;
+const BATCH_RESOURCE_MODE_TAGS = 3;
 
 export default {
     name: 'Thumbnail-List',
@@ -121,6 +146,9 @@ export default {
             isCurrentlyBatchSelect: false,
             batchSelectedItems: [],
             previouslySelectedBatchItemIndex: 0,
+            batchResources: [],
+            batchResourcesSelected: [],
+            batchSelectResourceMode: BATCH_RESOURCE_MODE_NONE,
         }
     },
     computed: {
@@ -149,6 +177,12 @@ export default {
         },
         anyItemsBatchSelected(){
             return this.batchSelectedItems.some((isSelected)=>isSelected);
+        },
+        shouldShowBatchResources(){
+            return this.batchSelectResourceMode !== BATCH_RESOURCE_MODE_NONE;
+        },
+        anyBatchResourcesSelected(){
+            return this.batchResourcesSelected.some((isSelected)=>isSelected);
         },
     },
     watch: {
@@ -216,6 +250,7 @@ export default {
         },
         toggleBatchSelect(){
             this.isCurrentlyBatchSelect = !this.isCurrentlyBatchSelect;
+            this.batchSelectResourceMode = BATCH_RESOURCE_MODE_NONE;
             if(this.isCurrentlyBatchSelect){
                 this.batchSelectedItems = this.filteredThumbnailList.map(()=>false);
                 this.previouslySelectedBatchItemIndex = 0;
@@ -247,6 +282,33 @@ export default {
         batchSelectAll(){
             const anySelected = this.anyItemsBatchSelected;
             this.batchSelectedItems = this.batchSelectedItems.map((isSelected)=>!anySelected);
+        },
+        idForBatchResource(item, index){
+            return `batch_resource_id_${item.id}_${index}`;
+        },
+        setBatchResourceMode(newResourceMode){
+            if(this.batchSelectResourceMode === newResourceMode){
+                return;
+            }
+            this.batchSelectResourceMode = newResourceMode;
+            if(newResourceMode === BATCH_RESOURCE_MODE_NONE){
+                return;
+            }
+            let apiUrl = '/api/albums';
+            if(newResourceMode === BATCH_RESOURCE_MODE_PERSONS){
+                apiUrl = '/api/persons';
+            }
+            else if(newResourceMode === BATCH_RESOURCE_MODE_TAGS){
+                apiUrl = '/api/tags';
+            }
+
+            fetchJson(apiUrl).then((data)=>{
+                this.batchResources = data;
+            });
+
+        },
+        buttonClassForResourceMode(resourceMode){
+            return resourceMode === this.batchSelectResourceMode ? 'btn-primary' : 'btn-secondary';
         },
     }
 }
