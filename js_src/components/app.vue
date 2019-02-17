@@ -1,14 +1,16 @@
 <template>
     <div>
-        <Photog-Header></Photog-Header>
-        <router-view :get-model="get" ref="routerView" :get-exif="getExif" :csrf-token="csrfToken"></router-view>
-        <Photog-Footer></Photog-Footer>
+        <Photog-Header/>
+        <Flash-Alert ref="flashAlert"/>
+        <router-view :get-model="get" :put-flash="putFlash" ref="routerView" :get-exif="getExif" :csrf-token="csrfToken"/>
+        <Photog-Footer/>
     </div>
 </template>
 
 <script>
 import PhotogHeader from './header.vue'
 import PhotogFooter from './footer.vue'
+import FlashAlert from './flash-alert.vue';
 import CacheUtil from '../cache-util.js'
 
 const API_URL_BASE = '/api';
@@ -24,6 +26,7 @@ export default {
     components: {
         'Photog-Header': PhotogHeader,
         'Photog-Footer': PhotogFooter,
+        'Flash-Alert': FlashAlert,
     },
     data() {
         return {
@@ -61,6 +64,11 @@ export default {
         getExif(imageId){
             const apiUrl = `${API_URL_BASE}/images/${imageId}/exif`;
             return CacheUtil.fetchIntoCache(apiUrl, this.exifCache, imageId);
+        },
+        putFlash(message, type){
+            const flashAlert = this.$refs.flashAlert;
+            flashAlert.putFlash(message, type);
+            flashAlert.$el.scrollIntoView({behavior: 'smooth', block: 'end'});
         },
     }
 }
