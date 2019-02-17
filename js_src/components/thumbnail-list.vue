@@ -131,7 +131,7 @@ export default {
     },
     created(){
         //initial setup of items, since $route watch method won't be called on initial load
-        this.loadModel(this.apiPath).then(()=>{
+        this.loadModel().then(()=>{
             this.isInitialLoadComplete = true;
         });
     },
@@ -187,15 +187,23 @@ export default {
     },
     watch: {
         '$route'(to, from){
-            this.loadModel(this.apiPath);
+            this.loadModel();
         },
     },
     methods: {
-        loadModel: function(modelPath){
+        loadModel(){
             this.thumbnailList = [];
-            return this.getModel(modelPath).then((itemsJson)=>{
-                this.model = itemsJson;
-                this.thumbnailList = this.thumnailListSource.slice(0, THUMBNAIL_CHUNK_LENGTH);
+            return this.getModel(this.apiPath).then((items)=>{
+                this.modelLoaded(items);
+            });
+        },
+        modelLoaded(items){
+            this.model = items;
+            this.thumbnailList = this.thumnailListSource.slice(0, THUMBNAIL_CHUNK_LENGTH);
+        },
+        refreshModel(){
+            return this.getModel(this.apiPath, true).then((items)=>{
+                this.modelLoaded(items);
             });
         },
         loadMoreThumbnails(){
@@ -332,7 +340,12 @@ export default {
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
             sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
-                this.toggleBatchSelect();
+                //don't do anything unless at 1 thing succeeded
+                if(response.data && response.data.length > 0){
+                    this.toggleBatchSelect();
+                    //model has to be refreshed or image details pages will show old data
+                    this.refreshModel();
+                }
             });
         },
     }
