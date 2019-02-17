@@ -296,7 +296,7 @@ export default {
             }
             let apiUrl = '/api/albums';
             if(newResourceMode === BATCH_RESOURCE_MODE_PERSONS){
-                apiUrl = '/api/persons';
+                apiUrl = '/api/persons?excerpt=true';
             }
             else if(newResourceMode === BATCH_RESOURCE_MODE_TAGS){
                 apiUrl = '/api/tags';
