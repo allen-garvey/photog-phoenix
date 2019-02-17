@@ -304,6 +304,7 @@ export default {
 
             fetchJson(apiUrl).then((data)=>{
                 this.batchResources = data;
+                this.batchResourcesSelected = this.batchResources.map(()=>false);
             });
 
         },
