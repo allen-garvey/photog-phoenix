@@ -13,7 +13,10 @@ $thumbnail_dimensions: 205px;
         margin-bottom: 25px;
     }
     .batch-selected{
-        border: 4px solid #FF3919;
+        border: 6px solid #FF3919;
+        border-radius: 5px;
+        background-color: #FF3919;
+        color: white;
     }
 }
 
