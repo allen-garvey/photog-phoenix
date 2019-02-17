@@ -42,7 +42,7 @@
                         <label :for="idForBatchResource(resource, index)">{{resource.name}}</label>
                     </li>
                 </ul>
-                <button class="btn btn-success" :disabled="!anyBatchResourcesSelected">Save</button>
+                <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected">Save</button>
             </div>
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
