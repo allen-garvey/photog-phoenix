@@ -11,6 +11,35 @@ defmodule PhotogWeb.AlbumImageController do
     render(conn, "index.json", album_images: album_images)
   end
 
+  @doc """
+  Batch add album_ids to each given image_id in image_ids
+  """
+  def create(conn, %{"image_ids" => image_ids, "album_ids" => album_ids}) do
+    {total_added, total_errors} =
+      Enum.reduce(image_ids, {[], []}, fn image_id, {total_added, total_errors} ->
+        {albums_added, errors} =
+          Enum.reduce(album_ids, {[], []}, fn album_id, {albums_added, errors} ->
+            album_image_params = %{"image_id" => image_id, "album_id" => album_id}
+            case Api.create_album_image(album_image_params) do
+              {:ok, %AlbumImage{} = _person_image} -> { [album_image_params | albums_added], errors }
+              {:error, _changeset}                  -> { albums_added, [ album_image_params | errors] }
+
+            end
+          end)
+        {albums_added ++ total_added, errors ++ total_errors}
+      end)
+
+    conn
+    |> put_view(PhotogWeb.GenericView)
+    |> (&(
+      if Enum.empty?(total_errors) do
+        render(&1, "ok.json", message: total_added)
+      else
+        render(&1, "mixed_response.json", message: total_added, error: total_errors)
+      end
+    )).()
+  end
+
   def create(conn, %{"album_image" => album_image_params}) do
     with {:ok, %AlbumImage{} = album_image} <- Api.create_album_image(album_image_params) do
       conn
