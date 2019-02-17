@@ -11,6 +11,35 @@ defmodule PhotogWeb.AlbumTagController do
     render(conn, "index.json", album_tags: album_tags)
   end
 
+  @doc """
+  Batch add tags_ids to each given album_id in album_ids
+  """
+  def create(conn, %{"album_ids" => album_ids, "tag_ids" => tag_ids}) do
+    {total_added, total_errors} =
+      Enum.reduce(album_ids, {[], []}, fn album_id, {total_added, total_errors} ->
+        {tags_added, errors} =
+          Enum.reduce(tag_ids, {[], []}, fn tag_id, {tags_added, errors} ->
+            album_tag_params = %{"album_id" => album_id, "tag_id" => tag_id}
+            case Api.create_album_tag(album_tag_params) do
+              {:ok, %AlbumTag{} = _album_tag} -> { [album_tag_params | tags_added], errors }
+              {:error, _changeset}                  -> { tags_added, [ album_tag_params | errors] }
+
+            end
+          end)
+        {tags_added ++ total_added, errors ++ total_errors}
+      end)
+
+    conn
+    |> put_view(PhotogWeb.GenericView)
+    |> (&(
+      if Enum.empty?(total_errors) do
+        render(&1, "ok.json", message: total_added)
+      else
+        render(&1, "mixed_response.json", message: total_added, error: total_errors)
+      end
+    )).()
+  end
+
   def create(conn, %{"album_tag" => album_tag_params}) do
     with {:ok, %AlbumTag{} = album_tag} <- Api.create_album_tag(album_tag_params) do
       conn
