@@ -36,3 +36,8 @@ img{
 .invisible{
     visibility: hidden;
 }
+
+//can't use display none or scrollIntoView won't work
+.alert:empty{
+    visibility: hidden;
+}
