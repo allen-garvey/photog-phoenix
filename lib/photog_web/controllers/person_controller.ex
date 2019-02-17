@@ -6,6 +6,11 @@ defmodule PhotogWeb.PersonController do
 
   action_fallback PhotogWeb.FallbackController
 
+  def index(conn, %{"excerpt" => "true"}) do
+    persons = Api.list_persons_excerpt()
+    render(conn, "index_excerpt.json", persons: persons)
+  end
+
   def index(conn, _params) do
     persons = Api.list_persons()
     render(conn, "index.json", persons: persons)

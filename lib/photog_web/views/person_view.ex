@@ -6,6 +6,10 @@ defmodule PhotogWeb.PersonView do
     %{data: render_many(persons, PersonView, "person_excerpt.json")}
   end
 
+  def render("index_excerpt.json", %{persons: persons}) do
+    %{data: render_many(persons, PersonView, "person_excerpt_mini.json")}
+  end
+
   def render("show.json", %{person: person}) do
     %{data: render_one(person, PersonView, "person.json")}
   end

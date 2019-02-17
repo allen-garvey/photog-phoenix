@@ -337,11 +337,18 @@ defmodule Photog.Api do
 
   """
   def list_persons do
-    #better than using separate preload, since only uses 1 query
-    #https://hexdocs.pm/ecto/Ecto.Query.html#preload/3
     Repo.all from person in Person,
           join: cover_image in assoc(person, :cover_image),
           preload: [cover_image: cover_image],
+          order_by: :name
+  end
+
+  @doc """
+  Returns the list of persons.
+  Used for such things as forms, when just need name and id
+  """
+  def list_persons_excerpt do
+    Repo.all from person in Person,
           order_by: :name
   end
 
