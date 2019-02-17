@@ -25,9 +25,8 @@
                 <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
             </fieldset>
         </div>
-        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" @mousedown="dragSelectMultipleStart" @mouseup="dragSelectMultipleEnd" @mouseleave="dragSelectMultipleEnd" @mousemove="dragSelectMultipleMouseMove">
-            <div class="drag-select-overlay" v-if="isCurrentlyDragSelecting" :style="{height: dragOverlayHeight, width: dragOverlayWidth, left: dragOverlayLeft, top: dragOverlayTop}"></div>
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" @mouseenter="listItemMouseEnter(item, i)" @mouseleave="listItemMouseLeave(item, i, $event)" :class="{'drag-selected': dragSelectedItems[i]}">
+        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': batchSelectedItems[i]}">
                 <router-link :to="showRouteFor(item)" class="thumbnail-image-container">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
@@ -87,7 +86,7 @@ export default {
             type: Boolean,
             default: false,
         },
-        enableDragSelectMultiple: {
+        enableBatchSelectMultiple: {
             type: Boolean,
             default: true,
         },
@@ -110,13 +109,8 @@ export default {
             thumbnailList: [],
             albumFilterMode: ALBUM_FILTER_MODE_ALL,
             personFilterMode: PERSON_FILTER_MODE_ALL,
-            //following used for drag select multiple items
-            isCurrentlyDragSelecting: false,
-            dragSelectStartCoordinate: null,
-            dragSelectCurrentCoordinate: null,
-            dragSelectedItems: [],
-            dragSelectMouseLeftDirection: true,
-            dragSelectMouseUpDirection: true,
+            //following used for batch select multiple items
+            batchSelectedItems: [],
         }
     },
     computed: {
@@ -139,37 +133,13 @@ export default {
                 return this.shouldShowItem(item);
             });
         },
-        dragOverlayTop(){
-            if(!this.isCurrentlyDragSelecting){
-                return 0;
-            }
-            return `${Math.min(this.dragSelectStartCoordinate.y, this.dragSelectCurrentCoordinate.y) + DRAG_OVERLAY_WHITESPACE}px`;
-        },
-        dragOverlayLeft(){
-            if(!this.isCurrentlyDragSelecting){
-                return 0;
-            }
-            return `${Math.min(this.dragSelectStartCoordinate.x, this.dragSelectCurrentCoordinate.x) + DRAG_OVERLAY_WHITESPACE}px`;
-        },
-        dragOverlayHeight(){
-            if(!this.isCurrentlyDragSelecting){
-                return 0;
-            }
-            return `${Math.abs(this.dragSelectStartCoordinate.y - this.dragSelectCurrentCoordinate.y) - (DRAG_OVERLAY_WHITESPACE * 4)}px`;
-        },
-        dragOverlayWidth(){
-            if(!this.isCurrentlyDragSelecting){
-                return 0;
-            }
-            return `${Math.abs(this.dragSelectStartCoordinate.x - this.dragSelectCurrentCoordinate.x) - (DRAG_OVERLAY_WHITESPACE * 4)}px`;
-        },
     },
     watch: {
         '$route'(to, from){
             this.loadModel(this.apiPath);
         },
         filteredThumbnailList(){
-            this.resetDragSelectedItems();
+            this.resetBatchSelectMultipleItems();
         },
     },
     methods: {
@@ -230,56 +200,8 @@ export default {
 
             return albumValidation && personValidation;
         },
-        dragSelectMultipleStart(event){
-            if(!this.enableDragSelectMultiple){
-                return;
-            }
-            const coordinate = {
-                x: event.pageX,
-                y: event.pageY,
-            };
-            this.dragSelectStartCoordinate = coordinate;
-            this.dragSelectCurrentCoordinate = coordinate;
-            this.resetDragSelectedItems();
-            this.isCurrentlyDragSelecting = true;
-        },
-        dragSelectMultipleMouseMove(event){
-            if(!this.isCurrentlyDragSelecting){
-                return;
-            }
-            const coordinate = {
-                x: event.pageX,
-                y: event.pageY,
-            };
-            this.dragSelectMouseLeftDirection = coordinate.x < this.dragSelectCurrentCoordinate.x;
-            this.dragSelectMouseUpDirection = coordinate.y < this.dragSelectCurrentCoordinate.y;
-            this.dragSelectCurrentCoordinate = coordinate;
-        },
-        dragSelectMultipleEnd(event){
-            if(!this.isCurrentlyDragSelecting){
-                return;
-            }
-            this.isCurrentlyDragSelecting = false;
-        },
-        resetDragSelectedItems(){
-            this.dragSelectedItems = this.filteredThumbnailList.map(()=>false);
-        },
-        listItemMouseEnter(item, index){
-            if(this.isCurrentlyDragSelecting){
-                console.log('enter');
-                vue.set(this.dragSelectedItems, index, true);
-            }
-        },
-        listItemMouseLeave(item, index, event){
-            if(this.isCurrentlyDragSelecting){
-                //use coordinates to determine if we need to deselect item
-                const x = event.pageX;
-                const y = event.pageY;
-
-                if((this.dragSelectMouseLeftDirection && x > this.dragSelectStartCoordinate.x) || (!this.dragSelectMouseLeftDirection && x < this.dragSelectStartCoordinate.x) || (this.dragSelectMouseUpDirection && y > this.dragSelectStartCoordinate.y) || (!this.dragSelectMouseUpDirection && y < this.dragSelectStartCoordinate.y)){
-                    vue.set(this.dragSelectedItems, index, false);
-                }
-            }
+        resetBatchSelectMultipleItems(){
+            this.batchSelectedItems = this.filteredThumbnailList.map(()=>false);
         },
     }
 }
