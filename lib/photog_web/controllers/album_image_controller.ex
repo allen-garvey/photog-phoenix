@@ -21,7 +21,7 @@ defmodule PhotogWeb.AlbumImageController do
           Enum.reduce(album_ids, {[], []}, fn album_id, {albums_added, errors} ->
             album_image_params = %{"image_id" => image_id, "album_id" => album_id}
             case Api.create_album_image(album_image_params) do
-              {:ok, %AlbumImage{} = _person_image} -> { [album_image_params | albums_added], errors }
+              {:ok, %AlbumImage{} = _album_image} -> { [album_image_params | albums_added], errors }
               {:error, _changeset}                  -> { albums_added, [ album_image_params | errors] }
 
             end
