@@ -54,9 +54,9 @@ export default {
         });
     },
     methods: {
-        get(modelPath){
+        get(modelPath, forceRefresh=false){
             const apiUrl = API_URL_BASE + modelPath;
-            return CacheUtil.fetchIntoCache(apiUrl, this.cache, apiUrl);
+            return CacheUtil.fetchIntoCache(apiUrl, this.cache, apiUrl, forceRefresh);
         },
         getExif(imageId){
             const apiUrl = `${API_URL_BASE}/images/${imageId}/exif`;
