@@ -64,6 +64,7 @@ import infiniteScroll from 'vue-infinite-scroll';
 import vue from 'vue';
 
 import { fetchJson, sendJson } from '../request-helpers.js';
+import { thumbnailUrlFor } from '../image.js';
 
 //amount of thumbnails to add each time vue infinite scroll is called
 const THUMBNAIL_CHUNK_LENGTH = 60;
@@ -227,7 +228,7 @@ export default {
             return this.imageFor(item).is_favorite;
         },
         thumbnailUrlFor: function(item){
-            return `/media/thumbnails/${encodeURI(this.imageFor(item).mini_thumbnail_path)}`;
+            return thumbnailUrlFor(this.imageFor(item).mini_thumbnail_path);
         },
         titleFor: function(item){
             if('name' in item){
