@@ -33,7 +33,7 @@
             </fieldset>
 
             <div class="spread-content">
-                <router-link :to="backLink" class="btn btn-outline-dark">Back</router-link>
+                <router-link :to="backLink" class="btn btn-outline-dark">Cancel</router-link>
                 <button class="btn btn-success" @click="save()">Save</button>
             </div>
         </div>
