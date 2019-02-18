@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label :for="idForField('cover_image_id')">Cover image id</label>
                 <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="album.cover_image_id" />
-                <Form-Field-Errors :errors="[errors['cover image'], errors['cover image id']]" />
+                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
             </div>
 
             <div>

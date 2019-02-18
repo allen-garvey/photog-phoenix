@@ -29,7 +29,13 @@ export default {
             }
             //note edge and safari < 12 do not have flatMap
             return this.errors.flatMap((item)=>{
-                return this.isArray(item) ? item : [];
+                if(this.isArray(item)){
+                    return item;
+                }
+                if(item !== undefined){
+                    return [item];
+                }
+                return [];
             });
         },
     },
