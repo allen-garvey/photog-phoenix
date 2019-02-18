@@ -131,6 +131,26 @@ export default {
                 }; 
             },
         },
+        //new route has to be before show route
+        { 
+            path: '/albums/new',
+            name: 'albumsNew', 
+            component: AlbumForm,
+            props: (route) => {
+                return {
+                }; 
+            },
+        },
+        { 
+            path: '/albums/:id/edit',
+            name: 'albumsEdit', 
+            component: AlbumForm,
+            props: (route) => {
+                return {
+                    albumId: parseInt(route.params.id),
+                }; 
+            },
+        },
         { 
             path: '/albums/:id',
             name: 'albumsShow', 
@@ -295,16 +315,6 @@ export default {
                             };
                         },
                     },
-                }; 
-            },
-        },
-        { 
-            path: '/albums/:id/edit',
-            name: 'albumsEdit', 
-            component: AlbumForm,
-            props: (route) => {
-                return {
-                    albumId: parseInt(route.params.id),
                 }; 
             },
         },
