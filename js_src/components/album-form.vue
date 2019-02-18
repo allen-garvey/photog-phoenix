@@ -15,10 +15,19 @@
                 <textarea :id="idForField('description')" class="form-control" v-model="album.description" rows="4"></textarea>
                 <Form-Field-Errors :errors="errors.description" />
             </div>
-
-            <div class="form-group">
+            
+            <div class="form-group" v-if="shouldShowCoverImageInput">
                 <label :for="idForField('cover_image_id')">Cover image id</label>
                 <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="album.cover_image_id" />
+                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
+            </div>
+
+            <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
+            <div class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
+                <label v-for="image in model.images" :key="image.id">
+                    <input type="radio" v-model="album.cover_image_id" :value="image.id">
+                    <img :src="thumbnailUrlFor(image)" />
+                </label>
                 <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
             </div>
 
@@ -34,6 +43,7 @@ import vue from 'vue';
 import FormFieldErrors from './form-field-errors.vue';
 
 import { fetchJson, sendJson } from '../request-helpers.js';
+import { thumbnailUrlFor } from '../image.js';
 
 export default {
     name: 'Album-Form',
@@ -77,6 +87,9 @@ export default {
                 return `Edit ${this.model.name}`;
             }
             return 'New Album';
+        },
+        shouldShowCoverImageInput(){
+            return this.isCreateForm || this.model.images.length === 0;
         },
     },
     watch: {
@@ -149,6 +162,9 @@ export default {
                     this.$router.push({name: 'albumsShow', params: {id: response.data.id}});
                 }
             });
+        },
+        thumbnailUrlFor(image){
+            return thumbnailUrlFor(image.mini_thumbnail_path);
         },
     }
 }
