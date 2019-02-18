@@ -142,9 +142,8 @@ export default {
             const resource = {album: this.toApiResource(this.album)};
 
             sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
-                console.log(response);
-                if(response.error){
-                    this.errors = response.error;
+                if(response.errors){
+                    this.errors = response.errors;
                 }
                 else{
                     this.$router.push({name: 'albumsShow', params: {id: response.data.id}});

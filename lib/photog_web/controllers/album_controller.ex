@@ -32,9 +32,8 @@ defmodule PhotogWeb.AlbumController do
   def update(conn, %{"id" => id, "album" => album_params}) do
     album = Api.get_album!(id)
 
-    case Api.update_album(album, album_params) do
-      {:ok, %Album{} = album} -> render(conn, "show.json", album: album)
-      {:error, changeset}     -> conn |> put_view(PhotogWeb.GenericView) |> render("mixed_response.json", message: "Errors updating album", error: Api.changeset_errors(changeset))
+    with {:ok, %Album{} = album} <- Api.update_album(album, album_params) do
+      render(conn, "show_excerpt_mini.json", album: album)
     end
   end
 
