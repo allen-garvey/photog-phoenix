@@ -54,3 +54,9 @@ fieldset{
 .alert:empty{
     visibility: hidden;
 }
+
+.spread-content{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
