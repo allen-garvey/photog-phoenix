@@ -23,13 +23,14 @@
             </div>
 
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
-            <div class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
+            <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
+                <legend>Cover Image</legend>
                 <label v-for="image in model.images" :key="image.id">
                     <input type="radio" v-model="album.cover_image_id" :value="image.id">
                     <img :src="thumbnailUrlFor(image)" />
                 </label>
                 <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
-            </div>
+            </fieldset>
 
             <div>
                 <button class="btn btn-success" @click="save()">Save</button>
