@@ -14,6 +14,10 @@ defmodule PhotogWeb.AlbumView do
     %{data: render_one(album, AlbumView, "album.json")}
   end
 
+  def render("show_excerpt_mini.json", %{album: album}) do
+    %{data: render_one(album, AlbumView, "album_excerpt_mini.json")}
+  end
+
   def render("album_excerpt.json", %{album: album}) do
     album_excerpt_to_map(album)
   end

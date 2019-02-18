@@ -20,7 +20,7 @@ defmodule PhotogWeb.AlbumController do
     with {:ok, %Album{} = album} <- Api.create_album(album_params) do
       conn
       |> put_status(:created)
-      |> render("show.json", album: album)
+      |> render("show_excerpt_mini.json", album: album)
     end
   end
 
