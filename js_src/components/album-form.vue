@@ -119,14 +119,30 @@ export default {
         toApiResource(item){
             const resource = {};
             for(const key in item){
-                resource[key] = this.nullifyValue(item[key]);
+                const resourceKeyName = key;
+                resource[resourceKeyName] = this.nullifyValue(item[key]);
             }
 
             return resource;
         },
         save(){
-            const resource = this.toApiResource(this.album);
-            console.log(resource);
+            let apiUrl = `/api/albums`;
+            let apiMethod = 'POST';
+            if(this.isEditForm){
+                apiUrl = `${apiUrl}/${this.albumId}`;
+                apiMethod = 'PATCH';
+            }
+            const resource = {album: this.toApiResource(this.album)};
+
+            sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
+                console.log(response);
+                if(response.error){
+
+                }
+                else{
+                    this.$router.push({name: 'albumsShow', params: {id: response.data.id}});
+                }
+            });
         },
     }
 }
