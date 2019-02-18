@@ -265,9 +265,9 @@ defmodule Photog.Api do
                       order_by: [album_image.image_order, album_image.id]
 
     Repo.one!(from album in Album,
-                      join: image in assoc(album, :images),
+                      join: cover_image in assoc(album, :cover_image),
                       where: album.id == ^id,
-                      preload: [cover_image: image, images: ^images_query],
+                      preload: [cover_image: cover_image, images: ^images_query],
                       limit: 1)
   end
 
