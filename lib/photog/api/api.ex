@@ -389,9 +389,9 @@ defmodule Photog.Api do
                       order_by: [desc: image.creation_time]
 
     Repo.one! from person in Person,
-           join:  image in assoc(person, :images),
+           join:  cover_image in assoc(person, :cover_image),
            where: person.id == ^id,
-           preload: [images: ^images_query, cover_image: image],
+           preload: [images: ^images_query, cover_image: cover_image],
            limit: 1
   end
 
