@@ -7,31 +7,19 @@
             <div class="form-group">
                 <label :for="idForField('name')">Name</label>
                 <input :id="idForField('name')" class="form-control" type="text" v-model="album.name" />
-                <div v-if="errors.name">
-                    <ul>
-                        <li v-for="(error, i) in errors.name" :key="i">{{error}}</li>
-                    </ul>
-                </div>
+                <Form-Field-Errors :errors="errors.name" />
             </div>
 
             <div class="form-group">
                 <label :for="idForField('description')">Description</label>
                 <textarea :id="idForField('description')" class="form-control" v-model="album.description" rows="4"></textarea>
-                <div v-if="errors.description">
-                    <ul>
-                        <li v-for="(error, i) in errors.description" :key="i">{{error}}</li>
-                    </ul>
-                </div>
+                <Form-Field-Errors :errors="errors.description" />
             </div>
 
             <div class="form-group">
                 <label :for="idForField('cover_image_id')">Cover image id</label>
                 <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="album.cover_image_id" />
-                <div v-if="errors.cover_image_id">
-                    <ul>
-                        <li v-for="(error, i) in errors.cover_image_id" :key="i">{{error}}</li>
-                    </ul>
-                </div>
+                <Form-Field-Errors :errors="[errors['cover image'], errors['cover image id']]" />
             </div>
 
             <div>
@@ -43,6 +31,7 @@
 
 <script>
 import vue from 'vue';
+import FormFieldErrors from './form-field-errors.vue';
 
 import { fetchJson, sendJson } from '../request-helpers.js';
 
@@ -62,6 +51,7 @@ export default {
         },
     },
     components: {
+        'Form-Field-Errors': FormFieldErrors,
     },
     created(){
         this.setup();
