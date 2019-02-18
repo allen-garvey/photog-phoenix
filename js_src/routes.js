@@ -1,6 +1,7 @@
 import ThumbnailList from './components/thumbnail-list.vue'
 import TextList from './components/text-list.vue'
 import ImageDetail from './components/image-detail.vue'
+import AlbumForm from './components/album-form.vue';
 
 export default {
     mode: 'history',
@@ -294,6 +295,16 @@ export default {
                             };
                         },
                     },
+                }; 
+            },
+        },
+        { 
+            path: '/albums/:id/edit',
+            name: 'albumsEdit', 
+            component: AlbumForm,
+            props: (route) => {
+                return {
+                    albumId: parseInt(route.params.id),
                 }; 
             },
         },
