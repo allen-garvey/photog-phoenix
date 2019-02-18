@@ -952,4 +952,16 @@ defmodule Photog.Api do
   def change_album_tag(%AlbumTag{} = album_tag) do
     AlbumTag.changeset(album_tag, %{})
   end
+
+    @doc """
+    Returns a map of changeset errors with the keys being the fields that have errors
+    based on: https://hexdocs.pm/ecto/Ecto.Changeset.html#traverse_errors/2 example
+    """
+    def changeset_errors(changeset) do
+        Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+            Enum.reduce(opts, msg, fn {key, value}, acc ->
+              String.replace(acc, "%{#{key}}", to_string(value))
+            end)
+          end)
+    end
 end
