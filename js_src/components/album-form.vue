@@ -32,7 +32,8 @@
                 <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
             </fieldset>
 
-            <div>
+            <div class="spread-content">
+                <router-link :to="backLink" class="btn btn-outline-dark">Back</router-link>
                 <button class="btn btn-success" @click="save()">Save</button>
             </div>
         </div>
@@ -91,6 +92,12 @@ export default {
         },
         shouldShowCoverImageInput(){
             return this.isCreateForm || this.model.images.length === 0;
+        },
+        backLink(){
+            if(this.isEditForm){
+                return {name: 'albumsShow', params: {id: this.albumId}};
+            }
+            return {name: 'albumsIndex'};
         },
     },
     watch: {
