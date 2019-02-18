@@ -29,6 +29,12 @@ a:hover, a:target{
 img{
     max-width: 100%;
 }
+
+fieldset{
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
 .container{
     max-width: 1200px;
     margin: 0 auto;
