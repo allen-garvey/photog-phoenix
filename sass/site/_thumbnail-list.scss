@@ -22,9 +22,9 @@ $thumbnail_dimensions: 205px;
     }
 
     &.batch-select .batch-selected{
-        border: 6px solid #FF3919;
+        border: 6px solid $photog_selected_highlight_color;
         border-radius: 5px;
-        background-color: #FF3919;
+        background-color: $photog_selected_highlight_color;
         color: white;
         opacity: 1;
     }
