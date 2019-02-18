@@ -7,16 +7,31 @@
             <div class="form-group">
                 <label :for="idForField('name')">Name</label>
                 <input :id="idForField('name')" class="form-control" type="text" v-model="album.name" />
+                <div v-if="errors.name">
+                    <ul>
+                        <li v-for="(error, i) in errors.name" :key="i">{{error}}</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="form-group">
                 <label :for="idForField('description')">Description</label>
                 <textarea :id="idForField('description')" class="form-control" v-model="album.description" rows="4"></textarea>
+                <div v-if="errors.description">
+                    <ul>
+                        <li v-for="(error, i) in errors.description" :key="i">{{error}}</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="form-group">
                 <label :for="idForField('cover_image_id')">Cover image id</label>
                 <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="album.cover_image_id" />
+                <div v-if="errors.cover_image_id">
+                    <ul>
+                        <li v-for="(error, i) in errors.cover_image_id" :key="i">{{error}}</li>
+                    </ul>
+                </div>
             </div>
 
             <div>
@@ -57,6 +72,7 @@ export default {
             //album is for our edits, model is the immutable album response from the api
             album: {},
             model: null,
+            errors: {},
         }
     },
     computed: {
@@ -81,6 +97,7 @@ export default {
     methods: {
         setup(){
             this.isInitialLoadComplete = false;
+            this.errors = {};
             if(this.isEditForm){
                 this.loadModel().then((album)=>{
                     this.album = {
@@ -137,7 +154,7 @@ export default {
             sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
                 console.log(response);
                 if(response.error){
-
+                    this.errors = response.error;
                 }
                 else{
                     this.$router.push({name: 'albumsShow', params: {id: response.data.id}});
