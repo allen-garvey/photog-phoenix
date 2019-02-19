@@ -162,6 +162,7 @@ export default {
                     itemsListKey: 'images',
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
+                    editItemLink: {name: 'albumsEdit', id: route.params.id},
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumImagesShow',
