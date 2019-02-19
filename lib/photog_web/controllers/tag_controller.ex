@@ -15,7 +15,6 @@ defmodule PhotogWeb.TagController do
     with {:ok, %Tag{} = tag} <- Api.create_tag(tag_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", tag_path(conn, :show, tag))
       |> render("show.json", tag: tag)
     end
   end
