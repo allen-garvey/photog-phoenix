@@ -1,5 +1,7 @@
 <template>
-    <div class="container alert" :class="`alert-${alertClass}`">{{alertText}}</div>
+    <div class="container">
+        <div class="alert" :class="`alert-${alertClass}`">{{alertText}}</div>
+    </div>
 </template>
 
 <script>
