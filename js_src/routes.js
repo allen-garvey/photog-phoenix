@@ -2,6 +2,7 @@ import ThumbnailList from './components/thumbnail-list.vue'
 import TextList from './components/text-list.vue'
 import ImageDetail from './components/image-detail.vue'
 import AlbumForm from './components/album-form.vue';
+import TagForm from './components/tag-form.vue';
 
 export default {
     mode: 'history',
@@ -194,6 +195,26 @@ export default {
                             },
                         };
                     },
+                }; 
+            },
+        },
+        //new route has to be before show route
+        { 
+            path: '/tags/new',
+            name: 'tagsNew', 
+            component: TagForm,
+            props: (route) => {
+                return {
+                }; 
+            },
+        },
+        { 
+            path: '/tags/:id/edit',
+            name: 'tagsEdit', 
+            component: TagForm,
+            props: (route) => {
+                return {
+                    tagId: parseInt(route.params.id),
                 }; 
             },
         },
