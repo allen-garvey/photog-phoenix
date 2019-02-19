@@ -15,7 +15,7 @@ defmodule PhotogWeb.TagController do
     with {:ok, %Tag{} = tag} <- Api.create_tag(tag_params) do
       conn
       |> put_status(:created)
-      |> render("show.json", tag: tag)
+      |> render("show_excerpt.json", tag: tag)
     end
   end
 
@@ -28,7 +28,7 @@ defmodule PhotogWeb.TagController do
     tag = Api.get_tag!(id)
 
     with {:ok, %Tag{} = tag} <- Api.update_tag(tag, tag_params) do
-      render(conn, "show.json", tag: tag)
+      render(conn, "show_excerpt.json", tag: tag)
     end
   end
 
