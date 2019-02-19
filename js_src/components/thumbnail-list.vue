@@ -30,7 +30,7 @@
             </fieldset>
         </div>
         <div class="thumbnail-batch-select-container" v-if="enableBatchSelectImages || enableBatchSelectAlbums">
-            <button class="btn" :class="{'btn-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
+            <button class="btn" :class="{'btn-outline-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
             <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
             <div class="resource-buttons-container" v-if="isCurrentlyBatchSelect">
                 <div v-if="enableBatchSelectImages" class="btn-group">
