@@ -57,8 +57,15 @@ fieldset{
     visibility: hidden;
 }
 
-.spread-content{
+.spread-content, .pull-right{
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+}
+
+.spread-content{
+    justify-content: space-between;
+}
+
+.pull-right{
+    justify-content: flex-end;
 }
