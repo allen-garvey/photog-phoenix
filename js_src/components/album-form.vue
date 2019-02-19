@@ -46,6 +46,7 @@ import FormFieldErrors from './form-field-errors.vue';
 
 import { fetchJson, sendJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
+import { toApiResource } from '../form-helpers.js';
 
 export default {
     name: 'Album-Form',
@@ -136,23 +137,6 @@ export default {
         idForField(fieldName){
             return `id_album_${fieldName}_input`;
         },
-        //returns null for empty strings or other values that should be null
-        //when sending to api
-        nullifyValue(value){
-            if(value === '' || value === undefined){
-                return null;
-            }
-            return value;
-        },
-        toApiResource(item){
-            const resource = {};
-            for(const key in item){
-                const resourceKeyName = key;
-                resource[resourceKeyName] = this.nullifyValue(item[key]);
-            }
-
-            return resource;
-        },
         save(){
             let apiUrl = `/api/albums`;
             let apiMethod = 'POST';
@@ -160,7 +144,7 @@ export default {
                 apiUrl = `${apiUrl}/${this.albumId}`;
                 apiMethod = 'PATCH';
             }
-            const resource = {album: this.toApiResource(this.album)};
+            const resource = {album: toApiResource(this.album)};
 
             sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
                 if(response.errors){
