@@ -1,6 +1,12 @@
 <template>
     <main class="main container">
-        <h2 v-if="model.name">{{model.name}}</h2>
+        <div class="spread-content thumbnail-list-heading">
+            <div><h2 class="thumbnail-list-title" v-if="model.name">{{model.name}}</h2></div>
+            <div class="pull-right" v-if="newItemLink || editItemLink">
+                <router-link :to="newItemLink" class="btn btn-success" v-if="newItemLink">New</router-link>
+                <router-link :to="editItemLink" class="btn btn-outline-dark" v-if="editItemLink">Edit</router-link>
+            </div>
+        </div>
         <ul class="text-list">
             <li v-for="(item, i) in thumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)">
@@ -25,6 +31,12 @@ export default {
         },
         itemsListKey: {
             type: String,
+        },
+        newItemLink: {
+            type: Object,
+        },
+        editItemLink: {
+            type: Object,
         },
     },
     components: {
