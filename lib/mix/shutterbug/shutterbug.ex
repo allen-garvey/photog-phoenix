@@ -3,6 +3,7 @@ defmodule Mix.Tasks.Shutterbug do
 
   alias Photog.Shutterbug.Error
   alias Photog.Shutterbug.Directory
+  alias Photog.Shutterbug.FileValidator
   alias Photog.Image.Exif
 
   @moduledoc """
@@ -11,13 +12,9 @@ defmodule Mix.Tasks.Shutterbug do
 
   @shortdoc "Imports images from given folder"
   def run([source_directory_name, target_directory_name]) do
-  	cond do
-  		!File.exists?(source_directory_name) -> Error.exit_with_error("#{source_directory_name} does not exist")
-  		!File.dir?(source_directory_name)    -> Error.exit_with_error("#{source_directory_name} is not a directory")
-  		!File.exists?(target_directory_name) -> Error.exit_with_error("#{target_directory_name} does not exist")
-  		!File.dir?(target_directory_name)    -> Error.exit_with_error("#{target_directory_name} is not a directory")
-  		true						  -> import_images_from_directory(source_directory_name, target_directory_name)
-  	end
+    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_directory_name) do
+      import_images_from_directory(source_directory_name, target_directory_name)
+    end
   end
 
   def run(_args) do
