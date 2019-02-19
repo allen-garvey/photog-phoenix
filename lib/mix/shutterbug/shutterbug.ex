@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.Shutterbug do
   use Mix.Task
 
+  alias Photog.Shutterbug.Error
   alias Photog.Shutterbug.Directory
   alias Photog.Image.Exif
 
@@ -11,21 +12,16 @@ defmodule Mix.Tasks.Shutterbug do
   @shortdoc "Imports images from given folder"
   def run([source_directory_name, target_directory_name]) do
   	cond do
-  		!File.exists?(source_directory_name) -> exit_with_error("#{source_directory_name} does not exist")
-  		!File.dir?(source_directory_name)    -> exit_with_error("#{source_directory_name} is not a directory")
-  		!File.exists?(target_directory_name) -> exit_with_error("#{target_directory_name} does not exist")
-  		!File.dir?(target_directory_name)    -> exit_with_error("#{target_directory_name} is not a directory")
+  		!File.exists?(source_directory_name) -> Error.exit_with_error("#{source_directory_name} does not exist")
+  		!File.dir?(source_directory_name)    -> Error.exit_with_error("#{source_directory_name} is not a directory")
+  		!File.exists?(target_directory_name) -> Error.exit_with_error("#{target_directory_name} does not exist")
+  		!File.dir?(target_directory_name)    -> Error.exit_with_error("#{target_directory_name} is not a directory")
   		true						  -> import_images_from_directory(source_directory_name, target_directory_name)
   	end
   end
 
   def run(_args) do
-  	exit_with_error("usage: mix shutterbug <image_source_directory> <image_library_destination_directory>")
-  end
-
-  def exit_with_error(error_message, reason \\ :invalid_commandline_arguments) do
-  	IO.puts :stderr, error_message
-  	exit(reason)
+  	Error.exit_with_error("usage: mix shutterbug <image_source_directory> <image_library_destination_directory>")
   end
 
   @doc """
@@ -35,7 +31,7 @@ defmodule Mix.Tasks.Shutterbug do
   	image_files = Photog.Shutterbug.File.get_image_files(source_directory_name)
 
   	if Enum.empty?(image_files) do
-  		exit_with_error("No image files found in #{source_directory_name}", :no_images_in_source_directory)
+  		Error.exit_with_error("No image files found in #{source_directory_name}", :no_images_in_source_directory)
     end
 
     #create directories for masters and thumbnails
@@ -45,12 +41,12 @@ defmodule Mix.Tasks.Shutterbug do
     thumbnails_path = Directory.thumbnails_path(target_directory_name, now)
 
     if File.exists?(masters_path) do
-      exit_with_error("#{masters_path} already exists", :masters_directory_exists)
+      Error.exit_with_error("#{masters_path} already exists", :masters_directory_exists)
     end
     File.mkdir_p!(masters_path)
 
     if File.exists?(thumbnails_path) do
-      exit_with_error("#{thumbnails_path} already exists", :thumbnails_directory_exists)
+      Error.exit_with_error("#{thumbnails_path} already exists", :thumbnails_directory_exists)
     end
     File.mkdir_p!(thumbnails_path)
 
@@ -88,7 +84,7 @@ defmodule Mix.Tasks.Shutterbug do
       exif_map = Exif.exif_for(image_master_path)
       creation_datetime = case Exif.exif_creation_time_as_datetime(exif_map) do
         {:ok, datetime, _} -> datetime
-        {:error, reason}   -> exit_with_error("Image exif creation date is in the wrong format because #{reason}", :image_exif_creation_date_wrong_format)
+        {:error, reason}   -> Error.exit_with_error("Image exif creation date is in the wrong format because #{reason}", :image_exif_creation_date_wrong_format)
         nil                -> now
       end
 

@@ -1,5 +1,5 @@
 defmodule Photog.Shutterbug.File do
-  alias Mix.Tasks.Shutterbug
+  alias Photog.Shutterbug.Error
 
   @doc """
   Returns list of image files for a given directory
@@ -23,7 +23,7 @@ defmodule Photog.Shutterbug.File do
   Copies source to destination but exits with error if destination file already exists
   """
   def safe_copy(source_path, destination_path) do
-    File.cp!(source_path, destination_path, fn _,  dest -> Shutterbug.exit_with_error("#{dest} already exists", :dest_file_already_exists) end)
+    File.cp!(source_path, destination_path, fn _,  dest -> Error.exit_with_error("#{dest} already exists", :dest_file_already_exists) end)
     # make sure permissions are good, since some devices (such as phones) can have too restrictive permissions which won't allow web server to serve image file
     File.chmod!(destination_path, 0o644)
   end
@@ -37,7 +37,7 @@ defmodule Photog.Shutterbug.File do
       # file permissions should be correct (tested with convert command and permissions are +r) but set permissions just in case
       File.chmod!(image_destination_path, 0o644)
     else
-      _ -> Shutterbug.exit_with_error("Error creating #{image_destination_path} using convert", :error_creating_thumbnail)
+      _ -> Error.exit_with_error("Error creating #{image_destination_path} using convert", :error_creating_thumbnail)
     end
   end
 
