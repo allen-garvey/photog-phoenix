@@ -1,6 +1,10 @@
 <template>
     <main class="main container">
         <h2 v-if="model.name">{{model.name}}</h2>
+        <div class="pull-right" v-if="newItemLink || editItemLink">
+            <router-link :to="newItemLink" class="btn btn-success" v-if="newItemLink">New</router-link>
+            <router-link :to="editItemLink" class="btn btn-outline-dark" v-if="editItemLink">Edit</router-link>
+        </div>
         <div class="thumbnail-filter-controls-container" :class="{invisible: isCurrentlyBatchSelect}">
             <fieldset v-if="enableHasAlbumFilter">
                 <legend>Album</legend>
@@ -109,6 +113,12 @@ export default {
         },
         itemsListKey: {
             type: String,
+        },
+        newItemLink: {
+            type: Object,
+        },
+        editItemLink: {
+            type: Object,
         },
         enableHasAlbumFilter: {
             type: Boolean,

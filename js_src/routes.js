@@ -37,6 +37,7 @@ export default {
                 return {
                     apiPath: route.path,
                     enableBatchSelectAlbums: true,
+                    newItemLink: {name: 'albumsNew'},
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
