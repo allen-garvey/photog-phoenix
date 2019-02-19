@@ -1,12 +1,6 @@
 <template>
     <main class="main container">
-        <div class="spread-content thumbnail-list-heading">
-            <div><h2 class="thumbnail-list-title" v-if="model.name">{{model.name}}</h2></div>
-            <div class="pull-right" v-if="newItemLink || editItemLink">
-                <router-link :to="newItemLink" class="btn btn-success" v-if="newItemLink">New</router-link>
-                <router-link :to="editItemLink" class="btn btn-outline-dark" v-if="editItemLink">Edit</router-link>
-            </div>
-        </div>
+        <Resource-Header :title="model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" />
         <ul class="text-list">
             <li v-for="(item, i) in thumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)">
@@ -18,6 +12,8 @@
 </template>
 
 <script>
+import ReasourceHeader from './resource-header.vue';
+
 export default {
     name: 'Text-List',
     props: {
@@ -40,6 +36,7 @@ export default {
         },
     },
     components: {
+        'Resource-Header': ReasourceHeader,
     },
     created(){
         //initial setup of items, since $route watch method won't be called on initial load
