@@ -19,6 +19,7 @@ export default {
             props: {
                 itemShowRouteName: 'tagsShow',
                 itemsListKey: null,
+                newItemLink: {name: 'tagsNew'},
             },
         },
         { 
@@ -227,6 +228,7 @@ export default {
                     apiPath: route.path,
                     itemsListKey: 'albums',
                     enableBatchSelectAlbums: true,
+                    editItemLink: {name: 'tagsEdit', id: route.params.id},
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
