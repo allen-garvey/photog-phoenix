@@ -25,6 +25,9 @@
         <div class="image-show-link-container">
             <a :href="masterUrl">View full-size</a>
         </div>
+        <div>
+            <button class="btn" :class="image.is_favorite ? 'btn-primary' : 'btn-outline-dark'" @click="toggleImageIsFavorite">{{image.is_favorite ? 'Favorited' : 'Click to favorite'}}</button>
+        </div>
         <div class="image-show-info-section">
             <h3 class="image-info-section-heading">Info</h3>
             <dl>
@@ -61,6 +64,8 @@
 
 <script>
 import ImageItemsList from './image-items-list.vue';
+
+import { sendJson } from '../request-helpers.js';
 
 //from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 function capitalizeFirstLetter(string){
@@ -205,7 +210,25 @@ export default {
             return (updatedItems)=>{
                 this.image[itemsKey] = updatedItems; 
             };
-        }
+        },
+        toggleImageIsFavorite(){
+            const newIsFavorite = !this.image.is_favorite;
+
+            const apiUrl = `/api/images/${this.image.id}`;
+
+            const data = {
+                image: {
+                    id: this.image.id,
+                    is_favorite: newIsFavorite,
+                },
+            };
+
+            sendJson(apiUrl, this.csrfToken, 'PATCH', data).then((response)=>{
+                this.image.is_favorite = response.data.is_favorite;
+            });
+
+
+        },
     }
 }
 </script>
