@@ -12,6 +12,10 @@ defmodule PhotogWeb.ImageView do
     %{data: render_one(image, ImageView, "image.json")}
   end
 
+  def render("show_excerpt_mini.json", %{image: image}) do
+    %{data: render_one(image, ImageView, "image_excerpt_mini.json")}
+  end
+
   def render("albums.json", %{albums: albums}) do
     %{data: render_many(albums, PhotogWeb.AlbumView, "album_excerpt_mini.json")}
   end
@@ -22,6 +26,13 @@ defmodule PhotogWeb.ImageView do
 
   def render("image.json", %{image: image}) do
     image_full_to_map(image)
+  end
+
+  def render("image_excerpt_mini.json", %{image: image}) do
+    %{
+      id: image.id,
+      is_favorite: image.is_favorite,
+    }
   end
 
   def render("exif.json", %{image: image, exif: exif}) do
