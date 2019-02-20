@@ -1,6 +1,6 @@
 <template>
     <main class="main container">
-        <Resource-Header :title="model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" />
+        <Resource-Header :title="model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
         <div class="thumbnail-filter-controls-container" :class="{invisible: isCurrentlyBatchSelect}">
             <fieldset v-if="enableHasAlbumFilter">
                 <legend>Album</legend>
