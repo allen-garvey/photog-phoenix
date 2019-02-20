@@ -19,7 +19,7 @@ defmodule PhotogWeb.Router do
 
     resources "/images", ImageController,               only: [:index, :show]
     resources "/albums", AlbumController
-    resources "/persons", PersonController,             only: [:index, :show]
+    resources "/persons", PersonController
     resources "/person_images", PersonImageController,  only: [:index, :show, :create]
     resources "/album_images", AlbumImageController,    only: [:index, :show, :create]
     resources "/imports", ImportController,             only: [:index, :show]
