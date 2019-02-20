@@ -9,11 +9,18 @@ defmodule Mix.Tasks.Shutterbug do
   @moduledoc """
   Given a directory of images, will copy image files to masters directory, create thumbnails, and add image resources to database
   """
-
-  @shortdoc "Imports images from given folder"
+  @doc """
+  Imports images from source directory to (optional) destination directory. If no directory given, will default to ./priv/static/media, or separate masters and thumbnail destination directories can be given
+  """
   def run([source_directory_name, target_directory_name]) do
     if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_directory_name) do
-      import_images_from_directory(source_directory_name, target_directory_name, target_directory_name)
+      import_images_from_directory(source_directory_name, Path.join(target_directory_name, "Masters"), Path.join(target_directory_name, "Thumbnails"))
+    end
+  end
+
+  def run([source_directory_name, target_masters_directory_name, target_thumbnails_directory_name]) do
+    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_masters_directory_name) and FileValidator.validate_import_directory!(target_thumbnails_directory_name) do
+      import_images_from_directory(source_directory_name, target_masters_directory_name, target_thumbnails_directory_name)
     end
   end
 

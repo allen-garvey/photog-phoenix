@@ -32,7 +32,6 @@ defmodule Photog.Shutterbug.Directory do
   def masters_path(target_directory, datetime) do
     Path.join([
       target_directory,
-      "Masters",
       import_relative_path(datetime),
     ])
   end
@@ -43,7 +42,6 @@ defmodule Photog.Shutterbug.Directory do
   def thumbnails_path(target_directory, datetime) do
     Path.join([
       target_directory,
-      "Thumbnails",
       import_relative_path(datetime),
     ])
   end
