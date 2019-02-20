@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Shutterbug do
   @shortdoc "Imports images from given folder"
   def run([source_directory_name, target_directory_name]) do
     if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_directory_name) do
-      import_images_from_directory(source_directory_name, target_directory_name)
+      import_images_from_directory(source_directory_name, target_directory_name, target_directory_name)
     end
   end
 
@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Shutterbug do
   @doc """
   Imports image files from directory
   """
-  def import_images_from_directory(source_directory_name, target_directory_name) do
+  def import_images_from_directory(source_directory_name, masters_target_directory_name, thumbnails_target_directory_name) do
   	image_files = Photog.Shutterbug.File.get_image_files(source_directory_name)
 
   	if Enum.empty?(image_files) do
@@ -34,8 +34,8 @@ defmodule Mix.Tasks.Shutterbug do
     #create directories for masters and thumbnails
     now = DateTime.utc_now()
     target_relative_path = Directory.import_relative_path(now)
-    masters_path = Directory.masters_path(target_directory_name, now)
-    thumbnails_path = Directory.thumbnails_path(target_directory_name, now)
+    masters_path = Directory.masters_path(masters_target_directory_name, now)
+    thumbnails_path = Directory.thumbnails_path(thumbnails_target_directory_name, now)
 
     if File.exists?(masters_path) do
       Error.exit_with_error("#{masters_path} already exists", :masters_directory_exists)
