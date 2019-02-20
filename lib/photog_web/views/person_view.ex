@@ -14,6 +14,10 @@ defmodule PhotogWeb.PersonView do
     %{data: render_one(person, PersonView, "person.json")}
   end
 
+  def render("show_excerpt_mini.json", %{person: person}) do
+    %{data: render_one(person, PersonView, "person_excerpt_mini.json")}
+  end
+
   def render("person.json", %{person: person}) do
     %{
       id: person.id,

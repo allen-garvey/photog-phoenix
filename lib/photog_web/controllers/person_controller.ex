@@ -20,7 +20,7 @@ defmodule PhotogWeb.PersonController do
     with {:ok, %Person{} = person} <- Api.create_person(person_params) do
       conn
       |> put_status(:created)
-      |> render("show.json", person: person)
+      |> render("show_excerpt_mini.json", person: person)
     end
   end
 
@@ -33,7 +33,7 @@ defmodule PhotogWeb.PersonController do
     person = Api.get_person!(id)
 
     with {:ok, %Person{} = person} <- Api.update_person(person, person_params) do
-      render(conn, "show.json", person: person)
+      render(conn, "show_excerpt_mini.json", person: person)
     end
   end
 
