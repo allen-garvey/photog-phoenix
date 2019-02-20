@@ -4,6 +4,7 @@ defmodule Mix.Tasks.Shutterbug do
   alias Photog.Shutterbug.Error
   alias Photog.Shutterbug.Directory
   alias Photog.Shutterbug.FileValidator
+  alias Photog.Shutterbug.Command
   alias Photog.Image.Exif
 
   @moduledoc """
@@ -15,19 +16,19 @@ defmodule Mix.Tasks.Shutterbug do
   def run([source_directory_name]) do
     masters_destination_path = Photog.Image.masters_directory()
     thumbnails_destination_path = Photog.Image.thumbnails_directory()
-    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(masters_destination_path) and FileValidator.validate_import_directory!(thumbnails_destination_path) do
+    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(masters_destination_path) and FileValidator.validate_import_directory!(thumbnails_destination_path) and Command.are_import_commands_available do
       import_images_from_directory(source_directory_name, masters_destination_path, thumbnails_destination_path)
     end
   end
 
   def run([source_directory_name, target_directory_name]) do
-    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_directory_name) do
+    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_directory_name) and Command.are_import_commands_available do
       import_images_from_directory(source_directory_name, Path.join(target_directory_name, "Masters"), Path.join(target_directory_name, "Thumbnails"))
     end
   end
 
   def run([source_directory_name, target_masters_directory_name, target_thumbnails_directory_name]) do
-    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_masters_directory_name) and FileValidator.validate_import_directory!(target_thumbnails_directory_name) do
+    if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(target_masters_directory_name) and FileValidator.validate_import_directory!(target_thumbnails_directory_name) and Command.are_import_commands_available do
       import_images_from_directory(source_directory_name, target_masters_directory_name, target_thumbnails_directory_name)
     end
   end
