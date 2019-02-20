@@ -20,7 +20,6 @@ defmodule PhotogWeb.PersonController do
     with {:ok, %Person{} = person} <- Api.create_person(person_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", person_path(conn, :show, person))
       |> render("show.json", person: person)
     end
   end
