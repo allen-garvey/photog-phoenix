@@ -2,6 +2,7 @@ import ThumbnailList from './components/thumbnail-list.vue'
 import TextList from './components/text-list.vue'
 import ImageDetail from './components/image-detail.vue'
 import AlbumForm from './components/album-form.vue';
+import PersonForm from './components/person-form.vue';
 import TagForm from './components/tag-form.vue';
 
 export default {
@@ -58,6 +59,7 @@ export default {
             props: (route) => {
                 return {
                     apiPath: route.path,
+                    newItemLink: {name: 'personsNew'},
                     showRouteFor: (item)=>{
                         return {
                             name: 'personsShow',
@@ -177,6 +179,26 @@ export default {
                 }; 
             },
         },
+        //new route has to be before show route
+        { 
+            path: '/persons/new',
+            name: 'personsNew', 
+            component: PersonForm,
+            props: (route) => {
+                return {
+                }; 
+            },
+        },
+        { 
+            path: '/persons/:id/edit',
+            name: 'personsEdit', 
+            component: PersonForm,
+            props: (route) => {
+                return {
+                    personId: parseInt(route.params.id),
+                }; 
+            },
+        },
         { 
             path: '/persons/:id',
             name: 'personsShow', 
@@ -187,6 +209,7 @@ export default {
                     itemsListKey: 'images',
                     enableHasAlbumFilter: true,
                     enableBatchSelectImages: true,
+                    editItemLink: {name: 'personsEdit', id: route.params.id},
                     showRouteFor: (item)=>{
                         return {
                             name: 'personImagesShow',
