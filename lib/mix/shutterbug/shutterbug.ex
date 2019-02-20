@@ -13,8 +13,8 @@ defmodule Mix.Tasks.Shutterbug do
   Imports images from source directory to (optional) destination directory. If no directory given, will default to ./priv/static/media, or separate masters and thumbnail destination directories can be given
   """
   def run([source_directory_name]) do
-    masters_destination_path = Path.absname("priv/static/media/images")
-    thumbnails_destination_path = Path.absname("priv/static/media/thumbnails")
+    masters_destination_path = Photog.Image.masters_directory()
+    thumbnails_destination_path = Photog.Image.thumbnails_directory()
     if FileValidator.validate_import_directory!(source_directory_name) and FileValidator.validate_import_directory!(masters_destination_path) and FileValidator.validate_import_directory!(thumbnails_destination_path) do
       import_images_from_directory(source_directory_name, masters_destination_path, thumbnails_destination_path)
     end
