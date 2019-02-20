@@ -5,8 +5,20 @@ defmodule Photog.Shutterbug.File do
   Returns list of image files for a given directory
   """
   def get_image_files(directory_name) do
-  	File.ls!(directory_name)
+  	get_files_recursive(directory_name)
   	|> Enum.filter(&is_image_filename/1)
+  end
+
+  def get_files_recursive(directory_name) do
+    File.ls!(directory_name)
+    |> Enum.flat_map(fn file_name ->
+      file_name_full = Path.join(directory_name, file_name)
+      if File.dir?(file_name_full) do
+        get_files_recursive(file_name_full)
+      else
+        [file_name_full]
+      end
+    end)
   end
 
   @doc """

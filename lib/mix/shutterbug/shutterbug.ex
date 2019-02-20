@@ -53,11 +53,11 @@ defmodule Mix.Tasks.Shutterbug do
     #create import
     import_id = Photog.Shutterbug.Import.create_import()
 
-    for image_file <- image_files do
-      IO.puts "Importing #{image_file}"
+    for image_source_path <- image_files do
+      IO.puts "Importing #{image_source_path}"
 
-      #get image full source path
-      image_source_path = Path.join(source_directory_name, image_file)
+      #get image filename
+      image_file = Path.basename(image_source_path)
       # copy image master
       image_master_path = Path.join(masters_path, image_file)
       Photog.Shutterbug.File.safe_copy(image_source_path, image_master_path)
