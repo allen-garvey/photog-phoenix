@@ -142,6 +142,11 @@ export default {
             name: 'albumsNew', 
             component: AlbumForm,
             props: (route) => {
+                if(route.params.images){
+                    return {
+                        images: route.params.images,
+                    };
+                }
                 return {
                 }; 
             },

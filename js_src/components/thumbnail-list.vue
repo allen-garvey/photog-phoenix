@@ -32,6 +32,7 @@
                 <div v-if="enableBatchSelectImages" class="btn-group">
                     <button class="btn btn-primary" @click="setBatchResourceMode(1)" :class="buttonClassForResourceMode(1)">Add Albums</button>
                     <button class="btn btn-primary" @click="setBatchResourceMode(2)" :class="buttonClassForResourceMode(2)">Add Persons</button>
+                    <button class="btn btn-outline-primary" @click="createAlbumWithImages()" :disabled="!anyItemsBatchSelected">Create Album</button>
                 </div>
                 <button class="btn btn-primary" @click="setBatchResourceMode(3)" :class="buttonClassForResourceMode(3)" v-if="enableBatchSelectAlbums">Add Tags</button>
             </div>  
@@ -378,6 +379,10 @@ export default {
                 }
 
             });
+        },
+        createAlbumWithImages(){
+            const selectedImages = this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]);
+            this.$router.push({name: 'albumsNew', params: {images: selectedImages}});
         },
     }
 }

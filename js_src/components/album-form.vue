@@ -25,7 +25,7 @@
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
                 <legend>Cover Image</legend>
-                <label v-for="image in model.images" :key="image.id">
+                <label v-for="image in imagesInAlbum" :key="image.id">
                     <input type="radio" v-model="album.cover_image_id" :value="image.id">
                     <img :src="thumbnailUrlFor(image)" />
                 </label>
@@ -66,6 +66,10 @@ export default {
         albumId: {
             type: Number,
         },
+        //for when creating an album with images
+        images: {
+            type: Array
+        },
     },
     components: {
         'Form-Field-Errors': FormFieldErrors,
@@ -96,7 +100,16 @@ export default {
             return 'New Album';
         },
         shouldShowCoverImageInput(){
-            return this.isCreateForm || this.model.images.length === 0;
+            return this.imagesInAlbum.length === 0;
+        },
+        imagesInAlbum(){
+            if(this.isEditForm){
+                return this.model.images;
+            }
+            else if(this.isCreateForm && this.images){
+                return this.images;
+            }
+            return [];
         },
         backLink(){
             if(this.isEditForm){
