@@ -354,7 +354,7 @@ export default {
                 thumbnailsKey = 'album_ids';
             }
             const data = {};
-            data[thumbnailsKey] = this.filteredThumbnailList.map((item)=>item.id);
+            data[thumbnailsKey] = this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]).map((item)=>item.id);
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
             this.sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
