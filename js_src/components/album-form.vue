@@ -161,9 +161,13 @@ export default {
                 apiUrl = `${apiUrl}/${this.albumId}`;
                 apiMethod = 'PATCH';
             }
-            const resource = {album: toApiResource(this.album)};
+            const data = {album: toApiResource(this.album)};
 
-            this.sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
+            if(this.isCreateForm && this.images){
+                data['image_ids'] = this.images.map(image => image.id);
+            }
+
+            this.sendJson(apiUrl, this.csrfToken, apiMethod, data).then((response)=>{
                 if(response.errors){
                     this.errors = response.errors;
                 }
