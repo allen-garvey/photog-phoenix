@@ -32,7 +32,8 @@
                 <div v-if="enableBatchSelectImages" class="btn-group">
                     <button class="btn btn-primary" @click="setBatchResourceMode(1)" :class="buttonClassForResourceMode(1)">Add Albums</button>
                     <button class="btn btn-primary" @click="setBatchResourceMode(2)" :class="buttonClassForResourceMode(2)">Add Persons</button>
-                    <button class="btn btn-outline-primary" @click="createAlbumWithImages()" :disabled="!anyItemsBatchSelected">Create Album</button>
+                    <button class="btn btn-outline-primary" @click="createResourceWithImages('albumsNew')" :disabled="!anyItemsBatchSelected">Create Album</button>
+                    <button class="btn btn-outline-primary" @click="createResourceWithImages('personsNew')" :disabled="!anyItemsBatchSelected">Create Person</button>
                 </div>
                 <button class="btn btn-primary" @click="setBatchResourceMode(3)" :class="buttonClassForResourceMode(3)" v-if="enableBatchSelectAlbums">Add Tags</button>
             </div>  
@@ -189,6 +190,9 @@ export default {
             return this.thumbnailList.filter((item)=>{
                 return this.shouldShowItem(item);
             });
+        },
+        thumbnailListSelectedItems(){
+            return this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]);
         },
         //so thumbnail links are disabled when we are in batch select mode
         thumbnailLinkEvent(){
@@ -355,7 +359,7 @@ export default {
                 thumbnailsKey = 'album_ids';
             }
             const data = {};
-            data[thumbnailsKey] = this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]).map((item)=>item.id);
+            data[thumbnailsKey] = this.thumbnailListSelectedItems.map((item)=>item.id);
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
             this.sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
@@ -380,8 +384,7 @@ export default {
 
             });
         },
-        createAlbumWithImages(){
-            const selectedImages = this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]);
+        createSuccessRedirectForCurrentPath(){
             //save current route name in variable, otherwise need to use iife
             //to create successRedirect
             const currentRoute = this.$router.currentRoute;
@@ -390,13 +393,17 @@ export default {
             for(const param in currentRoute.params){
                 params[param] = currentRoute.params[param];
             }
-            const successRedirect = (albumId) => {
+            return (id) => {
                 return {
                     name: currentRouteName,
                     params,
                 };
             };
-            this.$router.push({name: 'albumsNew', params: {images: selectedImages, successRedirect}});
+        },
+        createResourceWithImages(pathName){
+            const selectedImages = this.thumbnailListSelectedItems;
+            const successRedirect = this.createSuccessRedirectForCurrentPath();
+            this.$router.push({name: pathName, params: {images: selectedImages, successRedirect}});
         },
     }
 }

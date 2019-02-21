@@ -19,7 +19,7 @@
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
                 <legend>Cover Image</legend>
-                <label v-for="image in model.images" :key="image.id">
+                <label v-for="image in imagesInPerson" :key="image.id">
                     <input type="radio" v-model="person.cover_image_id" :value="image.id">
                     <img :src="thumbnailUrlFor(image)" />
                 </label>
@@ -60,6 +60,13 @@ export default {
         personId: {
             type: Number,
         },
+        //for when creating an album with images
+        images: {
+            type: Array
+        },
+        successRedirect: {
+            type: Function
+        },
     },
     components: {
         'Form-Field-Errors': FormFieldErrors,
@@ -90,7 +97,16 @@ export default {
             return 'New Person';
         },
         shouldShowCoverImageInput(){
-            return this.isCreateForm || this.model.images.length === 0;
+            return this.imagesInPerson.length === 0;
+        },
+        imagesInPerson(){
+            if(this.isEditForm){
+                return this.model.images;
+            }
+            else if(this.isCreateForm && this.images){
+                return this.images;
+            }
+            return [];
         },
         backLink(){
             if(this.isEditForm){
@@ -120,7 +136,11 @@ export default {
             }
             else{
                 this.model = null;
-                this.person = {};
+                const person = {};
+                if(this.images){
+                    person['cover_image_id'] = this.images[0].id;
+                }
+                this.person = person;
                 this.isInitialLoadComplete = true;
             }
         },
@@ -141,14 +161,19 @@ export default {
                 apiUrl = `${apiUrl}/${this.personId}`;
                 apiMethod = 'PATCH';
             }
-            const resource = {person: toApiResource(this.person)};
+            const data = {person: toApiResource(this.person)};
+            if(this.isCreateForm && this.images){
+                data['image_ids'] = this.images.map(image => image.id);
+            }
 
-            this.sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
+            this.sendJson(apiUrl, this.csrfToken, apiMethod, data).then((response)=>{
                 if(response.errors){
                     this.errors = response.errors;
                 }
                 else{
-                    this.$router.push({name: 'personsShow', params: {id: response.data.id}});
+                    const personId = response.data.id;
+                    const redirectPath = this.successRedirect ? this.successRedirect(personId) : {name: 'personsShow', params: {id: personId}};
+                    this.$router.push(redirectPath);
                 }
             });
         },

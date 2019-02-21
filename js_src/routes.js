@@ -191,8 +191,14 @@ export default {
             name: 'personsNew', 
             component: PersonForm,
             props: (route) => {
-                return {
-                }; 
+                const optionalParams = ['images', 'successRedirect'];
+                const props = {};
+                for(const param of optionalParams){
+                    if(param in route.params){
+                        props[param] = route.params[param];
+                    }
+                }
+                return props;
             },
         },
         { 
