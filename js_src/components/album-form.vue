@@ -140,7 +140,11 @@ export default {
             }
             else{
                 this.model = null;
-                this.album = {};
+                const album = {};
+                if(this.images){
+                    album['cover_image_id'] = this.images[0].id;
+                }
+                this.album = album;
                 this.isInitialLoadComplete = true;
             }
         },
