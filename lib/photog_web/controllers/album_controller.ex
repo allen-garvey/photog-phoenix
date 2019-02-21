@@ -3,6 +3,7 @@ defmodule PhotogWeb.AlbumController do
 
   alias Photog.Api
   alias Photog.Api.Album
+  alias Photog.Api.AlbumImage
 
   action_fallback PhotogWeb.FallbackController
 
@@ -16,12 +17,35 @@ defmodule PhotogWeb.AlbumController do
     render(conn, "index.json", albums: albums)
   end
 
+  def create(conn, %{"album" => album_params, "image_ids" => image_ids}) do
+    with {:ok, %Album{} = album} <- Api.create_album(album_params) do
+      {_, _} = add_images_to_album(album.id, image_ids)
+      conn
+      |> put_status(:created)
+      |> render("show_excerpt_mini.json", album: album)
+    end
+  end
+
   def create(conn, %{"album" => album_params}) do
     with {:ok, %Album{} = album} <- Api.create_album(album_params) do
       conn
       |> put_status(:created)
       |> render("show_excerpt_mini.json", album: album)
     end
+  end
+
+  @doc """
+  Adds images to an album
+  returns {image_ids_added, errors}
+  """
+  def add_images_to_album(album_id, image_ids) do
+    Enum.reduce(image_ids, {[], []}, fn image_id, {images_added, errors} ->
+      case Api.create_album_image(%{"album_id" => album_id, "image_id" => image_id}) do
+        {:ok, %AlbumImage{} = album_image} -> { [album_image.image_id | images_added], errors }
+        {:error, _changeset}                -> { images_added, [ image_id | errors] }
+
+      end
+    end)
   end
 
   def show(conn, %{"id" => id}) do
