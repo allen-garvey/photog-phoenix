@@ -142,13 +142,14 @@ export default {
             name: 'albumsNew', 
             component: AlbumForm,
             props: (route) => {
-                if(route.params.images){
-                    return {
-                        images: route.params.images,
-                    };
+                const optionalParams = ['images', 'successRedirect'];
+                const props = {};
+                for(const param of optionalParams){
+                    if(param in route.params){
+                        props[param] = route.params[param];
+                    }
                 }
-                return {
-                }; 
+                return props;
             },
         },
         { 

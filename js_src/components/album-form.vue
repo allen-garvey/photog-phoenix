@@ -70,6 +70,9 @@ export default {
         images: {
             type: Array
         },
+        successRedirect: {
+            type: Function
+        },
     },
     components: {
         'Form-Field-Errors': FormFieldErrors,
@@ -176,7 +179,9 @@ export default {
                     this.errors = response.errors;
                 }
                 else{
-                    this.$router.push({name: 'albumsShow', params: {id: response.data.id}});
+                    const albumId = response.data.id;
+                    const redirectPath = this.successRedirect ? this.successRedirect(albumId) : {name: 'albumsShow', params: {id: albumId}};
+                    this.$router.push(redirectPath);
                 }
             });
         },

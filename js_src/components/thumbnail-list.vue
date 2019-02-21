@@ -382,7 +382,21 @@ export default {
         },
         createAlbumWithImages(){
             const selectedImages = this.filteredThumbnailList.filter((item, i) => this.batchSelectedItems[i]);
-            this.$router.push({name: 'albumsNew', params: {images: selectedImages}});
+            //save current route name in variable, otherwise need to use iife
+            //to create successRedirect
+            const currentRoute = this.$router.currentRoute;
+            const currentRouteName = currentRoute.name;
+            const params = {};
+            for(const param in currentRoute.params){
+                params[param] = currentRoute.params[param];
+            }
+            const successRedirect = (albumId) => {
+                return {
+                    name: currentRouteName,
+                    params,
+                };
+            };
+            this.$router.push({name: 'albumsNew', params: {images: selectedImages, successRedirect}});
         },
     }
 }
