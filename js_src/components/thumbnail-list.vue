@@ -65,7 +65,7 @@ import vue from 'vue';
 
 import ReasourceHeader from './resource-header.vue';
 
-import { fetchJson, sendJson } from '../request-helpers.js';
+import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 
 //amount of thumbnails to add each time vue infinite scroll is called
@@ -94,6 +94,10 @@ export default {
             required: true,
         },
         putFlash: {
+            type: Function,
+            required: true,
+        },
+        sendJson: {
             type: Function,
             required: true,
         },
@@ -353,7 +357,7 @@ export default {
             data[thumbnailsKey] = this.filteredThumbnailList.map((item)=>item.id);
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
-            sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
+            this.sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
                 const hasAtLeastOneThingSucceeded = response.data && response.data.length > 0;
                 const hasErrors = response.error && response.error.length > 0;
                 //don't do anything unless at 1 thing succeeded

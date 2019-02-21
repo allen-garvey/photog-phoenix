@@ -2,7 +2,7 @@
     <div>
         <Photog-Header/>
         <Flash-Alert ref="flashAlert"/>
-        <router-view :get-model="get" :put-flash="putFlash" ref="routerView" :get-exif="getExif" :csrf-token="csrfToken"/>
+        <router-view :get-model="get" :put-flash="putFlash" ref="routerView" :get-exif="getExif" :csrf-token="csrfToken" :send-json="sendJson"/>
         <Photog-Footer/>
     </div>
 </template>
@@ -12,6 +12,7 @@ import PhotogHeader from './header.vue'
 import PhotogFooter from './footer.vue'
 import FlashAlert from './flash-alert.vue';
 import CacheUtil from '../cache-util.js'
+import { sendJson } from '../request-helpers.js';
 
 const API_URL_BASE = '/api';
 
@@ -70,6 +71,16 @@ export default {
             flashAlert.putFlash(message, type);
             flashAlert.$el.scrollIntoView({behavior: 'smooth', block: 'end'});
         },
+        //wrapper for send json so cache can be cleared after something is sent to API
+        sendJson(...args){
+            return sendJson(...args).then((response)=>{
+                //assume cache needs to be cleared
+                //note that the cache could still be stale if there are multiple users
+                //updating at once, but we are going to assume that this is a single user system
+                this.cache.clear();
+                return response;
+            });
+        }
     }
 }
 </script>

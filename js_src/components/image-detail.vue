@@ -57,15 +57,14 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List :csrf-token="csrfToken" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
-        <Image-Items-List :csrf-token="csrfToken" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
+        <Image-Items-List :csrf-token="csrfToken" :send-json="sendJson" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
+        
+        <Image-Items-List :csrf-token="csrfToken" :send-json="sendJson" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
     </main>
 </template>
 
 <script>
 import ImageItemsList from './image-items-list.vue';
-
-import { sendJson } from '../request-helpers.js';
 
 //from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 function capitalizeFirstLetter(string){
@@ -78,6 +77,10 @@ export default {
     props: {
         csrfToken: {
             type: String,
+            required: true,
+        },
+        sendJson: {
+            type: Function,
             required: true,
         },
         getModel: {
@@ -223,7 +226,7 @@ export default {
                 },
             };
 
-            sendJson(apiUrl, this.csrfToken, 'PATCH', data).then((response)=>{
+            this.sendJson(apiUrl, this.csrfToken, 'PATCH', data).then((response)=>{
                 this.image.is_favorite = response.data.is_favorite;
             });
 

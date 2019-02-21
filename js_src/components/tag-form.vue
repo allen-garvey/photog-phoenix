@@ -22,7 +22,7 @@
 import vue from 'vue';
 import FormFieldErrors from './form-field-errors.vue';
 
-import { fetchJson, sendJson } from '../request-helpers.js';
+import { fetchJson } from '../request-helpers.js';
 import { toApiResource } from '../form-helpers.js';
 
 export default {
@@ -33,6 +33,10 @@ export default {
             required: true,
         },
         putFlash: {
+            type: Function,
+            required: true,
+        },
+        sendJson: {
             type: Function,
             required: true,
         },
@@ -118,7 +122,7 @@ export default {
             }
             const resource = {tag: toApiResource(this.tag)};
 
-            sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
+            this.sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
                 if(response.errors){
                     this.errors = response.errors;
                 }

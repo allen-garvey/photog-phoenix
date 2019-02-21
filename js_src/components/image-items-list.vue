@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { fetchJson, sendJson } from '../request-helpers.js';
+import { fetchJson } from '../request-helpers.js';
 import { arrayRemove } from '../array-util.js';
 
 const MODE_ADD = 1;
@@ -38,6 +38,10 @@ export default {
     props: {
         csrfToken: {
             type: String,
+            required: true,
+        },
+        sendJson: {
+            type: Function,
             required: true,
         },
         heading: {
@@ -151,7 +155,7 @@ export default {
             const data = {};
             data[this.itemsApiName] = itemIds.join(',');
 
-            sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
+            this.sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
                 //display error message if any
                 
                 //add items to array
@@ -168,7 +172,7 @@ export default {
         deleteItem(item, index){
             const removeItemUrl = this.removeItemApiUrlBase + item.id;
 
-            sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
+            this.sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
                 //remove item from array
                 this.itemsUpdatedCallback(arrayRemove(this.items, index));
             });
