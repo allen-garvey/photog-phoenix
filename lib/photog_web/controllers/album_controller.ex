@@ -43,7 +43,6 @@ defmodule PhotogWeb.AlbumController do
       case Api.create_album_image(%{"album_id" => album_id, "image_id" => image_id}) do
         {:ok, %AlbumImage{} = album_image} -> { [album_image.image_id | images_added], errors }
         {:error, _changeset}                -> { images_added, [ image_id | errors] }
-
       end
     end)
   end
