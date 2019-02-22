@@ -1,5 +1,6 @@
 import ThumbnailList from './components/thumbnail-list.vue'
-import TextList from './components/text-list.vue'
+import TagsIndex from './components/tags-index.vue'
+import ImportsIndex from './components/imports-index.vue';
 import ImageDetail from './components/image-detail.vue'
 import AlbumForm from './components/album-form.vue';
 import PersonForm from './components/person-form.vue';
@@ -16,7 +17,7 @@ export default {
         { 
             path: '/tags',
             name: 'tagsIndex', 
-            component: TextList,
+            component: TagsIndex,
             props: {
                 itemShowRouteName: 'tagsShow',
                 itemsListKey: null,
@@ -26,7 +27,7 @@ export default {
         { 
             path: '/imports',
             name: 'importsIndex', 
-            component: TextList,
+            component: ImportsIndex,
             props: {
                 itemShowRouteName: 'importsShow',
                 itemsListKey: null,

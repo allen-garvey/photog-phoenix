@@ -12,7 +12,9 @@
 </template>
 
 <script>
-import TextListBase from './components-base/text-list-base.js';
+import textListBuilder from './components-base/text-list-base.js';
 
-export default TextListBase;
+const component = textListBuilder();
+
+export default component;
 </script>
