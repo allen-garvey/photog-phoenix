@@ -7,8 +7,8 @@ defmodule PhotogWeb.ImportController do
   action_fallback PhotogWeb.FallbackController
 
   def index(conn, _params) do
-    imports = Api.list_imports()
-    render(conn, "index.json", imports: imports)
+    resources = Api.list_imports_with_count_and_limited_images()
+    render(conn, "index_with_count_and_images.json", resources: resources)
   end
 
   def create(conn, %{"import" => import_params}) do

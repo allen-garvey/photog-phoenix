@@ -662,6 +662,35 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Returns the list of {import, image_count} with count of associated images
+  Also preloads a limited amount of images
+  """
+  def list_imports_with_count_and_limited_images do
+    # we are going to use a separate query for count because otherwise we have to group_by
+    # everything in images and import model, which is fragile if we ever add any fields to them
+    # only thing to remember is that the order_by statement is the same in both queries
+
+    imports = from(
+        import in Import,
+        left_join: images in assoc(import, :images),
+        preload: [images: images],
+        order_by: [desc: import.id]
+    )
+    |> Repo.all
+
+    imports_images_count = from(
+        import in Import,
+        left_join: images_count in assoc(import, :images),
+        group_by: [import.id],
+        order_by: [desc: import.id],
+        select: count(images_count.id)
+    )
+    |> Repo.all
+
+    Enum.zip(imports, imports_images_count)
+  end
+
+  @doc """
   Gets a single import.
 
   Raises `Ecto.NoResultsError` if the Import does not exist.
