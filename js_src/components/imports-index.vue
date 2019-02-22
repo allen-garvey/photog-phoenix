@@ -16,5 +16,9 @@ import textListBuilder from './components-base/text-list-base.js';
 
 const component = textListBuilder();
 
+component.methods.titleFor = function(item){
+    return `${item.name} (${item.images_count})`;
+};
+
 export default component;
 </script>
