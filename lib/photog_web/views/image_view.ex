@@ -92,6 +92,13 @@ defmodule PhotogWeb.ImageView do
     }
   end
 
+  def image_thumbnail_to_map(image) do
+    %{
+      id: image.id,
+      mini_thumbnail_path: image.mini_thumbnail_path,
+    }
+  end
+
   def image_full_to_map(image) do
     %{
       id: image.id,
