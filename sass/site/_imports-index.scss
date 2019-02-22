@@ -1,0 +1,9 @@
+.imports-index-mini-thumbnail-list{
+    display: flex;
+    flex-wrap: wrap;
+    img{
+        object-fit: cover;
+        width: 25px;
+        height: 25px;
+    }
+}
