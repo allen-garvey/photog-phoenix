@@ -26,8 +26,7 @@ export default function textListBuilder(options){
             'Resource-Header': ReasourceHeader,
         },
         created(){
-            //initial setup of items, since $route watch method won't be called on initial load
-            this.loadModel(this.$route.path);
+            this.setup();
         },
         data() {
             return {
@@ -49,10 +48,13 @@ export default function textListBuilder(options){
         },
         watch: {
             '$route'(to, from){
-                this.loadModel(to.path);
+                this.setup();
             }
         },
         methods: {
+            setup(){
+                this.loadModel(this.$route.path);
+            },
             loadModel: function(modelPath){
                 this.isLoadingModel = true;
                 this.getModel(modelPath).then((itemsJson)=>{
