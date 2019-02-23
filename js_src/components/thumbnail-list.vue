@@ -54,7 +54,7 @@
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
                 </router-link>
-                <h3 class="thumbnail-title" :class="{'default-title': !('name' in item)}">
+                <h3 class="thumbnail-title" :class="{'default-title': !('name' in item), 'thumbnail-title-favorite': isThumbnailFavorited(item)}">
                     <router-link :to="showRouteFor(item)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'span' : 'a'">{{titleFor(item)}}</router-link>
                 </h3>
             </li>

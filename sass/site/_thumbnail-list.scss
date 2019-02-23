@@ -64,6 +64,13 @@ $thumbnail_dimensions: 205px;
     margin: 8px 0 0;
     font-size: 1.125rem;
 
+    &.thumbnail-title-favorite{
+        font-weight: bold;
+        a{
+            color: $photog_selected_highlight_color;
+        }
+    }
+
     &.default-title{
         font-size: 0.98rem;
     }
