@@ -42,6 +42,7 @@ export default {
                     apiPath: route.path,
                     enableBatchSelectAlbums: true,
                     newItemLink: {name: 'albumsNew'},
+                    pageTitle: 'Albums',
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
@@ -61,6 +62,7 @@ export default {
                 return {
                     apiPath: route.path,
                     newItemLink: {name: 'personsNew'},
+                    pageTitle: 'Persons',
                     showRouteFor: (item)=>{
                         return {
                             name: 'personsShow',
@@ -82,6 +84,7 @@ export default {
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
+                    pageTitle: 'Images',
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -104,6 +107,7 @@ export default {
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
+                    pageTitle: 'Favorites',
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
@@ -125,6 +129,7 @@ export default {
                     apiPath: '/images/?in_album=false',
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
+                    pageTitle: 'Images not in an album',
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
