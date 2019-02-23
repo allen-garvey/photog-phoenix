@@ -3,7 +3,7 @@
         <Resource-Header title="Imports" :editItemLink="editItemLink" :newItemLink="newItemLink" />
         <ul class="text-list">
             <li v-for="(item, i) in thumbnailList" :key="i">
-                <router-link :to="showRouteFor(item)">
+                <router-link :to="showRouteFor(item)" class="imports-index-item-link">
                     {{titleFor(item)}}
                     <ul class="imports-index-mini-thumbnail-list">
                         <li v-for="image in item.images" :key="image.id">
