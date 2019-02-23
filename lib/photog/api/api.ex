@@ -692,8 +692,8 @@ defmodule Photog.Api do
     # have to use fragment and manual preloading for query in lateral joins
     imports = from(
         import in Import,
-        # order by id ASC, because when we manually preload we will be reversing image order
-        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id LIMIT 6", import.id),
+        # when we manually join images order will be reversed, but we still need to order by DESC so we are selecting most recent images
+        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 6", import.id),
         on: true,
         order_by: [desc: import.id],
         select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id} }
