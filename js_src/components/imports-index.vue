@@ -1,6 +1,6 @@
 <template>
     <main class="main container">
-        <Resource-Header :title="model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" />
+        <Resource-Header title="Imports" :editItemLink="editItemLink" :newItemLink="newItemLink" />
         <ul class="text-list">
             <li v-for="(item, i) in thumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)">
