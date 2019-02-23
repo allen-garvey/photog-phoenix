@@ -5,12 +5,12 @@
             <li v-for="(item, i) in thumbnailList" :key="i">
                 <router-link :to="showRouteFor(item)">
                     {{titleFor(item)}}
+                    <ul class="imports-index-mini-thumbnail-list">
+                        <li v-for="image in item.images" :key="image.id">
+                            <img :src="thumbnailUrlFor(image)"/>
+                        </li>
+                    </ul>
                 </router-link>
-                <ul class="imports-index-mini-thumbnail-list">
-                    <li v-for="image in item.images" :key="image.id">
-                        <img :src="thumbnailUrlFor(image)"/>
-                    </li>
-                </ul>
             </li>
         </ul>
     </main>
