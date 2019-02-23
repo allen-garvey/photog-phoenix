@@ -662,6 +662,25 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Manually preloads images for imports since we can't use preload macro when using fragment for left lateral join
+  """
+  def manually_preload_images_for_imports(results) do
+    import_id_map = Enum.reduce(results, %{}, fn %{import: import, image: image}, import_id_map ->
+        saved_import = Map.get(import_id_map, import.id, import)
+        saved_images = case saved_import.images do
+            %Ecto.Association.NotLoaded{} -> [image]
+            images                        -> [image | images]
+        end
+        Map.put(import_id_map, import.id, %Import{saved_import | images: saved_images})
+    end)
+
+    Enum.uniq_by(results, fn %{import: import, image: _image} -> import.id end)
+    |> Enum.map(fn %{import: import, image: _image} ->
+        Map.get(import_id_map, import.id)
+    end)
+  end
+
+  @doc """
   Returns the list of {import, image_count} with count of associated images
   Also preloads a limited amount of images
   """
@@ -670,13 +689,17 @@ defmodule Photog.Api do
     # everything in images and import model, which is fragile if we ever add any fields to them
     # only thing to remember is that the order_by statement is the same in both queries
 
+    # have to use fragment and manual preloading for query in lateral joins
     imports = from(
         import in Import,
-        left_join: images in assoc(import, :images),
-        preload: [images: images],
-        order_by: [desc: import.id]
+        # order by id ASC, because when we manually preload we will be reversing image order
+        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id LIMIT 6", import.id),
+        on: true,
+        order_by: [desc: import.id],
+        select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id} }
     )
     |> Repo.all
+    |> manually_preload_images_for_imports
 
     imports_images_count = from(
         import in Import,
