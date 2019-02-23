@@ -2,9 +2,9 @@
     display: flex;
     flex-wrap: wrap;
     img{
-        $img_dimensions: 40px;
         object-fit: cover;
-        width: $img_dimensions;
-        height: $img_dimensions;
+        object-position: top;
+        width: 80px;
+        height: 40px;
     }
 }
