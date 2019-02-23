@@ -118,8 +118,7 @@ export default {
         },
     },
     created(){
-        //initial setup of items, since $route watch method won't be called on initial load
-        this.loadModel(this.modelApiPath);
+        this.setup();
     },
     data() {
         return {
@@ -157,10 +156,13 @@ export default {
     },
     watch: {
         '$route'(to, from){
-            this.loadModel(this.modelApiPath);
+            this.setup();
         }
     },
     methods: {
+        setup(){
+            this.loadModel(this.modelApiPath);
+        },
         loadModel(modelPath){
             this.imageModel = null;
             this.modelIndex = -1;
