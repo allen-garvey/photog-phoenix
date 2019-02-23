@@ -11,6 +11,8 @@ defmodule PhotogWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :protect_from_forgery
   end
 
   # Other scopes may use custom stacks.
