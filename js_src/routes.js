@@ -107,7 +107,7 @@ export default {
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
-                    pageTitle: 'Favorites',
+                    pageTitle: 'Favorite images',
                     showRouteFor: (item)=>{
                         return {
                             name: 'imagesShow',
