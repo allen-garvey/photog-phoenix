@@ -151,10 +151,7 @@ export default {
         'Resource-Header': ReasourceHeader,
     },
     created(){
-        //initial setup of items, since $route watch method won't be called on initial load
-        this.loadModel().then(()=>{
-            this.isInitialLoadComplete = true;
-        });
+        this.setup();
     },
     data() {
         return {
@@ -219,10 +216,27 @@ export default {
     },
     watch: {
         '$route'(to, from){
-            this.loadModel();
+            this.setup();
         },
     },
     methods: {
+        setup(){
+            this.isInitialLoadComplete = false;
+            this.model = [];
+            this.albumFilterMode = ALBUM_FILTER_MODE_ALL;
+            this.personFilterMode = PERSON_FILTER_MODE_ALL;
+            this.isCurrentlyBatchSelect = false;
+            this.batchSelectedItems = [];
+            this.previouslySelectedBatchItemIndex = 0;
+            this.batchResources = [];
+            this.batchResourcesSelected = [];
+            this.batchSelectResourceMode = BATCH_RESOURCE_MODE_NONE;
+            this.shouldShowAllBatchResources = false;
+            
+            this.loadModel().then(()=>{
+                this.isInitialLoadComplete = true;
+            });
+        },
         loadModel(){
             this.thumbnailList = [];
             return this.getModel(this.apiPath).then((items)=>{
