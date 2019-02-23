@@ -39,11 +39,12 @@
             </div>  
             <div v-if="shouldShowBatchResources">
                 <ul class="batch-resources-list">
-                    <li v-for="(resource, index) in batchResources" :key="resource.id">
+                    <li v-for="(resource, index) in batchResourcesDisplayed" :key="resource.id">
                         <input type="checkbox" :id="idForBatchResource(resource, index)" v-model="batchResourcesSelected[index]" />
                         <label :for="idForBatchResource(resource, index)">{{resource.name}}</label>
                     </li>
                 </ul>
+                <button class="btn btn-outline-dark" v-if="batchResources.length > batchResourcesMoreLimit" @click="toggleDisplayMoreBatchResources">{{batchResourcesDisplayed.length < batchResources.length ? 'Show more' : 'Show less'}}</button>
                 <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected" @click="saveBatchSelected">Save</button>
             </div>
         </div>
@@ -169,6 +170,8 @@ export default {
             batchResources: [],
             batchResourcesSelected: [],
             batchSelectResourceMode: BATCH_RESOURCE_MODE_NONE,
+            shouldShowAllBatchResources: false,
+            batchResourcesMoreLimit: 8,
         }
     },
     computed: {
@@ -206,6 +209,12 @@ export default {
         },
         anyBatchResourcesSelected(){
             return this.batchResourcesSelected.some((isSelected)=>isSelected);
+        },
+        batchResourcesDisplayed(){
+            if(this.shouldShowAllBatchResources){
+                return this.batchResources;
+            }
+            return this.batchResources.slice(0, this.batchResourcesMoreLimit);
         },
     },
     watch: {
@@ -342,6 +351,9 @@ export default {
         },
         buttonClassForResourceMode(resourceMode){
             return resourceMode === this.batchSelectResourceMode ? 'btn-primary' : 'btn-secondary';
+        },
+        toggleDisplayMoreBatchResources(){
+            this.shouldShowAllBatchResources = !this.shouldShowAllBatchResources;
         },
         saveBatchSelected(){
             //default is album_images
