@@ -818,8 +818,9 @@ defmodule Photog.Api do
       [%Tag{}, ...]
 
   """
-  def list_tags do
-    Repo.all(Tag)
+  def list_tags(order_by_list) do
+    from(Tag, order_by: ^order_by_list)
+    |> Repo.all
   end
 
   @doc """

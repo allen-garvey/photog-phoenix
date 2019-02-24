@@ -357,7 +357,7 @@ export default {
             }
             else if(newResourceMode === BATCH_RESOURCE_MODE_TAGS){
                 //no need for tags excerpt, since tags already only returns name and id
-                apiUrl = '/api/tags';
+                apiUrl = '/api/tags?sort=newest';
             }
 
             fetchJson(apiUrl).then((data)=>{

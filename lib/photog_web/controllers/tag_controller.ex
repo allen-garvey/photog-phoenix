@@ -6,8 +6,13 @@ defmodule PhotogWeb.TagController do
 
   action_fallback PhotogWeb.FallbackController
 
+  def index(conn, %{"sort" => "newest"}) do
+    tags = Api.list_tags([desc: :id])
+    render(conn, "index.json", tags: tags)
+  end
+
   def index(conn, _params) do
-    tags = Api.list_tags()
+    tags = Api.list_tags([:name])
     render(conn, "index.json", tags: tags)
   end
 
