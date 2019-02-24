@@ -27,6 +27,9 @@ export default {
             }
         },
         methods: {
+            titleFor(item){
+                return `${item.name} (${item.images_count})`;
+            },
             thumbnailUrlFor(image){
                 return thumbnailUrlFor(image.mini_thumbnail_path);
             },
