@@ -667,9 +667,11 @@ defmodule Photog.Api do
   def manually_preload_images_for_imports(results) do
     import_id_map = Enum.reduce(results, %{}, fn %{import: import, image: image}, import_id_map ->
         saved_import = Map.get(import_id_map, import.id, import)
-        saved_images = case saved_import.images do
-            %Ecto.Association.NotLoaded{} -> [image]
-            images                        -> [image | images]
+        saved_images = case {saved_import.images, image.id} do
+            {%Ecto.Association.NotLoaded{}, nil}       -> []
+            {%Ecto.Association.NotLoaded{}, _image_id} -> [image]
+            {images, nil}                        ->       images
+            {images, _image_id}                        -> [image | images]
         end
         Map.put(import_id_map, import.id, %Import{saved_import | images: saved_images})
     end)
