@@ -18,20 +18,11 @@ export default {
             path: '/tags',
             name: 'tagsIndex', 
             component: TagsIndex,
-            props: {
-                itemShowRouteName: 'tagsShow',
-                itemsListKey: null,
-                newItemLink: {name: 'tagsNew'},
-            },
         },
         { 
             path: '/imports',
             name: 'importsIndex', 
             component: ImportsIndex,
-            props: {
-                itemShowRouteName: 'importsShow',
-                itemsListKey: null,
-            },
         },
         { 
             path: '/albums',
