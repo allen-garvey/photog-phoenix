@@ -68,7 +68,6 @@ import vue from 'vue';
 
 import ReasourceHeader from './resource-header.vue';
 
-import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 
 //amount of thumbnails to add each time vue infinite scroll is called
@@ -351,16 +350,16 @@ export default {
             if(newResourceMode === BATCH_RESOURCE_MODE_NONE){
                 return;
             }
-            let apiUrl = '/api/albums?excerpt=true';
+            let apiUrl = '/albums?excerpt=true';
             if(newResourceMode === BATCH_RESOURCE_MODE_PERSONS){
-                apiUrl = '/api/persons?excerpt=true';
+                apiUrl = '/persons?excerpt=true';
             }
             else if(newResourceMode === BATCH_RESOURCE_MODE_TAGS){
                 //no need for tags excerpt, since tags already only returns name and id
-                apiUrl = '/api/tags?sort=newest';
+                apiUrl = '/tags?sort=newest';
             }
 
-            fetchJson(apiUrl).then((data)=>{
+            this.getModel(apiUrl).then((data)=>{
                 this.batchResources = data;
                 this.batchResourcesSelected = this.batchResources.map(()=>false);
             });
