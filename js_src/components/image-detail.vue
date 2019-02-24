@@ -57,9 +57,9 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List :csrf-token="csrfToken" :send-json="sendJson" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
+        <Image-Items-List :send-json="sendJson" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
         
-        <Image-Items-List :csrf-token="csrfToken" :send-json="sendJson" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
+        <Image-Items-List :send-json="sendJson" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
     </main>
 </template>
 
@@ -75,10 +75,6 @@ function capitalizeFirstLetter(string){
 export default {
     name: 'Image-Detail',
     props: {
-        csrfToken: {
-            type: String,
-            required: true,
-        },
         sendJson: {
             type: Function,
             required: true,
@@ -228,7 +224,7 @@ export default {
                 },
             };
 
-            this.sendJson(apiUrl, this.csrfToken, 'PATCH', data).then((response)=>{
+            this.sendJson(apiUrl, 'PATCH', data).then((response)=>{
                 this.image.is_favorite = response.data.is_favorite;
             });
 

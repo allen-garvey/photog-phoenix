@@ -28,10 +28,6 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Tag-Form',
     props: {
-        csrfToken: {
-            type: String,
-            required: true,
-        },
         putFlash: {
             type: Function,
             required: true,
@@ -122,7 +118,7 @@ export default {
             }
             const resource = {tag: toApiResource(this.tag)};
 
-            this.sendJson(apiUrl, this.csrfToken, apiMethod, resource).then((response)=>{
+            this.sendJson(apiUrl, apiMethod, resource).then((response)=>{
                 if(response.errors){
                     this.errors = response.errors;
                 }

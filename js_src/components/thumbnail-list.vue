@@ -91,10 +91,6 @@ const BATCH_RESOURCE_MODE_TAGS = 3;
 export default {
     name: 'Thumbnail-List',
     props: {
-        csrfToken: {
-            type: String,
-            required: true,
-        },
         putFlash: {
             type: Function,
             required: true,
@@ -390,7 +386,7 @@ export default {
             data[thumbnailsKey] = this.thumbnailListSelectedItems.map((item)=>item.id);
             data[resourcesKey] = this.batchResources.filter((item, i)=>this.batchResourcesSelected[i]).map((item)=>item.id);
 
-            this.sendJson(apiUrl, this.csrfToken, 'POST', data).then((response)=>{
+            this.sendJson(apiUrl, 'POST', data).then((response)=>{
                 const hasAtLeastOneThingSucceeded = response.data && response.data.length > 0;
                 const hasErrors = response.error && response.error.length > 0;
                 //don't do anything unless at 1 thing succeeded

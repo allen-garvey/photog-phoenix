@@ -51,10 +51,6 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Album-Form',
     props: {
-        csrfToken: {
-            type: String,
-            required: true,
-        },
         putFlash: {
             type: Function,
             required: true,
@@ -174,7 +170,7 @@ export default {
                 data['image_ids'] = this.images.map(image => image.id);
             }
 
-            this.sendJson(apiUrl, this.csrfToken, apiMethod, data).then((response)=>{
+            this.sendJson(apiUrl, apiMethod, data).then((response)=>{
                 if(response.errors){
                     this.errors = response.errors;
                 }

@@ -36,10 +36,6 @@ const MODE_EDIT = 3;
 export default {
     name: 'Image-Items-List',
     props: {
-        csrfToken: {
-            type: String,
-            required: true,
-        },
         sendJson: {
             type: Function,
             required: true,
@@ -155,7 +151,7 @@ export default {
             const data = {};
             data[this.itemsApiName] = itemIds.join(',');
 
-            this.sendJson(this.addItemsApiUrl, this.csrfToken, 'POST', data).then((response)=>{
+            this.sendJson(this.addItemsApiUrl, 'POST', data).then((response)=>{
                 //display error message if any
                 
                 //add items to array
@@ -172,7 +168,7 @@ export default {
         deleteItem(item, index){
             const removeItemUrl = this.removeItemApiUrlBase + item.id;
 
-            this.sendJson(removeItemUrl, this.csrfToken, 'DELETE').then((response)=>{
+            this.sendJson(removeItemUrl, 'DELETE').then((response)=>{
                 //remove item from array
                 this.itemsUpdatedCallback(arrayRemove(this.items, index));
             });
