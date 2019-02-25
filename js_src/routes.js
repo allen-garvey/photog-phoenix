@@ -31,7 +31,7 @@ export default {
             name: 'albumsIndex', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     enableBatchSelectAlbums: true,
                     newItemLink: {name: 'albumsNew'},
@@ -44,7 +44,9 @@ export default {
                             },
                         };
                     },
-                }; 
+                };
+
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         { 
@@ -52,7 +54,7 @@ export default {
             name: 'personsIndex', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     newItemLink: {name: 'personsNew'},
                     pageTitle: 'Persons',
@@ -65,6 +67,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         { 
@@ -72,7 +75,7 @@ export default {
             name: 'imagesIndex', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
@@ -88,6 +91,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         { 
@@ -95,7 +99,7 @@ export default {
             name: 'imageFavoritesIndex', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: '/images/?favorites=true',
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
@@ -111,6 +115,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         { 
@@ -118,7 +123,7 @@ export default {
             name: 'imagesNotInAlbumIndex', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: '/images/?in_album=false',
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
@@ -133,6 +138,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         //new route has to be before show route
@@ -159,7 +165,7 @@ export default {
             name: 'albumsShow', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     itemsListKey: 'images',
                     enableHasPersonFilter: true,
@@ -175,6 +181,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         //new route has to be before show route
@@ -201,7 +208,7 @@ export default {
             name: 'personsShow', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     itemsListKey: 'images',
                     enableHasAlbumFilter: true,
@@ -217,6 +224,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         //new route has to be before show route
@@ -244,7 +252,7 @@ export default {
             name: 'tagsShow', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     itemsListKey: 'albums',
                     enableBatchSelectAlbums: true,
@@ -258,6 +266,7 @@ export default {
                         };
                     },
                 }; 
+                return getOptionalParams(route.params, ['flashMessage'], props);
             },
         },
         { 
@@ -265,7 +274,7 @@ export default {
             name: 'importsShow', 
             component: ThumbnailList,
             props: (route) => {
-                return {
+                const props = {
                     apiPath: route.path,
                     itemsListKey: 'images',
                     enableHasAlbumFilter: true,
@@ -280,7 +289,8 @@ export default {
                             },
                         };
                     },
-                }; 
+                };
+                return getOptionalParams(route.params, ['flashMessage'], props); 
             },
         },
         { 

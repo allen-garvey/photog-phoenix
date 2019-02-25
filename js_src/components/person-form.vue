@@ -169,6 +169,7 @@ export default {
                 else{
                     const personId = response.data.id;
                     const redirectPath = this.successRedirect ? this.successRedirect(personId) : {name: 'personsShow', params: {id: personId}};
+                    redirectPath.params.flashMessage = [`${data.person.name} created`, 'info'];
                     this.$router.push(redirectPath);
                 }
             });

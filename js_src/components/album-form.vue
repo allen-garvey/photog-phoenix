@@ -177,6 +177,7 @@ export default {
                 else{
                     const albumId = response.data.id;
                     const redirectPath = this.successRedirect ? this.successRedirect(albumId) : {name: 'albumsShow', params: {id: albumId}};
+                    redirectPath.params.flashMessage = [`${data.album.name} created`, 'info'];
                     this.$router.push(redirectPath);
                 }
             });
