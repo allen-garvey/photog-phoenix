@@ -17,18 +17,15 @@ export default {
             alertText: '',
         }
     },
-    watch: {
-        '$route'(to, from){
-            this.alertText = '';
-        },
-    },
-    computed: {
-
-    },
     methods: {
         putFlash(message, type='info'){
             this.alertText = message;
             this.alertClass = type;
+        },
+        //can't clear flash automatically in route watch, since might be called after
+        //flash message has already been put there
+        clearFlash(){
+            this.alertText = '';
         },
     }
 }

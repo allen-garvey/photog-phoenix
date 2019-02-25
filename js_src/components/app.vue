@@ -38,6 +38,13 @@ export default {
     computed: {
 
     },
+    watch: {
+        '$route'(to, from){
+            //have to manually clear flash alert here, because this is called first
+            //while if we do it in the component it might be called later
+            this.$refs.flashAlert.clearFlash();
+        },
+    },
     created() {
         window.addEventListener('keyup', (e)=>{
             const routerView = this.$refs.routerView;
