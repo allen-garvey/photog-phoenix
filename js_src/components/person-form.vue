@@ -19,7 +19,7 @@
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
                 <legend>Cover Image</legend>
-                <label v-for="image in imagesInPerson" :key="image.id">
+                <label v-for="image in imagesInModel" :key="image.id">
                     <input type="radio" v-model="person.cover_image_id" :value="image.id">
                     <img :src="thumbnailUrlFor(image)" />
                 </label>
@@ -36,8 +36,8 @@
 
 <script>
 import vue from 'vue';
-import FormFieldErrors from './form-field-errors.vue';
 
+import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
 import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 import { toApiResource } from '../form-helpers.js';
@@ -45,46 +45,20 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Person-Form',
     props: {
-        putFlash: {
-            type: Function,
-            required: true,
-        },
-        sendJson: {
-            type: Function,
-            required: true,
-        },
         personId: {
             type: Number,
         },
-        //for when creating an album with images
-        images: {
-            type: Array
-        },
-        successRedirect: {
-            type: Function
-        },
     },
-    components: {
-        'Form-Field-Errors': FormFieldErrors,
-    },
-    created(){
-        this.setup();
-    },
+    mixins: [albumAndPersonFormMixinBuilder()],
     data() {
         return {
-            isInitialLoadComplete: false,
             //person is for our edits, model is the immutable person response from the api
             person: {},
-            model: null,
-            errors: {},
         }
     },
     computed: {
         isEditForm(){
             return typeof this.personId === 'number';
-        },
-        isCreateForm(){
-            return !this.isEditForm;
         },
         headingText(){
             if(this.isEditForm){
@@ -92,28 +66,11 @@ export default {
             }
             return 'New Person';
         },
-        shouldShowCoverImageInput(){
-            return this.imagesInPerson.length === 0;
-        },
-        imagesInPerson(){
-            if(this.isEditForm){
-                return this.model.images;
-            }
-            else if(this.isCreateForm && this.images){
-                return this.images;
-            }
-            return [];
-        },
         backLink(){
             if(this.isEditForm){
                 return {name: 'personsShow', params: {id: this.personId}};
             }
             return {name: 'personsIndex'};
-        },
-    },
-    watch: {
-        '$route'(to, from){
-            this.setup();
         },
     },
     methods: {
@@ -173,9 +130,6 @@ export default {
                     this.$router.push(redirectPath);
                 }
             });
-        },
-        thumbnailUrlFor(image){
-            return thumbnailUrlFor(image.mini_thumbnail_path);
         },
     }
 }

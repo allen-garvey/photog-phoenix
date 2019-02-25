@@ -25,7 +25,7 @@
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
                 <legend>Cover Image</legend>
-                <label v-for="image in imagesInAlbum" :key="image.id">
+                <label v-for="image in imagesInModel" :key="image.id">
                     <input type="radio" v-model="album.cover_image_id" :value="image.id">
                     <img :src="thumbnailUrlFor(image)" />
                 </label>
@@ -42,8 +42,8 @@
 
 <script>
 import vue from 'vue';
-import FormFieldErrors from './form-field-errors.vue';
 
+import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
 import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 import { toApiResource } from '../form-helpers.js';
@@ -51,46 +51,20 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Album-Form',
     props: {
-        putFlash: {
-            type: Function,
-            required: true,
-        },
-        sendJson: {
-            type: Function,
-            required: true,
-        },
         albumId: {
             type: Number,
         },
-        //for when creating an album with images
-        images: {
-            type: Array
-        },
-        successRedirect: {
-            type: Function
-        },
     },
-    components: {
-        'Form-Field-Errors': FormFieldErrors,
-    },
-    created(){
-        this.setup();
-    },
+    mixins: [albumAndPersonFormMixinBuilder()],
     data() {
         return {
-            isInitialLoadComplete: false,
             //album is for our edits, model is the immutable album response from the api
             album: {},
-            model: null,
-            errors: {},
         }
     },
     computed: {
         isEditForm(){
             return typeof this.albumId === 'number';
-        },
-        isCreateForm(){
-            return !this.isEditForm;
         },
         headingText(){
             if(this.isEditForm){
@@ -98,28 +72,11 @@ export default {
             }
             return 'New Album';
         },
-        shouldShowCoverImageInput(){
-            return this.imagesInAlbum.length === 0;
-        },
-        imagesInAlbum(){
-            if(this.isEditForm){
-                return this.model.images;
-            }
-            else if(this.isCreateForm && this.images){
-                return this.images;
-            }
-            return [];
-        },
         backLink(){
             if(this.isEditForm){
                 return {name: 'albumsShow', params: {id: this.albumId}};
             }
             return {name: 'albumsIndex'};
-        },
-    },
-    watch: {
-        '$route'(to, from){
-            this.setup();
         },
     },
     methods: {
@@ -181,9 +138,6 @@ export default {
                     this.$router.push(redirectPath);
                 }
             });
-        },
-        thumbnailUrlFor(image){
-            return thumbnailUrlFor(image.mini_thumbnail_path);
         },
     }
 }
