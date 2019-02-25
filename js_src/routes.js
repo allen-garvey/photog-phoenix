@@ -1,3 +1,5 @@
+import { getOptionalParams } from './router-helpers.js'; 
+
 import ThumbnailList from './components/thumbnail-list.vue'
 import TagsIndex from './components/tags-index.vue'
 import ImportsIndex from './components/imports-index.vue';
@@ -139,14 +141,7 @@ export default {
             name: 'albumsNew', 
             component: AlbumForm,
             props: (route) => {
-                const optionalParams = ['images', 'successRedirect'];
-                const props = {};
-                for(const param of optionalParams){
-                    if(param in route.params){
-                        props[param] = route.params[param];
-                    }
-                }
-                return props;
+                return getOptionalParams(route.params, ['images', 'successRedirect']);
             },
         },
         { 
@@ -188,14 +183,7 @@ export default {
             name: 'personsNew', 
             component: PersonForm,
             props: (route) => {
-                const optionalParams = ['images', 'successRedirect'];
-                const props = {};
-                for(const param of optionalParams){
-                    if(param in route.params){
-                        props[param] = route.params[param];
-                    }
-                }
-                return props;
+                return getOptionalParams(route.params, ['images', 'successRedirect']);
             },
         },
         { 
