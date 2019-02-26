@@ -8,7 +8,6 @@
 
 <script>
 import { formMixinBuilder } from './mixins/form-mixin.js';
-import FormFieldErrors from './form-field-errors.vue';
 
 import { fetchJson } from '../request-helpers.js';
 import { toApiResource } from '../form-helpers.js';
@@ -29,9 +28,6 @@ export default {
         },
     },
     mixins: [formMixinBuilder()],
-    components: {
-        'Form-Field-Errors': FormFieldErrors,
-    },
     created(){
         this.setup();
     },
