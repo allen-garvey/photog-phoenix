@@ -4,11 +4,7 @@
             <h1>{{headingText}}</h1>
         </div>
         <div>
-            <div class="form-group">
-                <label :for="idForField('name')">Name</label>
-                <input :id="idForField('name')" class="form-control" type="text" v-model="tag.name" />
-                <Form-Field-Errors :errors="errors.name" />
-            </div>
+            <Form-Input :id="idForField('name')" label="Name" v-model="tag.name" :errors="errors.name" />
 
             <div class="spread-content">
                 <router-link :to="backLink" class="btn btn-outline-dark">Cancel</router-link>
@@ -19,7 +15,7 @@
 </template>
 
 <script>
-import vue from 'vue';
+import { formMixinBuilder } from './mixins/form-mixin.js';
 import FormFieldErrors from './form-field-errors.vue';
 
 import { fetchJson } from '../request-helpers.js';
@@ -40,6 +36,7 @@ export default {
             type: Number,
         },
     },
+    mixins: [formMixinBuilder()],
     components: {
         'Form-Field-Errors': FormFieldErrors,
     },
