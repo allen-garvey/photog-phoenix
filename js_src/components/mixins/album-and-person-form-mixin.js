@@ -1,3 +1,4 @@
+import { thumbnailUrlFor } from '../../image.js';
 import FormFieldErrors from '../form-field-errors.vue';
 
 export function albumAndPersonFormMixinBuilder(){
