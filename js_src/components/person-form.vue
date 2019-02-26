@@ -4,17 +4,9 @@
             <h1>{{headingText}}</h1>
         </div>
         <div>
-            <div class="form-group">
-                <label :for="idForField('name')">Name</label>
-                <input :id="idForField('name')" class="form-control" type="text" v-model="person.name" />
-                <Form-Field-Errors :errors="errors.name" />
-            </div>
-            
-            <div class="form-group" v-if="shouldShowCoverImageInput">
-                <label :for="idForField('cover_image_id')">Cover image id</label>
-                <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="person.cover_image_id" />
-                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
-            </div>
+            <Form-Input :id="idForField('name')" label="Name" v-model="person.name" :errors="errors.name" />
+
+            <Form-Input :id="idForField('cover_image_id')" label="Cover image id" v-model="person.cover_image_id" :errors="[errors['cover_image'], errors['cover_image_id']]" type="number" v-if="shouldShowCoverImageInput" />
 
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
