@@ -43,6 +43,7 @@
 <script>
 import vue from 'vue';
 
+import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
 import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
@@ -55,7 +56,7 @@ export default {
             type: Number,
         },
     },
-    mixins: [albumAndPersonFormMixinBuilder()],
+    mixins: [formMixinBuilder(), albumAndPersonFormMixinBuilder()],
     data() {
         return {
             //album is for our edits, model is the immutable album response from the api
