@@ -1,6 +1,5 @@
 import { thumbnailUrlFor } from '../../image.js';
 import CoverImageFormInput from '../cover-image-form-input.vue';
-import FormFieldErrors from '../form-field-errors.vue';
 
 export function albumAndPersonFormMixinBuilder(){
     return {
@@ -22,7 +21,6 @@ export function albumAndPersonFormMixinBuilder(){
             },
         },
         components: {
-            'Form-Field-Errors': FormFieldErrors,
             'Cover-Image-Form-Input': CoverImageFormInput,
         },
         created(){

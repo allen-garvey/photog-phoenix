@@ -3,17 +3,7 @@
         <template v-slot:inputs>
             <Form-Input :id="idForField('name')" label="Name" v-model="person.name" :errors="errors.name" />
 
-            <Form-Input :id="idForField('cover_image_id')" label="Cover image id" v-model="person.cover_image_id" :errors="[errors['cover_image'], errors['cover_image_id']]" type="number" v-if="shouldShowCoverImageInput" />
-
-            <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
-            <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
-                <legend>Cover Image</legend>
-                <label v-for="image in imagesInModel" :key="image.id">
-                    <input type="radio" v-model="person.cover_image_id" :value="image.id">
-                    <img :src="thumbnailUrlFor(image)" />
-                </label>
-                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
-            </fieldset>
+            <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="person.cover_image_id" />
         </template>
     </Form-Section>
 </template>
