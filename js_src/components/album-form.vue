@@ -1,23 +1,11 @@
 <template>
     <Form-Section :heading="headingText" :back-link="backLink" :save="save" v-if="isInitialLoadComplete">
         <template v-slot:inputs>
-            <div class="form-group">
-                <label :for="idForField('name')">Name</label>
-                <input :id="idForField('name')" class="form-control" type="text" v-model="album.name" />
-                <Form-Field-Errors :errors="errors.name" />
-            </div>
+            <Form-Input :id="idForField('name')" label="Name" v-model="album.name" :errors="errors.name" />
 
-            <div class="form-group">
-                <label :for="idForField('description')">Description</label>
-                <textarea :id="idForField('description')" class="form-control" v-model="album.description" rows="4"></textarea>
-                <Form-Field-Errors :errors="errors.description" />
-            </div>
-            
-            <div class="form-group" v-if="shouldShowCoverImageInput">
-                <label :for="idForField('cover_image_id')">Cover image id</label>
-                <input :id="idForField('cover_image_id')" class="form-control" type="number" v-model.number="album.cover_image_id" />
-                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
-            </div>
+            <Form-Input :id="idForField('description')" label="Description" v-model="album.description" :errors="errors.description" input-type="textarea" :textarea-rows="4" />
+
+            <Form-Input :id="idForField('cover_image_id')" label="Cover image id" v-model="album.cover_image_id" :errors="[errors.cover_image, errors.cover_image_id]" input-type="number" v-if="shouldShowCoverImageInput" />
 
             <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
             <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
