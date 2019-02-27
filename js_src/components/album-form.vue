@@ -1,9 +1,6 @@
 <template>
-    <main class="main container" v-if="isInitialLoadComplete">
-        <div>
-            <h1>{{headingText}}</h1>
-        </div>
-        <div>
+    <Form-Section :heading="headingText" :back-link="backLink" :save="save" v-if="isInitialLoadComplete">
+        <template v-slot:inputs>
             <div class="form-group">
                 <label :for="idForField('name')">Name</label>
                 <input :id="idForField('name')" class="form-control" type="text" v-model="album.name" />
@@ -31,13 +28,8 @@
                 </label>
                 <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
             </fieldset>
-
-            <div class="spread-content">
-                <router-link :to="backLink" class="btn btn-outline-dark">Cancel</router-link>
-                <button class="btn btn-success" @click="save()">Save</button>
-            </div>
-        </div>
-    </main>
+        </template>
+    </Form-Section>
 </template>
 
 <script>
