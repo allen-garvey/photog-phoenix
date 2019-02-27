@@ -1,7 +1,8 @@
 <template>
     <div class="form-group">
         <label :for="id">{{label}}</label>
-        <input :id="id" class="form-control" :type="inputType" v-model="value" />
+        <textarea :id="id" class="form-control" v-model="value" :rows="textareaRows" v-if="isTextarea"></textarea>
+        <input :id="id" class="form-control" :type="inputType" v-model="value" v-if="!isTextarea" />
         <Form-Field-Errors :errors="errors" />
     </div>
 </template>
@@ -20,6 +21,10 @@ export default {
             type: String,
             default: 'text',
         },
+        textareaRows: {
+            type: Number,
+            default: 1,
+        },
         label: {
             type: String,
             required: true,
@@ -34,6 +39,11 @@ export default {
     data() {
         return {
             value: '',
+        }
+    },
+    computed: {
+        isTextarea(){
+            return this.inputType === 'textarea';
         }
     },
     watch: {
