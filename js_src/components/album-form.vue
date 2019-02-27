@@ -5,17 +5,7 @@
 
             <Form-Input :id="idForField('description')" label="Description" v-model="album.description" :errors="errors.description" input-type="textarea" :textarea-rows="4" />
 
-            <Form-Input :id="idForField('cover_image_id')" label="Cover image id" v-model="album.cover_image_id" :errors="[errors.cover_image, errors.cover_image_id]" input-type="number" v-if="shouldShowCoverImageInput" />
-
-            <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
-            <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
-                <legend>Cover Image</legend>
-                <label v-for="image in imagesInModel" :key="image.id">
-                    <input type="radio" v-model="album.cover_image_id" :value="image.id">
-                    <img :src="thumbnailUrlFor(image)" />
-                </label>
-                <Form-Field-Errors :errors="[errors['cover_image'], errors['cover_image_id']]" />
-            </fieldset>
+            <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="album.cover_image_id" />
         </template>
     </Form-Section>
 </template>
