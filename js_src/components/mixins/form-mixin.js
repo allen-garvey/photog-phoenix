@@ -28,6 +28,9 @@ export function formMixinBuilder(){
             this.setup();
         },
         computed: {
+            isEditForm(){
+                return typeof this.modelId === 'number';
+            },
             isCreateForm(){
                 return !this.isEditForm;
             },

@@ -34,9 +34,6 @@ export default {
         }
     },
     computed: {
-        isEditForm(){
-            return typeof this.modelId === 'number';
-        },
         headingText(){
             if(this.isEditForm){
                 return `Edit ${this.model.name}`;
