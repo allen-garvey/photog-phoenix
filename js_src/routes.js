@@ -156,7 +156,7 @@ export default {
             component: AlbumForm,
             props: (route) => {
                 return {
-                    albumId: parseInt(route.params.id),
+                    modelId: parseInt(route.params.id),
                 }; 
             },
         },
@@ -199,7 +199,7 @@ export default {
             component: PersonForm,
             props: (route) => {
                 return {
-                    personId: parseInt(route.params.id),
+                    modelId: parseInt(route.params.id),
                 }; 
             },
         },
@@ -243,7 +243,7 @@ export default {
             component: TagForm,
             props: (route) => {
                 return {
-                    tagId: parseInt(route.params.id),
+                    modelId: parseInt(route.params.id),
                 }; 
             },
         },

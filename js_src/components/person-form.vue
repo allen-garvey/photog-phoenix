@@ -20,7 +20,7 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Person-Form',
     props: {
-        personId: {
+        modelId: {
             type: Number,
         },
     },
@@ -33,7 +33,7 @@ export default {
     },
     computed: {
         isEditForm(){
-            return typeof this.personId === 'number';
+            return typeof this.modelId === 'number';
         },
         headingText(){
             if(this.isEditForm){
@@ -43,7 +43,7 @@ export default {
         },
         backLink(){
             if(this.isEditForm){
-                return {name: 'personsShow', params: {id: this.personId}};
+                return {name: 'personsShow', params: {id: this.modelId}};
             }
             return {name: 'personsIndex'};
         },
@@ -73,7 +73,7 @@ export default {
             }
         },
         loadModel(){
-            const apiUrl = `/api/persons/${this.personId}`;
+            const apiUrl = `/api/persons/${this.modelId}`;
             return fetchJson(apiUrl).then((person)=>{
                 this.model = person;
                 return person;
@@ -86,7 +86,7 @@ export default {
             let apiUrl = `/api/persons`;
             let apiMethod = 'POST';
             if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.personId}`;
+                apiUrl = `${apiUrl}/${this.modelId}`;
                 apiMethod = 'PATCH';
             }
             const data = {person: toApiResource(this.person)};
@@ -99,8 +99,8 @@ export default {
                     this.errors = response.errors;
                 }
                 else{
-                    const personId = response.data.id;
-                    const redirectPath = this.successRedirect ? this.successRedirect(personId) : {name: 'personsShow', params: {id: personId}};
+                    const modelId = response.data.id;
+                    const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'personsShow', params: {id: modelId}};
                     redirectPath.params.flashMessage = [`${data.person.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
                     this.$router.push(redirectPath);
                 }

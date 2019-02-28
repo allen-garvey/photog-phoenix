@@ -15,7 +15,7 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Tag-Form',
     props: {
-        tagId: {
+        modelId: {
             type: Number,
         },
     },
@@ -28,7 +28,7 @@ export default {
     },
     computed: {
         isEditForm(){
-            return typeof this.tagId === 'number';
+            return typeof this.modelId === 'number';
         },
         headingText(){
             if(this.isEditForm){
@@ -38,7 +38,7 @@ export default {
         },
         backLink(){
             if(this.isEditForm){
-                return {name: 'tagsShow', params: {id: this.tagId}};
+                return {name: 'tagsShow', params: {id: this.modelId}};
             }
             return {name: 'tagsIndex'};
         },
@@ -63,7 +63,7 @@ export default {
             }
         },
         loadModel(){
-            const apiUrl = `/api/tags/${this.tagId}`;
+            const apiUrl = `/api/tags/${this.modelId}`;
             return fetchJson(apiUrl).then((tag)=>{
                 this.model = tag;
                 return tag;
@@ -76,7 +76,7 @@ export default {
             let apiUrl = `/api/tags`;
             let apiMethod = 'POST';
             if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.tagId}`;
+                apiUrl = `${apiUrl}/${this.modelId}`;
                 apiMethod = 'PATCH';
             }
             const resource = {tag: toApiResource(this.tag)};

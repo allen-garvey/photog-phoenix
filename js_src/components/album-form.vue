@@ -22,7 +22,7 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Album-Form',
     props: {
-        albumId: {
+        modelId: {
             type: Number,
         },
     },
@@ -35,7 +35,7 @@ export default {
     },
     computed: {
         isEditForm(){
-            return typeof this.albumId === 'number';
+            return typeof this.modelId === 'number';
         },
         headingText(){
             if(this.isEditForm){
@@ -45,7 +45,7 @@ export default {
         },
         backLink(){
             if(this.isEditForm){
-                return {name: 'albumsShow', params: {id: this.albumId}};
+                return {name: 'albumsShow', params: {id: this.modelId}};
             }
             return {name: 'albumsIndex'};
         },
@@ -76,7 +76,7 @@ export default {
             }
         },
         loadModel(){
-            const apiUrl = `/api/albums/${this.albumId}`;
+            const apiUrl = `/api/albums/${this.modelId}`;
             return fetchJson(apiUrl).then((album)=>{
                 this.model = album;
                 return album;
@@ -89,7 +89,7 @@ export default {
             let apiUrl = `/api/albums`;
             let apiMethod = 'POST';
             if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.albumId}`;
+                apiUrl = `${apiUrl}/${this.modelId}`;
                 apiMethod = 'PATCH';
             }
             const data = {album: toApiResource(this.album)};
@@ -103,8 +103,8 @@ export default {
                     this.errors = response.errors;
                 }
                 else{
-                    const albumId = response.data.id;
-                    const redirectPath = this.successRedirect ? this.successRedirect(albumId) : {name: 'albumsShow', params: {id: albumId}};
+                    const modelId = response.data.id;
+                    const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'albumsShow', params: {id: modelId}};
                     redirectPath.params.flashMessage = [`${data.album.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
                     this.$router.push(redirectPath);
                 }
