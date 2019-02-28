@@ -26,8 +26,9 @@ export default {
             type: String,
             required: true,
         },
+        //should be number, but can't specify it or we get 
+        //all kinds of problems
         value: {
-            type: Number,
             required: true,
         },
         errors: {
