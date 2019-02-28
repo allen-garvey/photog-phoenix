@@ -40,9 +40,17 @@ export default {
     },
     watch: {
         '$route'(to, from){
-            //have to manually clear flash alert here, because this is called first
-            //while if we do it in the component it might be called later
-            this.$refs.flashAlert.clearFlash();
+            const flashAlert = this.$refs.flashAlert;
+            const flashMessage = to.params.flashMessage;
+            //show flash message if any
+            if(flashMessage){
+                this.putFlash(...flashMessage);
+            }
+            else{
+                //have to manually clear flash alert here, because this is called first
+                //while if we do it in the component it might be called later
+                flashAlert.clearFlash();
+            }
         },
     },
     created() {

@@ -46,7 +46,7 @@ export default {
                     },
                 };
 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         { 
@@ -67,7 +67,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         { 
@@ -91,7 +91,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         { 
@@ -115,7 +115,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         { 
@@ -138,7 +138,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         //new route has to be before show route
@@ -181,7 +181,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         //new route has to be before show route
@@ -224,7 +224,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         //new route has to be before show route
@@ -266,7 +266,7 @@ export default {
                         };
                     },
                 }; 
-                return getOptionalParams(route.params, ['flashMessage'], props);
+                return props;
             },
         },
         { 
@@ -290,7 +290,7 @@ export default {
                         };
                     },
                 };
-                return getOptionalParams(route.params, ['flashMessage'], props); 
+                return props;
             },
         },
         { 

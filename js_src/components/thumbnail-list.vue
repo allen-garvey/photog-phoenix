@@ -91,9 +91,6 @@ const BATCH_RESOURCE_MODE_TAGS = 3;
 export default {
     name: 'Thumbnail-List',
     props: {
-        flashMessage: {
-            type: Array,
-        },
         putFlash: {
             type: Function,
             required: true,
@@ -222,9 +219,6 @@ export default {
     },
     methods: {
         setup(){
-            if(this.flashMessage){
-                this.putFlash(...this.flashMessage);
-            }
             this.isInitialLoadComplete = false;
             this.model = [];
             this.albumFilterMode = ALBUM_FILTER_MODE_ALL;
