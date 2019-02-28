@@ -1,8 +1,8 @@
 <template>
     <div class="form-group">
         <label :for="id">{{label}}</label>
-        <textarea :id="id" class="form-control" v-model="value" :rows="textareaRows" v-if="isTextarea"></textarea>
-        <input :id="id" class="form-control" :type="inputType" v-model="value" v-if="!isTextarea" />
+        <textarea :id="id" class="form-control" v-model="internalValue" :rows="textareaRows" v-if="isTextarea"></textarea>
+        <input :id="id" class="form-control" :type="inputType" v-model="internalValue" v-if="!isTextarea" />
         <Form-Field-Errors :errors="errors" />
     </div>
 </template>
@@ -15,6 +15,9 @@ export default {
     props: {
         id: {
             type: String,
+            required: true,
+        },
+        value: {
             required: true,
         },
         inputType: {
@@ -36,10 +39,15 @@ export default {
     components: {
         'Form-Field-Errors': FormFieldErrors,
     },
-    data() {
+    created(){
+        //have to create copy, otherwise have problem with mutating
+        //object properties directly
+        this.internalValue = this.value;
+    },
+    data(){
         return {
-            value: '',
-        }
+            internalValue: 0,
+        };
     },
     computed: {
         isTextarea(){
@@ -47,7 +55,7 @@ export default {
         }
     },
     watch: {
-        value(newValue){
+        internalValue(newValue){
             this.$emit('input', newValue);
         },
     },

@@ -1,12 +1,12 @@
 <template>
     <div>
-        <Form-Input :id="id" label="Cover image id" v-model="value" :errors="errors" input-type="number" v-if="shouldShowCoverImageInput" />
+        <Form-Input :id="id" label="Cover image id" v-model="coverImageId" :errors="errors" input-type="number" v-if="shouldShowCoverImageInput" />
 
         <!-- thumbnail radio buttons based on: https://stackoverflow.com/questions/17541614/use-images-instead-of-radio-buttons -->
         <fieldset class="form-group thumbnail-radio-container" v-if="!shouldShowCoverImageInput">
             <legend>Cover Image</legend>
             <label v-for="image in images" :key="image.id">
-                <input type="radio" v-model="value" :value="image.id">
+                <input type="radio" v-model="coverImageId" :value="image.id">
                 <img :src="thumbnailUrlFor(image)" />
             </label>
             <Form-Field-Errors :errors="errors" />
@@ -26,6 +26,10 @@ export default {
             type: String,
             required: true,
         },
+        value: {
+            type: Number,
+            required: true,
+        },
         errors: {
             type: Array
         },
@@ -38,10 +42,13 @@ export default {
         'Form-Field-Errors': FormFieldErrors,
         'Form-Input': FormInput,
     },
-    data() {
+    created(){
+        this.coverImageId = this.value;
+    },
+    data(){
         return {
-            value: '',
-        }
+            coverImageId: 0,
+        };
     },
     computed: {
         shouldShowCoverImageInput(){
@@ -49,7 +56,7 @@ export default {
         },
     },
     watch: {
-        value(newValue){
+        coverImageId(newValue){
             this.$emit('input', newValue);
         },
     },
