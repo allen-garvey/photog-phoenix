@@ -15,37 +15,20 @@ import { toApiResource } from '../form-helpers.js';
 export default {
     name: 'Tag-Form',
     props: {
-        putFlash: {
-            type: Function,
-            required: true,
-        },
-        sendJson: {
-            type: Function,
-            required: true,
-        },
         tagId: {
             type: Number,
         },
     },
     mixins: [formMixinBuilder()],
-    created(){
-        this.setup();
-    },
     data() {
         return {
-            isInitialLoadComplete: false,
-            //album is for our edits, model is the immutable album response from the api
+            //tag is for our edits, model is the immutable album response from the api
             tag: {},
-            model: null,
-            errors: {},
         }
     },
     computed: {
         isEditForm(){
             return typeof this.tagId === 'number';
-        },
-        isCreateForm(){
-            return !this.isEditForm;
         },
         headingText(){
             if(this.isEditForm){
@@ -58,11 +41,6 @@ export default {
                 return {name: 'tagsShow', params: {id: this.tagId}};
             }
             return {name: 'tagsIndex'};
-        },
-    },
-    watch: {
-        '$route'(to, from){
-            this.setup();
         },
     },
     methods: {

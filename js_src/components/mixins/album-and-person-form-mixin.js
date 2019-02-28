@@ -4,14 +4,6 @@ import CoverImageFormInput from '../cover-image-form-input.vue';
 export function albumAndPersonFormMixinBuilder(){
     return {
         props: {
-            putFlash: {
-                type: Function,
-                required: true,
-            },
-            sendJson: {
-                type: Function,
-                required: true,
-            },
             //for when creating a resource with images
             images: {
                 type: Array
@@ -23,20 +15,7 @@ export function albumAndPersonFormMixinBuilder(){
         components: {
             'Cover-Image-Form-Input': CoverImageFormInput,
         },
-        created(){
-            this.setup();
-        },
-        data() {
-            return {
-                isInitialLoadComplete: false,
-                model: null,
-                errors: {},
-            }
-        },
         computed: {
-            isCreateForm(){
-                return !this.isEditForm;
-            },
             shouldShowCoverImageInput(){
                 return this.imagesInModel.length === 0;
             },
@@ -48,11 +27,6 @@ export function albumAndPersonFormMixinBuilder(){
                     return this.images;
                 }
                 return [];
-            },
-        },
-        watch: {
-            '$route'(to, from){
-                this.setup();
             },
         },
         methods: {
