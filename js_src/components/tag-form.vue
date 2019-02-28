@@ -108,7 +108,14 @@ export default {
                     this.errors = response.errors;
                 }
                 else{
-                    this.$router.push({name: 'tagsShow', params: {id: response.data.id}});
+                    const flashMessage = [`${response.data.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
+                    this.$router.push({
+                        name: 'tagsShow', 
+                        params: {
+                            id: response.data.id,
+                            flashMessage: flashMessage
+                        }
+                    });
                 }
             });
         },
