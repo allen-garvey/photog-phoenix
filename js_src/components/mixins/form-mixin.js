@@ -1,3 +1,5 @@
+import { fetchJson } from '../../request-helpers.js';
+
 import FormSection from '../base/form-section.vue';
 import FormInput from '../form-input.vue';
 
@@ -38,6 +40,15 @@ export function formMixinBuilder(){
         watch: {
             '$route'(to, from){
                 this.setup();
+            },
+        },
+        methods: {
+            loadModel(){
+                const apiUrl = `${this.resourceApiUrlBase}/${this.modelId}`;
+                return fetchJson(apiUrl).then((model)=>{
+                    this.model = model;
+                    return model;
+                });
             },
         },
     };

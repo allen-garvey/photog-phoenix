@@ -9,7 +9,6 @@
 <script>
 import { formMixinBuilder } from './mixins/form-mixin.js';
 
-import { fetchJson } from '../request-helpers.js';
 import { toApiResource } from '../form-helpers.js';
 
 export default {
@@ -24,6 +23,7 @@ export default {
         return {
             //tag is for our edits, model is the immutable album response from the api
             tag: {},
+            resourceApiUrlBase: '/api/tags',
         }
     },
     computed: {
@@ -58,13 +58,6 @@ export default {
                 this.tag = {};
                 this.isInitialLoadComplete = true;
             }
-        },
-        loadModel(){
-            const apiUrl = `/api/tags/${this.modelId}`;
-            return fetchJson(apiUrl).then((tag)=>{
-                this.model = tag;
-                return tag;
-            });
         },
         idForField(fieldName){
             return `id_tag_${fieldName}_input`;

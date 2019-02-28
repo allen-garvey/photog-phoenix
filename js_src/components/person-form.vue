@@ -13,7 +13,6 @@ import vue from 'vue';
 
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
-import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 import { toApiResource } from '../form-helpers.js';
 
@@ -29,6 +28,7 @@ export default {
         return {
             //person is for our edits, model is the immutable person response from the api
             person: {},
+            resourceApiUrlBase: '/api/persons',
         }
     },
     computed: {
@@ -68,13 +68,6 @@ export default {
                 this.person = person;
                 this.isInitialLoadComplete = true;
             }
-        },
-        loadModel(){
-            const apiUrl = `/api/persons/${this.modelId}`;
-            return fetchJson(apiUrl).then((person)=>{
-                this.model = person;
-                return person;
-            });
         },
         idForField(fieldName){
             return `id_person_${fieldName}_input`;

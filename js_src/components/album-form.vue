@@ -15,7 +15,6 @@ import vue from 'vue';
 
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
-import { fetchJson } from '../request-helpers.js';
 import { thumbnailUrlFor } from '../image.js';
 import { toApiResource } from '../form-helpers.js';
 
@@ -31,6 +30,7 @@ export default {
         return {
             //album is for our edits, model is the immutable album response from the api
             album: {},
+            resourceApiUrlBase: '/api/albums',
         }
     },
     computed: {
@@ -71,13 +71,6 @@ export default {
                 this.album = album;
                 this.isInitialLoadComplete = true;
             }
-        },
-        loadModel(){
-            const apiUrl = `/api/albums/${this.modelId}`;
-            return fetchJson(apiUrl).then((album)=>{
-                this.model = album;
-                return album;
-            });
         },
         idForField(fieldName){
             return `id_album_${fieldName}_input`;
