@@ -1,3 +1,4 @@
+export const API_URL_BASE = '/api';
 
 export function fetchJson(url){
     return fetch(url).then((data) => {return data.json();}).then((json) => {return json.data;});
