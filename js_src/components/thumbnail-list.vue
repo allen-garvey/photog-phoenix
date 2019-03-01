@@ -253,29 +253,29 @@ export default {
         loadMoreThumbnails(){
             this.thumbnailList = this.thumnailListSource.slice(0, this.thumbnailList.length + THUMBNAIL_CHUNK_LENGTH);
         },
-        imageFor: function(item){
+        imageFor(item){
             if('cover_image' in item){
                 return item.cover_image;
             }
             return item;
         },
-        isThumbnailFavorited: function(item){
+        isThumbnailFavorited(item){
             //don't show favorite heart for cover image
             if('cover_image' in item){
                 return false;
             }
             return this.imageFor(item).is_favorite;
         },
-        thumbnailUrlFor: function(item){
+        thumbnailUrlFor(item){
             return thumbnailUrlFor(this.imageFor(item).mini_thumbnail_path);
         },
-        titleFor: function(item){
+        titleFor(item){
             if('name' in item){
                 return item.name;
             }
             return `${item.creation_time.formatted.us_date} ${item.creation_time.formatted.time}`;
         },
-        altTextFor: function(item){
+        altTextFor(item){
             if('name' in item){
                 return `Thumbnail for ${item.name}`;
             }
