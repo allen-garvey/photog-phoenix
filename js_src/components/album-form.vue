@@ -14,6 +14,7 @@
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
 import { toApiResource } from '../form-helpers.js';
+import { API_URL_BASE } from '../request-helpers.js';
 
 export default {
     name: 'Album-Form',
@@ -27,7 +28,7 @@ export default {
         return {
             //album is for our edits, model is the immutable album response from the api
             album: {},
-            resourceApiUrlBase: '/api/albums',
+            resourceApiUrlBase: `${API_URL_BASE}/albums`,
         }
     },
     computed: {

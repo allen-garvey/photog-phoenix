@@ -9,6 +9,7 @@
 <script>
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { toApiResource } from '../form-helpers.js';
+import { API_URL_BASE } from '../request-helpers.js';
 
 export default {
     name: 'Tag-Form',
@@ -22,7 +23,7 @@ export default {
         return {
             //tag is for our edits, model is the immutable album response from the api
             tag: {},
-            resourceApiUrlBase: '/api/tags',
+            resourceApiUrlBase: `${API_URL_BASE}/tags`,
         }
     },
     computed: {

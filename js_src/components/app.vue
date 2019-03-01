@@ -12,9 +12,7 @@ import PhotogHeader from './header.vue'
 import PhotogFooter from './footer.vue'
 import FlashAlert from './flash-alert.vue';
 import CacheUtil from '../cache-util.js'
-import { sendJson } from '../request-helpers.js';
-
-const API_URL_BASE = '/api';
+import { API_URL_BASE, sendJson } from '../request-helpers.js';
 
 export default {
     name: 'Photog-App',

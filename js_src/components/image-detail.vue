@@ -57,14 +57,15 @@
                     </dl>
                 </template>
         </div>
-        <Image-Items-List :send-json="sendJson" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/api/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/api/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/api/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
+        <Image-Items-List :send-json="sendJson" heading="Albums" item-route-name="albumsShow" :items="image.albums" :unused-items-api-url="`/images/${image.id}/albums/?unused=true`" :add-items-api-url="`/images/${image.id}/albums`" items-api-name="albums" :remove-item-api-url-base="`/images/${image.id}/albums/`" :items-updated-callback="imageItemsUpdatedBuilder('albums')" />
         
-        <Image-Items-List :send-json="sendJson" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/api/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/api/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/api/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
+        <Image-Items-List :send-json="sendJson" heading="Persons" item-route-name="personsShow" :items="image.persons" :unused-items-api-url="`/images/${image.id}/persons/?unused=true`" :add-items-api-url="`/images/${image.id}/persons`" items-api-name="persons" :remove-item-api-url-base="`/images/${image.id}/persons/`" :items-updated-callback="imageItemsUpdatedBuilder('persons')" />
     </main>
 </template>
 
 <script>
 import ImageItemsList from './image-items-list.vue';
+import { API_URL_BASE } from '../request-helpers';
 
 //from: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
 function capitalizeFirstLetter(string){
@@ -215,7 +216,7 @@ export default {
         toggleImageIsFavorite(){
             const newIsFavorite = !this.image.is_favorite;
 
-            const apiUrl = `/api/images/${this.image.id}`;
+            const apiUrl = `${API_URL_BASE}/images/${this.image.id}`;
 
             const data = {
                 image: {

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { fetchJson } from '../request-helpers.js';
+import { API_URL_BASE, fetchJson } from '../request-helpers.js';
 import { arrayRemove } from '../array-util.js';
 
 const MODE_ADD = 1;
@@ -132,7 +132,7 @@ export default {
             }
         },
         fetchAddItems(){
-            fetchJson(this.unusedItemsApiUrl).then((items) => {
+            fetchJson(API_URL_BASE + this.unusedItemsApiUrl).then((items) => {
                 this.itemsThatCanBeAdded = items;
                 this.itemsThatCanBeAddedSelected = this.itemsThatCanBeAdded.map(()=>false);
                 this.mode = MODE_ADD;
@@ -151,7 +151,7 @@ export default {
             const data = {};
             data[this.itemsApiName] = itemIds.join(',');
 
-            this.sendJson(this.addItemsApiUrl, 'POST', data).then((response)=>{
+            this.sendJson(API_URL_BASE + this.addItemsApiUrl, 'POST', data).then((response)=>{
                 //display error message if any
                 
                 //add items to array
@@ -168,7 +168,7 @@ export default {
         deleteItem(item, index){
             const removeItemUrl = this.removeItemApiUrlBase + item.id;
 
-            this.sendJson(removeItemUrl, 'DELETE').then((response)=>{
+            this.sendJson(API_URL_BASE + removeItemUrl, 'DELETE').then((response)=>{
                 //remove item from array
                 this.itemsUpdatedCallback(arrayRemove(this.items, index));
             });

@@ -69,6 +69,7 @@ import vue from 'vue';
 import ReasourceHeader from './resource-header.vue';
 
 import { thumbnailUrlFor } from '../image.js';
+import { API_URL_BASE } from '../request-helpers.js';
 
 //amount of thumbnails to add each time vue infinite scroll is called
 const THUMBNAIL_CHUNK_LENGTH = 60;
@@ -369,16 +370,16 @@ export default {
         },
         saveBatchSelected(){
             //default is album_images
-            let apiUrl = '/api/album_images';
+            let apiUrl = `${API_URL_BASE}/album_images`;
             let resourcesKey = 'album_ids';
             let thumbnailsKey = 'image_ids';
 
             if(this.batchSelectResourceMode === BATCH_RESOURCE_MODE_PERSONS){
-                apiUrl = '/api/person_images';
+                apiUrl = `${API_URL_BASE}/person_images`;
                 resourcesKey = 'person_ids';
             }
             else if(this.batchSelectResourceMode === BATCH_RESOURCE_MODE_TAGS){
-                apiUrl = '/api/album_tags';
+                apiUrl = `${API_URL_BASE}/album_tags`;
                 resourcesKey = 'tag_ids';
                 thumbnailsKey = 'album_ids';
             }
