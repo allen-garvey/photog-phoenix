@@ -48,28 +48,23 @@ export default {
         },
     },
     methods: {
-        setup(){
-            this.isInitialLoadComplete = false;
-            this.errors = {};
-            if(this.isEditForm){
-                this.loadModel().then((album)=>{
-                    this.album = {
-                        id: album.id,
-                        name: album.name,
-                        description: album.description,
-                        cover_image_id: album.cover_image.id,
-                    };
-                    this.isInitialLoadComplete = true;
-                });
+        setupModel(album=null){
+            //edit form
+            if(album){
+                this.album = {
+                    id: album.id,
+                    name: album.name,
+                    description: album.description,
+                    cover_image_id: album.cover_image.id,
+                };
             }
+            //new form
             else{
-                this.model = null;
                 const album = {};
                 if(this.images){
                     album['cover_image_id'] = this.images[0].id;
                 }
                 this.album = album;
-                this.isInitialLoadComplete = true;
             }
         },
         idForField(fieldName){

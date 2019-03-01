@@ -46,27 +46,22 @@ export default {
         },
     },
     methods: {
-        setup(){
-            this.isInitialLoadComplete = false;
-            this.errors = {};
-            if(this.isEditForm){
-                this.loadModel().then((person)=>{
-                    this.person = {
-                        id: person.id,
-                        name: person.name,
-                        cover_image_id: person.cover_image.id,
-                    };
-                    this.isInitialLoadComplete = true;
-                });
+        setupModel(person=null){
+            //edit form
+            if(person){
+                this.person = {
+                    id: person.id,
+                    name: person.name,
+                    cover_image_id: person.cover_image.id,
+                };
             }
+            //new form
             else{
-                this.model = null;
                 const person = {};
                 if(this.images){
                     person['cover_image_id'] = this.images[0].id;
                 }
                 this.person = person;
-                this.isInitialLoadComplete = true;
             }
         },
         idForField(fieldName){

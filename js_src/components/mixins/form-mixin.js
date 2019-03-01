@@ -43,6 +43,21 @@ export function formMixinBuilder(){
             },
         },
         methods: {
+            setup(){
+                this.isInitialLoadComplete = false;
+                this.errors = {};
+                if(this.isEditForm){
+                    this.loadModel().then((model)=>{
+                        this.setupModel(model);
+                        this.isInitialLoadComplete = true;
+                    });
+                }
+                else{
+                    this.model = null;
+                    this.setupModel(null);
+                    this.isInitialLoadComplete = true;
+                }
+            },
             loadModel(){
                 const apiUrl = `${this.resourceApiUrlBase}/${this.modelId}`;
                 return fetchJson(apiUrl).then((model)=>{

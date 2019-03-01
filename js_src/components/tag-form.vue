@@ -41,22 +41,17 @@ export default {
         },
     },
     methods: {
-        setup(){
-            this.isInitialLoadComplete = false;
-            this.errors = {};
-            if(this.isEditForm){
-                this.loadModel().then((tag)=>{
-                    this.tag = {
-                        id: tag.id,
-                        name: tag.name,
-                    };
-                    this.isInitialLoadComplete = true;
-                });
+        setupModel(tag=null){
+            //edit form
+            if(tag){
+                this.tag = {
+                    id: tag.id,
+                    name: tag.name,
+                };
             }
+            //new form
             else{
-                this.model = null;
                 this.tag = {};
-                this.isInitialLoadComplete = true;
             }
         },
         idForField(fieldName){
