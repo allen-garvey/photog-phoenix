@@ -67,29 +67,18 @@ export default {
         idForField(fieldName){
             return `id_person_${fieldName}_input`;
         },
-        save(){
-            let apiUrl = `/api/persons`;
-            let apiMethod = 'POST';
-            if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.modelId}`;
-                apiMethod = 'PATCH';
-            }
+        getResourceForSave(){
             const data = {person: toApiResource(this.person)};
             if(this.isCreateForm && this.images){
                 data['image_ids'] = this.images.map(image => image.id);
             }
-
-            this.sendJson(apiUrl, apiMethod, data).then((response)=>{
-                if(response.errors){
-                    this.errors = response.errors;
-                }
-                else{
-                    const modelId = response.data.id;
-                    const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'personsShow', params: {id: modelId}};
-                    redirectPath.params.flashMessage = [`${data.person.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
-                    this.$router.push(redirectPath);
-                }
-            });
+            return data;
+        },
+        saveSuccessful(person){
+            const modelId = person.id;
+            const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'personsShow', params: {id: modelId}};
+            redirectPath.params.flashMessage = [`${person.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
+            this.$router.push(redirectPath);
         },
     }
 }

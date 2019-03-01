@@ -57,28 +57,16 @@ export default {
         idForField(fieldName){
             return `id_tag_${fieldName}_input`;
         },
-        save(){
-            let apiUrl = `/api/tags`;
-            let apiMethod = 'POST';
-            if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.modelId}`;
-                apiMethod = 'PATCH';
-            }
-            const resource = {tag: toApiResource(this.tag)};
-
-            this.sendJson(apiUrl, apiMethod, resource).then((response)=>{
-                if(response.errors){
-                    this.errors = response.errors;
-                }
-                else{
-                    const flashMessage = [`${response.data.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
-                    this.$router.push({
-                        name: 'tagsShow', 
-                        params: {
-                            id: response.data.id,
-                            flashMessage: flashMessage
-                        }
-                    });
+        getResourceForSave(){
+            return {tag: toApiResource(this.tag)};
+        },
+        saveSuccessful(tag){
+            const flashMessage = [`${tag.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
+            this.$router.push({
+                name: 'tagsShow', 
+                params: {
+                    id: tag.id,
+                    flashMessage: flashMessage
                 }
             });
         },

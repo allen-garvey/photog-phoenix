@@ -65,6 +65,24 @@ export function formMixinBuilder(){
                     return model;
                 });
             },
+            save(){
+                let apiUrl = this.resourceApiUrlBase;
+                let apiMethod = 'POST';
+                if(this.isEditForm){
+                    apiUrl = `${apiUrl}/${this.modelId}`;
+                    apiMethod = 'PATCH';
+                }
+                const resource = this.getResourceForSave();
+    
+                this.sendJson(apiUrl, apiMethod, resource).then((response)=>{
+                    if(response.errors){
+                        this.errors = response.errors;
+                    }
+                    else{
+                        this.saveSuccessful(response.data);
+                    }
+                });
+            },
         },
     };
 }

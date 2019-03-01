@@ -70,30 +70,18 @@ export default {
         idForField(fieldName){
             return `id_album_${fieldName}_input`;
         },
-        save(){
-            let apiUrl = `/api/albums`;
-            let apiMethod = 'POST';
-            if(this.isEditForm){
-                apiUrl = `${apiUrl}/${this.modelId}`;
-                apiMethod = 'PATCH';
-            }
+        getResourceForSave(){
             const data = {album: toApiResource(this.album)};
-
             if(this.isCreateForm && this.images){
                 data['image_ids'] = this.images.map(image => image.id);
             }
-
-            this.sendJson(apiUrl, apiMethod, data).then((response)=>{
-                if(response.errors){
-                    this.errors = response.errors;
-                }
-                else{
-                    const modelId = response.data.id;
-                    const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'albumsShow', params: {id: modelId}};
-                    redirectPath.params.flashMessage = [`${data.album.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
-                    this.$router.push(redirectPath);
-                }
-            });
+            return data;
+        },
+        saveSuccessful(album){
+            const modelId = album.id;
+            const redirectPath = this.successRedirect ? this.successRedirect(modelId) : {name: 'albumsShow', params: {id: modelId}};
+            redirectPath.params.flashMessage = [`${album.name} ${this.isEditForm ? 'updated' : 'created'}`, 'info'];
+            this.$router.push(redirectPath);
         },
     }
 }
