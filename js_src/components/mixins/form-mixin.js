@@ -54,7 +54,7 @@ export function formMixinBuilder(){
                 }
                 else{
                     this.model = null;
-                    this.setupModel(null);
+                    this.setupModel();
                     this.isInitialLoadComplete = true;
                 }
             },
