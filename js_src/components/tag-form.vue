@@ -8,7 +8,6 @@
 
 <script>
 import { formMixinBuilder } from './mixins/form-mixin.js';
-
 import { toApiResource } from '../form-helpers.js';
 
 export default {
