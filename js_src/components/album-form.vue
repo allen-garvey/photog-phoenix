@@ -11,11 +11,8 @@
 </template>
 
 <script>
-import vue from 'vue';
-
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
-import { thumbnailUrlFor } from '../image.js';
 import { toApiResource } from '../form-helpers.js';
 
 export default {
