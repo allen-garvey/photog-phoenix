@@ -658,7 +658,7 @@ defmodule Photog.Api do
 
   """
   def list_imports do
-    Repo.all(from(Import, order_by: [desc: :id]))
+    Repo.all(from(Import, order_by: [desc: :import_time, desc: :id]))
   end
 
   @doc """
@@ -697,7 +697,7 @@ defmodule Photog.Api do
         # when we manually join images order will be reversed, but we still need to order by DESC so we are selecting most recent images
         left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 6", import.id),
         on: true,
-        order_by: [desc: import.id],
+        order_by: [desc: import.import_time, desc: import.id],
         select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id} }
     )
     |> Repo.all
@@ -707,7 +707,7 @@ defmodule Photog.Api do
         import in Import,
         left_join: images_count in assoc(import, :images),
         group_by: [import.id],
-        order_by: [desc: import.id],
+        order_by: [desc: import.import_time, desc: import.id],
         select: count(images_count.id)
     )
     |> Repo.all
