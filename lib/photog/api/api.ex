@@ -716,6 +716,44 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Returns the list of {import, image_count} with count of associated images
+  Also preloads a limited amount of images
+  """
+  def list_imports_with_count_and_limited_images(items_limit) do
+    # we are going to use a separate query for count because otherwise we have to group_by
+    # everything in images and import model, which is fragile if we ever add any fields to them
+    # only thing to remember is that the order_by statement is the same in both queries
+
+    # have to use fragment and manual preloading for query in lateral joins
+    imports = from(
+        import in Import,
+        # need to add inner join here for the limit to work properly because we don't know how many images each import has
+        # and we need to get the set of import.ids we are selecting from
+        inner_join: import_limit_ids in fragment("SELECT id from imports ORDER BY import_time DESC, id DESC LIMIT ?", ^items_limit),
+        on: import_limit_ids.id == import.id,
+        # when we manually join images order will be reversed, but we still need to order by DESC so we are selecting most recent images
+        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 6", import.id),
+        on: true,
+        order_by: [desc: import.import_time, desc: import.id],
+        select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id}, import_limit_ids: import_limit_ids.id }
+    )
+    |> Repo.all
+    |> manually_preload_images_for_imports
+
+    imports_images_count = from(
+        import in Import,
+        left_join: images_count in assoc(import, :images),
+        group_by: [import.id],
+        order_by: [desc: import.import_time, desc: import.id],
+        select: count(images_count.id)
+    )
+    |> limit(^items_limit)
+    |> Repo.all
+
+    Enum.zip(imports, imports_images_count)
+  end
+
+  @doc """
   Gets a single import.
 
   Raises `Ecto.NoResultsError` if the Import does not exist.
