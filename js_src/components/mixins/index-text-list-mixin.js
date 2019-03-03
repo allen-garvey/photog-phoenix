@@ -18,12 +18,12 @@ export default function mixinBuilder(){
             return {
                 model: [],
                 //need this property or there will be errors when we switch routes and new models haven't been loaded yet
-                isLoadingModel: true,
+                isInitialLoadComplete: false,
             }
         },
         computed: {
             itemsList(){
-                if(this.isLoadingModel){
+                if(!this.isInitialLoadComplete){
                     return [];
                 }
                 return this.model;
@@ -36,10 +36,10 @@ export default function mixinBuilder(){
         },
         methods: {
             setup(){
-                this.isLoadingModel = true;
+                this.isInitialLoadComplete = false;
                 this.getModel(this.modelPath).then((itemsJson)=>{
                     this.model = itemsJson;
-                    this.isLoadingModel = false;
+                    this.isInitialLoadComplete = true;
                 });
             },
             showRouteFor(item){
