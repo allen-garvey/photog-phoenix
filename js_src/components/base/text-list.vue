@@ -1,16 +1,17 @@
 <template>
     <main class="main container">
         <Resource-Header :title="title" :editItemLink="editItemLink" :newItemLink="newItemLink" />
-        <ul class="text-list" v-infinite-scroll="infiniteScrollCallback" infinite-scroll-distance="40" :infinite-scroll-disabled="!enableInfiniteScroll">
+        <ul class="text-list">
             <li v-for="(item, i) in itemsList" :key="i">
                 <slot name="item" :item="item" :index="i"></slot>
             </li>
         </ul>
+        <infinite-loading @infinite="loadMoreItemsCallback" spinner="waveDots" v-if="isInitialLoadComplete && loadMoreItemsCallback"></infinite-loading>
     </main>
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
+import InfiniteLoading from 'vue-infinite-loading';
 import ReasourceHeader from '../resource-header.vue';
 
 export default {
@@ -24,26 +25,23 @@ export default {
                 type: Array,
                 required: true,
             },
+            isInitialLoadComplete: {
+                type: Boolean,
+                required: true,
+            },
             newItemLink: {
                 type: Object,
             },
             editItemLink: {
                 type: Object,
             },
-            enableInfiniteScroll: {
-                type: Boolean,
-                default: false,
-            },
-            infiniteScrollCallback: {
-                type: Function,
-                default: () =>{},
+            loadMoreItemsCallback: {
+                type: Function
             },
         },
         components: {
             'Resource-Header': ReasourceHeader,
-        },
-        directives: {
-            infiniteScroll,
+            InfiniteLoading,
         },
     };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <Text-List title="Tags" :new-item-link="newItemLink" :items-list="itemsList">
+    <Text-List title="Tags" :new-item-link="newItemLink" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete">
         <template v-slot:item="{item, index}">
             <router-link :to="showRouteFor(item)">{{titleFor(item)}}</router-link>
         </template>
