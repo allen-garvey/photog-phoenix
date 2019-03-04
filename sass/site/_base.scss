@@ -55,6 +55,10 @@ fieldset{
 //can't use display none or scrollIntoView won't work
 .alert:empty{
     visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
 }
 
 .spread-content, .pull-right{
