@@ -772,9 +772,7 @@ defmodule Photog.Api do
     image_albums_query = from(Album, order_by: :name)
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
-                      #can use join here instead of left join since we know it has to have an import
                       join: import in assoc(image, :import),
-                      where: image.import_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: [image.creation_time, image.id]
 
