@@ -281,11 +281,11 @@ export default {
                     enableHasAlbumFilter: true,
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, model)=>{
                         return {
                             name: 'importImagesShow',
                             params: {
-                                import_id: route.params.id,
+                                import_id: model.id,
                                 image_id: item.id,
                             },
                         };
