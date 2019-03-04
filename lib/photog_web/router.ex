@@ -19,6 +19,9 @@ defmodule PhotogWeb.Router do
   scope "/api", PhotogWeb do
     pipe_through :api
 
+    #has to be here so it doesn't conflict with import show route
+    get "/imports/last", ImportController, :show_last
+
     resources "/images", ImageController,               only: [:index, :show, :update]
     resources "/albums", AlbumController
     resources "/persons", PersonController

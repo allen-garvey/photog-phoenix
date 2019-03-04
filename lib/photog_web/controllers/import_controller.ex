@@ -31,6 +31,11 @@ defmodule PhotogWeb.ImportController do
     render(conn, "show.json", import: import)
   end
 
+  def show_last(conn, _params) do
+    import = Api.get_last_import!()
+    render(conn, "show.json", import: import)
+  end
+
   def update(conn, %{"id" => id, "import" => import_params}) do
     import = Api.get_import!(id)
 

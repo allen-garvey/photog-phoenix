@@ -783,6 +783,24 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Gets the last import.
+
+  Raises `Ecto.NoResultsError` if there are no imports.
+  """
+  def get_last_import!() do
+    # for some reason, if you put subquery directly in preload, it causes an error
+    image_albums_query = from(Album, order_by: :name)
+    image_persons_query = from(Person, order_by: :name)
+    images_query = from image in Image,
+                      join: import in assoc(image, :import),
+                      preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
+                      order_by: [image.creation_time, image.id]
+
+    Repo.one!(from(import in Import, order_by: [desc: :import_time, desc: :id], limit: 1))
+    |> Repo.preload(images: images_query)
+  end
+
+  @doc """
   Creates a import.
 
   ## Examples
