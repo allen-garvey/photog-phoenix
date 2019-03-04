@@ -36,7 +36,7 @@ export default {
                     enableBatchSelectAlbums: true,
                     newItemLink: {name: 'albumsNew'},
                     pageTitle: 'Albums',
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'albumsShow',
                             params: {
@@ -58,7 +58,7 @@ export default {
                     apiPath: route.path,
                     newItemLink: {name: 'personsNew'},
                     pageTitle: 'Persons',
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'personsShow',
                             params: {
@@ -81,7 +81,7 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     pageTitle: 'Images',
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'imagesShow',
                             params: {
@@ -105,7 +105,7 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     pageTitle: 'Favorite images',
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'imagesShow',
                             params: {
@@ -128,7 +128,7 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     pageTitle: 'Images not in an album',
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'imagesShow',
                             params: {
@@ -171,7 +171,7 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     editItemLink: {name: 'albumsEdit', id: route.params.id},
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'albumImagesShow',
                             params: {
@@ -214,7 +214,7 @@ export default {
                     enableHasAlbumFilter: true,
                     enableBatchSelectImages: true,
                     editItemLink: {name: 'personsEdit', id: route.params.id},
-                    showRouteFor: (item)=>{
+                    showRouteFor: (item, _model)=>{
                         return {
                             name: 'personImagesShow',
                             params: {
