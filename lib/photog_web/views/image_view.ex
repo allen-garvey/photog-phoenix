@@ -113,20 +113,9 @@ defmodule PhotogWeb.ImageView do
       thumbnail_path: image.thumbnail_path,
       mini_thumbnail_path: image.mini_thumbnail_path,
       is_favorite: image.is_favorite,
-      import: optional_import_map(image.import),
+      import: PhotogWeb.ImportView.import_excerpt_to_map(image.import),
       albums: Enum.map(image.albums, &PhotogWeb.AlbumView.album_excerpt_mini_to_map/1),
       persons: Enum.map(image.persons, &PhotogWeb.PersonView.person_excerpt_mini_to_map/1),
     }
-  end
-
-  @doc """
-  Since image does not have to have an import
-  """
-  def optional_import_map(nil) do
-    nil
-  end
-
-  def optional_import_map(import) do
-    PhotogWeb.ImportView.import_excerpt_to_map(import)
   end
 end
