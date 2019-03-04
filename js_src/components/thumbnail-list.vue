@@ -50,12 +50,12 @@
         </div>
         <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)">
-                <router-link :to="showRouteFor(item)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'">
+                <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
                 </router-link>
                 <h3 class="thumbnail-title" :class="{'default-title': !('name' in item), 'thumbnail-title-favorite': isThumbnailFavorited(item)}">
-                    <router-link :to="showRouteFor(item)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'span' : 'a'">{{titleFor(item)}}</router-link>
+                    <router-link :to="showRouteFor(item, model)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'span' : 'a'">{{titleFor(item)}}</router-link>
                 </h3>
             </li>
         </ul>
