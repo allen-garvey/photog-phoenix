@@ -20,7 +20,7 @@ defmodule Photog.Api do
   """
   def image_preload_import(query) do
     query
-    |> join(:left, [image], import in assoc(image, :import))
+    |> join(:inner, [image], import in assoc(image, :import))
     |> preload([image, import], [import: import])
   end
 
@@ -259,7 +259,7 @@ defmodule Photog.Api do
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
                       join: album_image in assoc(image, :album_images),
-                      left_join: import in assoc(image, :import),
+                      join: import in assoc(image, :import),
                       where: album_image.album_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: [album_image.image_order, album_image.id]
@@ -383,7 +383,7 @@ defmodule Photog.Api do
     image_persons_query = from(Person, order_by: :name)
     images_query = from image in Image,
                       join: person_image in assoc(image, :person_images),
-                      left_join: import in assoc(image, :import),
+                      join: import in assoc(image, :import),
                       where: person_image.person_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: [desc: image.creation_time]
