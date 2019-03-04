@@ -269,6 +269,31 @@ export default {
                 return props;
             },
         },
+        //has to be before importsShow route
+        { 
+            path: '/imports/last',
+            name: 'importsShowLast', 
+            component: ThumbnailList,
+            props: (route) => {
+                const props = {
+                    apiPath: route.path,
+                    itemsListKey: 'images',
+                    enableHasAlbumFilter: true,
+                    enableHasPersonFilter: true,
+                    enableBatchSelectImages: true,
+                    showRouteFor: (item)=>{
+                        return {
+                            name: 'importImagesShow',
+                            params: {
+                                import_id: route.params.id,
+                                image_id: item.id,
+                            },
+                        };
+                    },
+                };
+                return props;
+            },
+        },
         { 
             path: '/imports/:id',
             name: 'importsShow', 
