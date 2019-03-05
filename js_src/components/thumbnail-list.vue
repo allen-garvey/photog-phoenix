@@ -48,7 +48,7 @@
                 <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected" @click="saveBatchSelected">Save</button>
             </div>
         </div>
-        <ul class="thumbnail-list"  v-infinite-scroll="loadMoreThumbnails" infinite-scroll-distance="40" infinite-scroll-disabled="isInfiniteScrollDisabled" :class="{'batch-select': isCurrentlyBatchSelect}">
+        <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect}">
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
@@ -59,11 +59,12 @@
                 </h3>
             </li>
         </ul>
+        <infinite-loading @infinite="loadMoreThumbnails" spinner="waveDots" v-if="isInitialLoadComplete"></infinite-loading>
     </main>
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
+import InfiniteLoading from 'vue-infinite-loading';
 import vue from 'vue';
 
 import ReasourceHeader from './resource-header.vue';
@@ -143,11 +144,9 @@ export default {
             default: false,
         },
     },
-    directives: {
-        infiniteScroll,
-    },
     components: {
         'Resource-Header': ReasourceHeader,
+        InfiniteLoading,
     },
     created(){
         this.setup();
@@ -181,9 +180,6 @@ export default {
             }
             return this.model;
 
-        },
-        isInfiniteScrollDisabled(){
-            return !this.isInitialLoadComplete && this.thumbnailList.length === this.thumnailListSource.length;
         },
         filteredThumbnailList(){
             return this.thumbnailList.filter((item)=>{
@@ -251,8 +247,14 @@ export default {
                 this.modelLoaded(items);
             });
         },
-        loadMoreThumbnails(){
+        loadMoreThumbnails($state){
             this.thumbnailList = this.thumnailListSource.slice(0, this.thumbnailList.length + THUMBNAIL_CHUNK_LENGTH);
+            if(this.thumbnailList.length === this.thumnailListSource.length){
+                $state.complete();
+            }
+            else{
+                $state.loaded();
+            }
         },
         imageFor(item){
             if('cover_image' in item){
