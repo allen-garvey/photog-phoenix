@@ -77,11 +77,12 @@ defmodule Photog.Api do
   def list_images_not_in_album() do
     from(
         image in Image,
+        join: import in assoc(image, :import),
         left_join: album_image in assoc(image, :album_images),
         where: is_nil(album_image.image_id),
+        preload: [import: import],
         order_by: [desc: image.creation_time, desc: image.id]
     )
-    |> image_preload_import
     |> Repo.all
     |> image_default_preloads
   end
