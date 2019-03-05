@@ -9,11 +9,6 @@ module.exports = {
         filename: 'app.js',
         path: path.resolve(__dirname, 'priv/static/js'),
     },
-    resolve: {
-        alias: {
-            'vue-infinite-scroll': path.resolve(__dirname, 'node_modules/vue-infinite-scroll/vue-infinite-scroll.js'),
-        }
-    },
     module: {
         rules: [
             {
