@@ -8,6 +8,7 @@ Turn your Apple Photos library into a web application
 * npm
 * elixir >= 1.5
 * exiftool
+* ImageMagick (optional, required for shutterbug mix task)
 
 ## Getting Started
 
