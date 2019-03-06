@@ -1,30 +1,9 @@
 <template>
     <main class="main container">
         <Resource-Header :title="pageTitle ? pageTitle : model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
-        <div class="thumbnail-filter-controls-container" :class="{invisible: isCurrentlyBatchSelect}">
-            <fieldset v-if="enableHasAlbumFilter">
-                <legend>Album</legend>
-                <label for="album_filter_mode_all">All</label>
-                <input id="album_filter_mode_all" type="radio" value="1" v-model="albumFilterMode" />
-                
-                <label for="album_filter_mode_no_albums">Uncategorized</label>
-                <input id="album_filter_mode_no_albums" type="radio" value="2" v-model="albumFilterMode" />
-                
-                <label for="album_filter_mode_has_albums">Categorized</label>
-                <input id="album_filter_mode_has_albums" type="radio" value="3" v-model="albumFilterMode" />
-            </fieldset>
-            <fieldset v-if="enableHasPersonFilter">
-                <legend>Person</legend>
-                <label for="persons_filter_mode_all">All</label>
-                <input id="persons_filter_mode_all" type="radio" value="1" v-model="personFilterMode" />
-                
-                <label for="persons_filter_mode_no_persons">Uncategorized</label>
-                <input id="persons_filter_mode_no_persons" type="radio" value="2" v-model="personFilterMode" />
-                
-                <label for="persons_filter_mode_has_persons">Categorized</label>
-                <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
-            </fieldset>
-        </div>
+        
+        <Thumbnail-Filter-Controls :class="{invisible: isCurrentlyBatchSelect}" :enable-album-filter="enableHasAlbumFilter" :enable-person-filter="enableHasPersonFilter" :album-filter-mode="albumFilterMode" :person-filter-mode="personFilterMode"/>
+
         <div class="thumbnail-batch-select-container" v-if="enableBatchSelectImages || enableBatchSelectAlbums">
             <button class="btn" :class="{'btn-outline-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
             <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
@@ -68,6 +47,7 @@ import InfiniteLoading from 'vue-infinite-loading';
 import vue from 'vue';
 
 import ReasourceHeader from './resource-header.vue';
+import ThumbnailFilterControls from './thumbnail-filter-controls.vue';
 
 import { thumbnailUrlFor } from '../image.js';
 import { API_URL_BASE } from '../request-helpers.js';
@@ -146,6 +126,7 @@ export default {
     },
     components: {
         'Resource-Header': ReasourceHeader,
+        ThumbnailFilterControls,
         InfiniteLoading,
     },
     created(){
