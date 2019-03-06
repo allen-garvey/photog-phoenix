@@ -26,6 +26,17 @@ Turn your Apple Photos library into a web application
 * Run the export script in the [Photog-spark project](https://github.com/allen-garvey/photog-spark) to export your Photos Library as a SQL file
 * Import the file by running `psql photog_dev < your-export-file.sql`
 
+## Importing new images using the shutterbug mix task
+
+Note that this bypasses your Apple Photos database, so only do this if you are ready to migrate away from Apple Photos. For now, this only works on .jpg and .png image types. This mix task both adds the images in a given source folder to the Photog database, but also generates thumbnail images and copies the original image source files to the your masters folder. Generated/copied files are placed inside folders based on the current date and time, using the same convention as Apple Photos.
+
+* `mix shutterbug <source_folder>` takes the images in the source folder and copies the images and generated thumbnails to `./priv/static/media/images` and `./priv/static/media/thumbnails` respectively
+
+* `mix shutterbug <source_folder> <destination_folder>` takes the images in the source folder and copies the images and generated thumbnails to `destination_folder/Masters` and `destination_folder/Thumnails` respectively
+
+* `mix shutterbug <source_folder> <masters_destination_folder> <thumbnails_destination_folder>` takes the images in the source folder and copies the images and generated thumbnails to `masters_destination_folder` and `thumbnails_destination_folder` respectivly
+
+
 ## License
 
 Photog Phoenix is released under the MIT License. See license.txt for more details.
