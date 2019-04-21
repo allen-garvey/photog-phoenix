@@ -35,6 +35,7 @@ defmodule Photog.Mixfile do
     [
       {:phoenix, "~> 1.4"},
       {:phoenix_ecto, "~> 4.0"},
+      {:phoenix_pubsub, "~> 1.1.2"},
       {:ecto_sql, "~> 3.0.3"},
       {:postgrex, ">= 0.14.1"},
       {:phoenix_html, "~> 2.12"},
