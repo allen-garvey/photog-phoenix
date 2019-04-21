@@ -19,14 +19,15 @@ $thumbnail_dimensions: 205px;
         &:hover{
             opacity: 1;
         }
-    }
-
-    &.batch-select .batch-selected{
-        border: 6px solid $photog_selected_highlight_color;
+        border: 6px solid transparent;
         border-radius: 5px;
-        background-color: $photog_selected_highlight_color;
-        color: white;
-        opacity: 1;
+
+        &.batch-selected{
+            border-color: $photog_selected_highlight_color;
+            background-color: $photog_selected_highlight_color;
+            color: white;
+            opacity: 1;
+        }
     }
 }
 .reorder-resources-controls-container{
