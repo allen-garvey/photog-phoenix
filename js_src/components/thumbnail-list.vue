@@ -2,9 +2,9 @@
     <main class="main container">
         <Resource-Header :title="pageTitle ? pageTitle : model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
         
-        <Thumbnail-Filter-Controls :class="{invisible: isCurrentlyBatchSelect}" :enable-album-filter="enableHasAlbumFilter" :enable-person-filter="enableHasPersonFilter" :album-filter-mode="albumFilterMode" :person-filter-mode="personFilterMode"/>
+        <Thumbnail-Filter-Controls :class="{invisible: isCurrentlyBatchSelect || isReordering}" :enable-album-filter="enableHasAlbumFilter" :enable-person-filter="enableHasPersonFilter" :album-filter-mode="albumFilterMode" :person-filter-mode="personFilterMode"/>
 
-        <div class="thumbnail-batch-select-container" v-if="enableBatchSelectImages || enableBatchSelectAlbums">
+        <div class="thumbnail-batch-select-container" :class="{invisible: isReordering}" v-if="(enableBatchSelectImages || enableBatchSelectAlbums) && filteredThumbnailList.length > 0">
             <button class="btn" :class="{'btn-outline-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
             <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
             <div class="resource-buttons-container" v-if="isCurrentlyBatchSelect">
@@ -27,8 +27,12 @@
                 <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected" @click="saveBatchSelected">Save</button>
             </div>
         </div>
+        <div class="reorder-resources-controls-container" v-if="supportsReorder">
+            <button class="btn" :class="{'btn-outline-primary': !isReordering, 'btn-outline-secondary': isReordering}" v-show="shouldShowReorderButton" @click="reorderButtonAction()">{{isReordering ? 'Cancel' : 'Reorder'}}</button>
+            <button class="btn btn-success" v-show="isReordering" @click="saveOrder()">Save order</button>
+        </div>
         <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect}">
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" />
                     <div v-if="isThumbnailFavorited(item)" class="heart"></div>
@@ -123,6 +127,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        supportsReorder: {
+            type: Boolean,
+            default: false,
+        },
     },
     components: {
         'Resource-Header': ReasourceHeader,
@@ -148,6 +156,8 @@ export default {
             batchSelectResourceMode: BATCH_RESOURCE_MODE_NONE,
             shouldShowAllBatchResources: false,
             batchResourcesMoreLimit: 8,
+            //following for reordering resources
+            isReordering: false,
         }
     },
     computed: {
@@ -188,6 +198,9 @@ export default {
                 return this.batchResources;
             }
             return this.batchResources.slice(0, this.batchResourcesMoreLimit);
+        },
+        shouldShowReorderButton(){
+            return this.supportsReorder && !this.isCurrentlyBatchSelect && this.albumFilterMode === ALBUM_FILTER_MODE_ALL && this.personFilterMode === PERSON_FILTER_MODE_ALL && this.filteredThumbnailList.length > 1;
         },
     },
     watch: {
@@ -412,6 +425,21 @@ export default {
             const selectedImages = this.thumbnailListSelectedItems;
             const successRedirect = this.createSuccessRedirectForCurrentPath();
             this.$router.push({name: pathName, params: {images: selectedImages, successRedirect}});
+        },
+        /**
+         * Reordering resources
+         */
+        reorderButtonAction(){
+            if(!this.isReordering){
+                this.isReordering = true;
+            }
+            else{
+                //TODO put resources back into original order
+                this.isReordering = false;
+            }
+        },
+        saveOrder(){
+
         },
     }
 }

@@ -29,6 +29,9 @@ $thumbnail_dimensions: 205px;
         opacity: 1;
     }
 }
+.thumbnail-batch-select-container, .reorder-resources-controls-container{
+    display: inline-block;
+}
 
 .thumbnail-batch-select-container{
     margin-bottom: 1em;

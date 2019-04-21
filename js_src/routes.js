@@ -171,6 +171,7 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     editItemLink: {name: 'albumsEdit', id: route.params.id},
+                    supportsReorder: true,
                     showRouteFor: (item, _model)=>{
                         return {
                             name: 'albumImagesShow',
@@ -257,6 +258,7 @@ export default {
                     itemsListKey: 'albums',
                     enableBatchSelectAlbums: true,
                     editItemLink: {name: 'tagsEdit', id: route.params.id},
+                    supportsReorder: true,
                     showRouteFor: (item)=>{
                         return {
                             name: 'albumsShow',
