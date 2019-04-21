@@ -31,14 +31,14 @@
             <button class="btn" :class="{'btn-outline-primary': !isReordering, 'btn-outline-secondary': isReordering}" v-show="shouldShowReorderButton" @click="reorderButtonAction()">{{isReordering ? 'Cancel' : 'Reorder'}}</button>
             <button class="btn btn-success" v-show="isReordering && isListReordered" @click="saveOrder()">Save order</button>
         </div>
-        <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect}">
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
-                <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'" :draggable="!isReordering">
+        <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect, 'reordering': isReordering}">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
+                <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'div' : 'a'" :draggable="!isReordering">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :draggable="!isReordering" />
                     <div v-if="isThumbnailFavorited(item)" class="heart" :draggable="!isReordering"></div>
                 </router-link>
                 <h3 class="thumbnail-title" :class="{'default-title': !('name' in item), 'thumbnail-title-favorite': isThumbnailFavorited(item)}" :draggable="!isReordering">
-                    <router-link :to="showRouteFor(item, model)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'span' : 'a'" :draggable="!isReordering">{{titleFor(item)}}</router-link>
+                    <router-link :to="showRouteFor(item, model)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'span' : 'a'" :draggable="!isReordering">{{titleFor(item)}}</router-link>
                 </h3>
             </li>
         </ul>
@@ -160,7 +160,7 @@ export default {
             isReordering: false,
             isListReordered: false,
             reorderedThumbnailList: [],
-            currentDragIndex: 0,
+            currentDragIndex: -1,
         }
     },
     computed: {
@@ -188,7 +188,7 @@ export default {
         },
         //so thumbnail links are disabled when we are in batch select mode
         thumbnailLinkEvent(){
-            return this.isCurrentlyBatchSelect ? '' : 'click';
+            return this.isCurrentlyBatchSelect || this.isReordering ? '' : 'click';
         },
         shouldShowBatchResources(){
             return this.batchSelectResourceMode !== BATCH_RESOURCE_MODE_NONE;
@@ -439,6 +439,7 @@ export default {
             if(!this.isReordering){
                 this.isListReordered = false;
                 this.reorderedThumbnailList = this.thumbnailList.slice();
+                this.currentDragIndex = -1;
                 this.isReordering = true;
             }
             else{

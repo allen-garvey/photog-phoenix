@@ -29,6 +29,15 @@ $thumbnail_dimensions: 205px;
             opacity: 1;
         }
     }
+    &.reordering li{
+        border: 6px solid transparent;
+        border-radius: 5px;
+
+        &.reorder-select{
+            border-color: $photog_selected_reorder_color;
+            background-color: $photog_selected_reorder_color;
+        }
+    }
 }
 .reorder-resources-controls-container{
     margin-left: 1.5em;   
