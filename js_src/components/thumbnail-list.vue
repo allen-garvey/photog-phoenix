@@ -29,10 +29,10 @@
         </div>
         <div class="reorder-resources-controls-container" v-if="supportsReorder">
             <button class="btn" :class="{'btn-outline-primary': !isReordering, 'btn-outline-secondary': isReordering}" v-show="shouldShowReorderButton" @click="reorderButtonAction()">{{isReordering ? 'Cancel' : 'Reorder'}}</button>
-            <button class="btn btn-success" v-show="isReordering" @click="saveOrder()">Save order</button>
+            <button class="btn btn-success" v-show="isReordering && isListReordered" @click="saveOrder()">Save order</button>
         </div>
         <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect}">
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i]}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect ? 'div' : 'a'" :draggable="!isReordering">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :draggable="!isReordering" />
                     <div v-if="isThumbnailFavorited(item)" class="heart" :draggable="!isReordering"></div>
@@ -158,6 +158,9 @@ export default {
             batchResourcesMoreLimit: 8,
             //following for reordering resources
             isReordering: false,
+            isListReordered: false,
+            reorderedThumbnailList: [],
+            currentDragIndex: 0,
         }
     },
     computed: {
@@ -173,6 +176,9 @@ export default {
 
         },
         filteredThumbnailList(){
+            if(this.isReordering){
+                return this.reorderedThumbnailList;
+            }
             return this.thumbnailList.filter((item)=>{
                 return this.shouldShowItem(item);
             });
@@ -431,15 +437,33 @@ export default {
          */
         reorderButtonAction(){
             if(!this.isReordering){
+                this.isListReordered = false;
+                this.reorderedThumbnailList = this.thumbnailList.slice();
                 this.isReordering = true;
             }
             else{
-                //TODO put resources back into original order
+                //when reordering is false, list is automatically put back in original order
+                this.reorderedThumbnailList = [];
                 this.isReordering = false;
             }
         },
         saveOrder(){
-
+            //TODO persist new order using api
+            this.thumbnailList = this.reorderedThumbnailList;
+            this.isReordering = false;
+        },
+        itemDragStart(index){
+            this.currentDragIndex = index;
+        },
+        itemDragOver(index){
+            if(this.currentDragIndex === index){
+                return;
+            }
+            this.isListReordered = true;
+            //reorder array
+            //https://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another/6470794
+            this.reorderedThumbnailList.splice(index, 0, this.reorderedThumbnailList.splice(this.currentDragIndex, 1)[0]);
+            this.currentDragIndex = index;
         },
     }
 }
