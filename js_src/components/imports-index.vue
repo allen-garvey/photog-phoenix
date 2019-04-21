@@ -2,7 +2,7 @@
     <Text-List title="Imports" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete" :load-more-items-callback="loadMoreItems">
         <template v-slot:item="{item, index}">
             <router-link :to="showRouteFor(item)" class="imports-index-item-link">
-                {{titleFor(item)}}
+                <div>{{titleFor(item)}}</div>
                 <ul class="imports-index-mini-thumbnail-list">
                     <li v-for="image in item.images" :key="image.id">
                         <img :src="thumbnailUrlFor(image)"/>

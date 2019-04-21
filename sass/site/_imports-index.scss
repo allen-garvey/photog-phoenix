@@ -1,20 +1,18 @@
 .imports-index-mini-thumbnail-list{
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     img{
         object-fit: cover;
-        object-position: top;
-        width: 80px;
-        height: 40px;
-        transition: width 0.5s, height 0.75s;
+        object-position: center;
+        height: 90px;
+        width: 100px;
+        transition: width 0.4s, height 0.75s;
     }
 }
 
-.imports-index-item-link:hover{
-    .imports-index-mini-thumbnail-list{
-        img{
-            height: 90px;
-            width: 100px;
-        }
+.imports-index-mini-thumbnail-list:hover{
+    img{
+        height: 240px;
+        width: 280px;
     }
 }
