@@ -696,7 +696,7 @@ defmodule Photog.Api do
     imports = from(
         import in Import,
         # when we manually join images order will be reversed, but we still need to order by DESC so we are selecting most recent images
-        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 6", import.id),
+        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 4", import.id),
         on: true,
         order_by: [desc: import.import_time, desc: import.id],
         select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id} }
@@ -733,7 +733,7 @@ defmodule Photog.Api do
         inner_join: import_limit_ids in fragment("SELECT id from imports ORDER BY import_time DESC, id DESC LIMIT ?", ^items_limit),
         on: import_limit_ids.id == import.id,
         # when we manually join images order will be reversed, but we still need to order by DESC so we are selecting most recent images
-        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 6", import.id),
+        left_lateral_join: image in fragment("SELECT id, mini_thumbnail_path, import_id FROM images WHERE import_id = ? ORDER BY id DESC LIMIT 4", import.id),
         on: true,
         order_by: [desc: import.import_time, desc: import.id],
         select: %{import: import, image: %Image{id: image.id, mini_thumbnail_path: image.mini_thumbnail_path, import_id: image.import_id}, import_limit_ids: import_limit_ids.id }
