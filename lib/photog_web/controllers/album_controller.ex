@@ -47,6 +47,14 @@ defmodule PhotogWeb.AlbumController do
     end)
   end
 
+  @doc """
+  Reorders images in album
+  """
+  def reorder_images(conn, %{"id" => id, "image_ids" => image_ids}) when is_list(image_ids) do
+    Api.reorder_images_for_album(id, image_ids)
+    send_resp(conn, 200, "{\"data\": \"ok\"}")
+  end
+
   def show(conn, %{"id" => id}) do
     album = Api.get_album!(id)
     render(conn, "show.json", album: album)

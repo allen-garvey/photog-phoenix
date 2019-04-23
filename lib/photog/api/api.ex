@@ -338,6 +338,20 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Reorders the images in an album
+  """
+  def reorder_images_for_album(album_id, image_ids) when is_list(image_ids) do
+    for {image_id, i} <- image_ids |> Enum.with_index do
+      now = DateTime.utc_now() |> DateTime.truncate(:second)
+      from(
+            album_image in AlbumImage,
+            where: album_image.album_id == ^album_id and album_image.image_id == ^image_id
+          )
+        |> Repo.update_all(set: [image_order: i, updated_at: now])
+    end
+  end
+
+  @doc """
   Returns the list of persons.
 
   ## Examples
