@@ -148,9 +148,11 @@ export default {
             type: Boolean,
             default: false,
         },
-        supportsReorder: {
-            type: Boolean,
-            default: false,
+        reorderPathSuffix: {
+            type: String,
+        },
+        reorderItemsKey: {
+            type: String,
         },
     },
     components: {
@@ -225,6 +227,12 @@ export default {
                 return this.batchResources;
             }
             return this.batchResources.slice(0, this.batchResourcesMoreLimit);
+        },
+        /**
+         * Reordering stuff
+         */
+        supportsReorder(){
+            return this.reorderPathSuffix && this.reorderItemsKey;
         },
         shouldShowReorderButton(){
             return this.supportsReorder && !this.isCurrentlyBatchSelect && this.albumFilterMode === ALBUM_FILTER_MODE_ALL && this.personFilterMode === PERSON_FILTER_MODE_ALL && this.filteredThumbnailList.length > 1;
@@ -470,9 +478,13 @@ export default {
             }
         },
         saveOrder(){
-            //TODO persist new order using api
-            this.thumbnailList = this.reorderedThumbnailList;
-            this.isReordering = false;
+            const url = `${API_URL_BASE}${this.apiPath}${this.reorderPathSuffix}`;
+            const data = {};
+            data[this.reorderItemsKey] = this.reorderedThumbnailList.map(item=>item.id);
+            this.sendJson(url, 'PATCH', data).then((response)=>{
+                this.thumbnailList = this.reorderedThumbnailList;
+                this.isReordering = false;
+            });
         },
         itemDragStart(index){
             this.currentDragIndex = index;

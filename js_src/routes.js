@@ -171,7 +171,8 @@ export default {
                     enableHasPersonFilter: true,
                     enableBatchSelectImages: true,
                     editItemLink: {name: 'albumsEdit', id: route.params.id},
-                    supportsReorder: true,
+                    reorderPathSuffix: '/images/reorder',
+                    reorderItemsKey: 'image_ids',
                     showRouteFor: (item, _model)=>{
                         return {
                             name: 'albumImagesShow',
