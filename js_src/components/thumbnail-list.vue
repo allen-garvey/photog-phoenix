@@ -1,12 +1,24 @@
 <template>
     <main class="main container">
+        <!-- 
+            * Header
+        -->
         <Resource-Header :title="pageTitle ? pageTitle : model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
         
+        <!-- 
+            * Filtering controls 
+        -->
         <Thumbnail-Filter-Controls :class="{invisible: isCurrentlyBatchSelect || isReordering}" :enable-album-filter="enableHasAlbumFilter" :enable-person-filter="enableHasPersonFilter" :album-filter-mode="albumFilterMode" :person-filter-mode="personFilterMode"/>
 
+        <!-- 
+            * Batch edit controls 
+        -->
         <div class="thumbnail-batch-select-container" :class="{invisible: isReordering}" v-if="(enableBatchSelectImages || enableBatchSelectAlbums) && filteredThumbnailList.length > 0">
             <button class="btn" :class="{'btn-outline-primary' : !isCurrentlyBatchSelect, 'btn-outline-secondary': isCurrentlyBatchSelect}" @click="toggleBatchSelect">{{isCurrentlyBatchSelect ? 'Cancel' : 'Batch edit'}}</button>
             <button class="btn btn-outline-primary" @click="batchSelectAll" v-if="isCurrentlyBatchSelect">{{anyItemsBatchSelected ? 'Deselect all' : 'Select all'}}</button>
+            <!-- 
+            * Batch edit controls when in batch edit mode
+            -->
             <div class="resource-buttons-container" v-if="isCurrentlyBatchSelect">
                 <div v-if="enableBatchSelectImages" class="btn-group">
                     <button class="btn btn-primary" @click="setBatchResourceMode(1)" :class="buttonClassForResourceMode(1)">Add Albums</button>
@@ -16,6 +28,9 @@
                 </div>
                 <button class="btn btn-primary" @click="setBatchResourceMode(3)" :class="buttonClassForResourceMode(3)" v-if="enableBatchSelectAlbums">Add Tags</button>
             </div>  
+            <!-- 
+                * List of batch edit resources that can be added to selected items
+            -->
             <div v-if="shouldShowBatchResources">
                 <ul class="batch-resources-list">
                     <li v-for="(resource, index) in batchResourcesDisplayed" :key="resource.id">
@@ -27,10 +42,16 @@
                 <button class="btn btn-success" :disabled="!anyBatchResourcesSelected || !anyItemsBatchSelected" @click="saveBatchSelected">Save</button>
             </div>
         </div>
+        <!-- 
+            * Reorder items controls 
+        -->
         <div class="reorder-resources-controls-container" v-if="supportsReorder">
             <button class="btn" :class="{'btn-outline-primary': !isReordering, 'btn-outline-secondary': isReordering}" v-show="shouldShowReorderButton" @click="reorderButtonAction()">{{isReordering ? 'Cancel' : 'Reorder'}}</button>
             <button class="btn btn-success" v-show="isReordering && isListReordered" @click="saveOrder()">Save order</button>
         </div>
+        <!-- 
+            * Items list
+        -->
         <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect, 'reordering': isReordering}">
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'div' : 'a'" :draggable="!isReordering">
