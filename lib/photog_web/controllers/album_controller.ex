@@ -52,6 +52,7 @@ defmodule PhotogWeb.AlbumController do
   """
   def reorder_images(conn, %{"id" => id, "image_ids" => image_ids}) when is_list(image_ids) do
     Api.reorder_images_for_album(id, image_ids)
+    # have to send something back for js to register request succeeded
     send_resp(conn, 200, "{\"data\": \"ok\"}")
   end
 
