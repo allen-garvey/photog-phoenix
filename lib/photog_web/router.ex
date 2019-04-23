@@ -36,6 +36,9 @@ defmodule PhotogWeb.Router do
     # Reorder album images
     patch "/albums/:id/images/reorder",       AlbumController, :reorder_images
 
+    # Reorder album tags
+    patch "/tags/:id/albums/reorder",         TagController, :reorder_albums
+
     # Edit album images
     get "/images/:id/albums",                 ImageController, :albums_for
     post "/images/:id/albums",                ImageController, :add_albums

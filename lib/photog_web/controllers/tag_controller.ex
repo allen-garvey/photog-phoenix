@@ -24,6 +24,15 @@ defmodule PhotogWeb.TagController do
     end
   end
 
+  @doc """
+  Reorders albums in tag
+  """
+  def reorder_albums(conn, %{"id" => id, "album_ids" => album_ids}) when is_list(album_ids) do
+    Api.reorder_albums_for_tag(id, album_ids)
+    # have to send something back for js to register request succeeded
+    send_resp(conn, 200, "{\"data\": \"ok\"}")
+  end
+
   def show(conn, %{"id" => id}) do
     tag = Api.get_tag!(id)
     render(conn, "show.json", tag: tag)

@@ -984,6 +984,20 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Reorders the albums in an tag
+  """
+  def reorder_albums_for_tag(tag_id, album_ids) when is_list(album_ids) do
+    for {album_id, i} <- album_ids |> Enum.with_index do
+      now = DateTime.utc_now() |> DateTime.truncate(:second)
+      from(
+            album_tag in AlbumTag,
+            where: album_tag.tag_id == ^tag_id and album_tag.album_id == ^album_id
+          )
+        |> Repo.update_all(set: [album_order: i, updated_at: now])
+    end
+  end
+
+  @doc """
   Returns the list of album_tags.
 
   ## Examples
