@@ -341,14 +341,16 @@ defmodule Photog.Api do
   Reorders the images in an album
   """
   def reorder_images_for_album(album_id, image_ids) when is_list(image_ids) do
-    for {image_id, i} <- image_ids |> Enum.with_index do
-      now = DateTime.utc_now() |> DateTime.truncate(:second)
-      {1, nil} = from(
-            album_image in AlbumImage,
-            where: album_image.album_id == ^album_id and album_image.image_id == ^image_id
-          )
-        |> Repo.update_all(set: [image_order: i, updated_at: now])
-    end
+    Repo.transaction(fn ->
+      for {image_id, i} <- image_ids |> Enum.with_index do
+        now = DateTime.utc_now() |> DateTime.truncate(:second)
+        {1, nil} = from(
+              album_image in AlbumImage,
+              where: album_image.album_id == ^album_id and album_image.image_id == ^image_id
+            )
+          |> Repo.update_all(set: [image_order: i, updated_at: now])
+      end
+    end)
   end
 
   @doc """
@@ -987,14 +989,16 @@ defmodule Photog.Api do
   Reorders the albums in an tag
   """
   def reorder_albums_for_tag(tag_id, album_ids) when is_list(album_ids) do
-    for {album_id, i} <- album_ids |> Enum.with_index do
-      now = DateTime.utc_now() |> DateTime.truncate(:second)
-      {1, nil} = from(
-            album_tag in AlbumTag,
-            where: album_tag.tag_id == ^tag_id and album_tag.album_id == ^album_id
-          )
-        |> Repo.update_all(set: [album_order: i, updated_at: now])
-    end
+    Repo.transaction(fn ->
+      for {album_id, i} <- album_ids |> Enum.with_index do
+        now = DateTime.utc_now() |> DateTime.truncate(:second)
+        {1, nil} = from(
+              album_tag in AlbumTag,
+              where: album_tag.tag_id == ^tag_id and album_tag.album_id == ^album_id
+            )
+          |> Repo.update_all(set: [album_order: i, updated_at: now])
+      end
+    end)
   end
 
   @doc """
