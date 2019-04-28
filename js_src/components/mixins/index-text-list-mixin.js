@@ -1,8 +1,12 @@
 import TextList from '../base/text-list.vue';
 
-export default function mixinBuilder(){
+export default function mixinBuilder(pageTitle){
     return {
         props: {
+            setWindowTitle: {
+                type: Function,
+                required: true,
+            },
             getModel: {
                 type: Function,
                 required: true,
@@ -19,6 +23,7 @@ export default function mixinBuilder(){
                 model: [],
                 //need this property or there will be errors when we switch routes and new models haven't been loaded yet
                 isInitialLoadComplete: false,
+                pageTitle: pageTitle,
             }
         },
         computed: {
@@ -36,6 +41,7 @@ export default function mixinBuilder(){
         },
         methods: {
             setup(){
+                this.setWindowTitle(this.pageTitle);
                 this.isInitialLoadComplete = false;
                 this.getModel(this.modelPath).then((itemsJson)=>{
                     this.model = itemsJson;

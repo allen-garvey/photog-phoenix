@@ -1,5 +1,5 @@
 <template>
-    <Text-List title="Tags" :new-item-link="newItemLink" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete">
+    <Text-List :title="pageTitle" :new-item-link="newItemLink" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete">
         <template v-slot:item="{item, index}">
             <router-link :to="showRouteFor(item)">{{titleFor(item)}}</router-link>
         </template>
@@ -11,7 +11,7 @@ import IndexTextListMixinBuilder from './mixins/index-text-list-mixin.js';
 
 export default {
         name: 'Tags-Index',
-        mixins: [IndexTextListMixinBuilder()],
+        mixins: [IndexTextListMixinBuilder('Tags')],
         data() {
             return {
                 newItemLink: {name: 'tagsNew'},

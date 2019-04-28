@@ -3,7 +3,7 @@
         <!-- 
             * Header
         -->
-        <Resource-Header :title="pageTitle ? pageTitle : model.name" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
+        <Resource-Header :title="titleForPage" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
         
         <!-- 
             * Filtering controls 
@@ -98,6 +98,10 @@ const BATCH_RESOURCE_MODE_TAGS = 3;
 export default {
     name: 'Thumbnail-List',
     props: {
+        setWindowTitle: {
+            type: Function,
+            required: true,
+        },
         putFlash: {
             type: Function,
             required: true,
@@ -187,6 +191,12 @@ export default {
         }
     },
     computed: {
+        titleForPage(){
+            if(!this.isInitialLoadComplete){
+                return '';
+            }
+            return this.pageTitle ? this.pageTitle : this.model.name;
+        },
         thumnailListSource(){
             //this might happen when vue changed but model not yet loaded
             if(this.itemsListKey && !this.model[this.itemsListKey]){
@@ -259,6 +269,7 @@ export default {
             
             this.loadModel().then(()=>{
                 this.isInitialLoadComplete = true;
+                this.setWindowTitle(this.titleForPage);
             });
         },
         loadModel(){

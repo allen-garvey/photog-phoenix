@@ -1,5 +1,5 @@
 <template>
-    <Text-List title="Imports" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete" :load-more-items-callback="loadMoreItems">
+    <Text-List :title="pageTitle" :items-list="itemsList" :is-initial-load-complete="isInitialLoadComplete" :load-more-items-callback="loadMoreItems">
         <template v-slot:item="{item, index}">
             <router-link :to="showRouteFor(item)" class="imports-index-item-link">
                 <div>{{titleFor(item)}}</div>
@@ -19,7 +19,7 @@ import IndexTextListMixinBuilder from './mixins/index-text-list-mixin.js';
 
 export default {
         name: 'Imports-Index',
-        mixins: [IndexTextListMixinBuilder()],
+        mixins: [IndexTextListMixinBuilder('Imports')],
         data() {
             return {
                 modelPath: '/imports/?limit=20',

@@ -2,7 +2,7 @@
     <div>
         <Photog-Header/>
         <Flash-Alert ref="flashAlert"/>
-        <router-view :get-model="get" :put-flash="putFlash" ref="routerView" :get-exif="getExif" :send-json="sendJson"/>
+        <router-view :get-model="get" :put-flash="putFlash" ref="routerView" :get-exif="getExif" :send-json="sendJson" :set-window-title="setWindowTitle"/>
         <Photog-Footer/>
     </div>
 </template>
@@ -71,6 +71,9 @@ export default {
         });
     },
     methods: {
+        setWindowTitle(title){
+            document.title = `Photog | ${title}`;
+        },
         get(modelPath, forceRefresh=false){
             const apiUrl = API_URL_BASE + modelPath;
             return CacheUtil.fetchIntoCache(apiUrl, this.cache, apiUrl, forceRefresh);
