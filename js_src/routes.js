@@ -1,7 +1,6 @@
 import { getOptionalParams } from './router-helpers.js'; 
 
-import ThumbnailList from './components/thumbnail-list.vue'
-import TagsIndex from './components/tags-index.vue'
+import ThumbnailList from './components/thumbnail-list.vue';
 import ImportsIndex from './components/imports-index.vue';
 import ImageDetail from './components/image-detail.vue'
 import AlbumForm from './components/album-form.vue';
@@ -19,7 +18,24 @@ export default {
         { 
             path: '/tags',
             name: 'tagsIndex', 
-            component: TagsIndex,
+            component: ThumbnailList,
+            props: (route) => {
+                const props = {
+                    apiPath: route.path,
+                    newItemLink: {name: 'tagsNew'},
+                    pageTitle: 'Tags',
+                    showRouteFor: (item, _model)=>{
+                        return {
+                            name: 'tagsShow',
+                            params: {
+                                id: item.id,
+                            },
+                        };
+                    },
+                };
+
+                return props;
+            },
         },
         { 
             path: '/imports',

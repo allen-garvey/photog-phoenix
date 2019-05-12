@@ -310,7 +310,11 @@ export default {
             return this.imageFor(item).is_favorite;
         },
         thumbnailUrlFor(item){
-            return thumbnailUrlFor(this.imageFor(item).mini_thumbnail_path);
+            const image = this.imageFor(item);
+            if(image){
+                return thumbnailUrlFor(image.mini_thumbnail_path);
+            }
+            return '';
         },
         titleFor(item){
             if('name' in item){

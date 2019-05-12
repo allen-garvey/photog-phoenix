@@ -6,6 +6,10 @@ defmodule PhotogWeb.TagView do
     %{data: render_many(tags, TagView, "tag_excerpt.json")}
   end
 
+  def render("index_with_cover_image.json", %{results: results}) do
+    %{data: render_many(results, TagView, "tag_excerpt_with_cover_image.json")}
+  end
+
   def render("show.json", %{tag: tag}) do
     %{data: render_one(tag, TagView, "tag.json")}
   end
@@ -25,6 +29,24 @@ defmodule PhotogWeb.TagView do
   def render("tag_excerpt.json", %{tag: tag}) do
     %{id: tag.id,
       name: tag.name}
+  end
+
+  def render("tag_excerpt_with_cover_image.json", %{tag: %{tag: tag, cover_image: nil}}) do
+    %{
+      id: tag.id,
+      name: tag.name,
+      cover_image: nil,
+    }
+  end
+
+  def render("tag_excerpt_with_cover_image.json", %{tag: %{tag: tag, cover_image: cover_image}}) do
+    %{
+      id: tag.id,
+      name: tag.name,
+      cover_image: %{
+        mini_thumbnail_path: cover_image.mini_thumbnail_path,
+      }
+    }
   end
 
 end

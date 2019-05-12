@@ -895,6 +895,23 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Returns the list of maps with tag and cover image with the cover image of the last album added as the cover image
+  """
+  def list_tags_with_cover_image() do
+    from(
+        t in Tag,
+        left_lateral_join: album_tag in fragment("SELECT album_id FROM album_tags WHERE tag_id = ? ORDER BY id DESC LIMIT 1", t.id),
+        on: true,
+        left_join: album in Album,
+        on: album.id == album_tag.album_id,
+        left_join: image in assoc(album, :cover_image),
+        order_by: t.name,
+        select: %{tag: t, cover_image: image}
+    )
+    |> Repo.all
+  end
+
+  @doc """
   Gets a single tag.
 
   Raises `Ecto.NoResultsError` if the Tag does not exist.
