@@ -55,7 +55,7 @@
         <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect, 'reordering': isReordering}">
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'div' : 'a'" :draggable="!isReordering">
-                    <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :draggable="!isReordering" />
+                    <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :class="{'cover-image': !isCurrentlyBatchSelect && isThumbnailCoverImage(item)}" :draggable="!isReordering" />
                 </router-link>
                 <h3 class="thumbnail-title" :class="{'default-title': !('name' in item), 'thumbnail-title-favorite': isThumbnailFavorited(item)}" :draggable="!isReordering">
                     <router-link :to="showRouteFor(item, model)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'span' : 'a'" :draggable="!isReordering">{{titleFor(item)}}</router-link>
@@ -308,6 +308,12 @@ export default {
                 return false;
             }
             return this.imageFor(item).is_favorite;
+        },
+        isThumbnailCoverImage(item){
+            if(!('cover_image' in this.model)){
+                return false;
+            }
+            return this.imageFor(item).id === this.model.cover_image.id;
         },
         thumbnailUrlFor(item){
             const image = this.imageFor(item);

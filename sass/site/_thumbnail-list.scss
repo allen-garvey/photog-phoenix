@@ -72,6 +72,10 @@ $thumbnail_dimensions: 205px;
         width: $thumbnail_dimensions;
         border-radius: 10px;
         object-fit: cover;
+
+        &.cover-image{
+            border: 4px solid magenta;
+        }
     }
 }
 .thumbnail-title{
