@@ -3,16 +3,13 @@
 * based on: https://css-tricks.com/hearts-in-html-and-css/
 */
 
-$heart_color: black;
-$heart_size: 10px;
+$heart_color: #FF3919;
+$heart_size: 8px;
 
 .heart {
-	position: absolute;
-	bottom: $heart_size;
 	background-color: $heart_color;
 	display: inline-block;
 	height: $heart_size;
-	margin: 0 10px;
 	transform: rotate(-45deg);
 	width: $heart_size;
 }

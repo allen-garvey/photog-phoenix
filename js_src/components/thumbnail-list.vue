@@ -56,10 +56,10 @@
             <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'div' : 'a'" :draggable="!isReordering">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :draggable="!isReordering" />
-                    <div v-if="isThumbnailFavorited(item)" class="heart" :draggable="!isReordering"></div>
                 </router-link>
                 <h3 class="thumbnail-title" :class="{'default-title': !('name' in item), 'thumbnail-title-favorite': isThumbnailFavorited(item)}" :draggable="!isReordering">
                     <router-link :to="showRouteFor(item, model)" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'span' : 'a'" :draggable="!isReordering">{{titleFor(item)}}</router-link>
+                    <div v-if="isThumbnailFavorited(item)" class="heart" :draggable="!isReordering"></div>
                 </h3>
             </li>
         </ul>

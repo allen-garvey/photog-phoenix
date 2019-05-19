@@ -75,6 +75,9 @@ $thumbnail_dimensions: 205px;
     }
 }
 .thumbnail-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     min-height: 2em;
     font-weight: normal;
     margin: 8px 0 0;
