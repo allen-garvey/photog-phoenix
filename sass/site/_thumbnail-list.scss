@@ -4,9 +4,9 @@
 $thumbnail_dimensions: 205px;
 
 .thumbnail-list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 205px);
+    grid-gap: 20px;
 
     li{
         flex-basis: $thumbnail_dimensions;
