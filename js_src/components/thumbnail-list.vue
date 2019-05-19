@@ -53,7 +53,7 @@
             * Items list
         -->
         <ul class="thumbnail-list"  :class="{'batch-select': isCurrentlyBatchSelect, 'reordering': isReordering}">
-            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
+            <li v-for="(item, i) in filteredThumbnailList" :key="i" :class="{'batch-selected': isCurrentlyBatchSelect && batchSelectedItems[i], 'reorder-select': isReordering && currentDragIndex === i, 'hover-detail': showDetailHover && isInThumbnailDefaultMode}" @click="batchSelectItem(item, i, $event)" :draggable="isReordering" @dragstart="itemDragStart(i)" @dragover="itemDragOver(i)">
                 <router-link :to="showRouteFor(item, model)" class="thumbnail-image-container" :event="thumbnailLinkEvent" :tag="isCurrentlyBatchSelect || isReordering ? 'div' : 'a'" :draggable="!isReordering">
                     <img :alt="altTextFor(item)" :src="thumbnailUrlFor(item)" :class="{'cover-image': !isCurrentlyBatchSelect && isThumbnailCoverImage(item)}" :draggable="!isReordering" />
                 </router-link>
@@ -158,6 +158,10 @@ export default {
         reorderItemsKey: {
             type: String,
         },
+        showDetailHover: {
+            type: Boolean,
+            default: false,
+        },
     },
     components: {
         'Resource-Header': ReasourceHeader,
@@ -221,7 +225,10 @@ export default {
         },
         //so thumbnail links are disabled when we are in batch select mode
         thumbnailLinkEvent(){
-            return this.isCurrentlyBatchSelect || this.isReordering ? '' : 'click';
+            return !this.isInThumbnailDefaultMode ? '' : 'click';
+        },
+        isInThumbnailDefaultMode(){
+            return !this.isCurrentlyBatchSelect && !this.isReordering;
         },
         shouldShowBatchResources(){
             return this.batchSelectResourceMode !== BATCH_RESOURCE_MODE_NONE;
