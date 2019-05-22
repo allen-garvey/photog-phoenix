@@ -1,5 +1,18 @@
-.brand a{
-	color: black;
+.header{
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	nav{
+		flex-grow: 1;
+	}
+}
+
+.brand{
+	font-size: 1.563rem;
+	margin-right: 3.126rem;
+	a{
+		color: black;
+	}
 }
 .nav-list{
 	display: flex;
