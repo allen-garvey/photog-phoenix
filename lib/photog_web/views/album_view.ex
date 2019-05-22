@@ -1,6 +1,8 @@
 defmodule PhotogWeb.AlbumView do
   use PhotogWeb, :view
   alias PhotogWeb.AlbumView
+  alias PhotogWeb.ImageView
+  alias PhotogWeb.TagView
 
   def render("index.json", %{albums: albums}) do
     %{data: render_many(albums, AlbumView, "album_excerpt.json")}
@@ -30,8 +32,9 @@ defmodule PhotogWeb.AlbumView do
     %{id: album.id,
       name: album.name,
       description: album.description,
-      cover_image: PhotogWeb.ImageView.image_to_map(album.cover_image),
-      images: Enum.map(album.images, &PhotogWeb.ImageView.image_full_to_map/1),
+      cover_image: ImageView.image_to_map(album.cover_image),
+      images: Enum.map(album.images, &ImageView.image_full_to_map/1),
+      tags: Enum.map(album.tags, &TagView.tag_excerpt/1)
     }
   end
 
@@ -39,7 +42,7 @@ defmodule PhotogWeb.AlbumView do
     %{
       id: album.id,
       name: album.name,
-      cover_image: PhotogWeb.ImageView.image_to_map(album.cover_image),
+      cover_image: ImageView.image_to_map(album.cover_image),
     }
   end
 

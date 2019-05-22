@@ -26,9 +26,15 @@ defmodule PhotogWeb.TagView do
     }
   end
 
+  def tag_excerpt(tag) do
+    %{
+      id: tag.id,
+      name: tag.name
+    }
+  end
+
   def render("tag_excerpt.json", %{tag: tag}) do
-    %{id: tag.id,
-      name: tag.name}
+    tag_excerpt(tag)
   end
 
   def render("tag_excerpt_with_cover_image.json", %{tag: %{tag: tag, cover_image: nil}}) do

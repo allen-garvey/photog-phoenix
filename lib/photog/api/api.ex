@@ -264,11 +264,15 @@ defmodule Photog.Api do
                       where: album_image.album_id == ^id,
                       preload: [albums: ^image_albums_query, persons: ^image_persons_query, import: import],
                       order_by: [album_image.image_order, album_image.id]
+    tags_query = from tag in Tag,
+                      join: album_tag in assoc(tag, :album_tags),
+                      where: album_tag.album_id == ^id,
+                      order_by: [asc: tag.name, desc: tag.id]
 
     Repo.one!(from album in Album,
                       join: cover_image in assoc(album, :cover_image),
                       where: album.id == ^id,
-                      preload: [cover_image: cover_image, images: ^images_query],
+                      preload: [cover_image: cover_image, images: ^images_query, tags: ^tags_query],
                       limit: 1)
   end
 
