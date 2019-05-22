@@ -4,6 +4,11 @@
             * Header
         -->
         <Resource-Header :title="titleForPage" :editItemLink="editItemLink" :newItemLink="newItemLink" :description="model.description" />
+
+        <!-- 
+            * Related fields list
+        -->
+        <Related-Fields-List :items="model[relatedFieldsKey]" v-if="relatedFieldsKey" />
         
         <!-- 
             * Filtering controls 
@@ -73,6 +78,7 @@ import vue from 'vue';
 
 import ResourceHeader from './resource-header.vue';
 import ThumbnailFilterControls from './thumbnail-filter-controls.vue';
+import RelatedFieldsList from './related-fields-list.vue';
 
 import { thumbnailUrlFor } from '../image.js';
 import { API_URL_BASE } from '../request-helpers.js';
@@ -162,10 +168,15 @@ export default {
             type: Boolean,
             default: false,
         },
+        relatedFieldsKey: {
+            type: String,
+            default: null,
+        },
     },
     components: {
         ResourceHeader,
         ThumbnailFilterControls,
+        RelatedFieldsList,
         InfiniteLoading,
     },
     created(){

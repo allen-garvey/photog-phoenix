@@ -190,6 +190,7 @@ export default {
                     reorderPathSuffix: '/images/reorder',
                     reorderItemsKey: 'image_ids',
                     showDetailHover: true,
+                    relatedFieldsKey: 'tags',
                     showRouteFor: (item, _model)=>{
                         return {
                             name: 'albumImagesShow',
