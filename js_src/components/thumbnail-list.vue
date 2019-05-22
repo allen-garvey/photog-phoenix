@@ -71,7 +71,7 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import vue from 'vue';
 
-import ReasourceHeader from './resource-header.vue';
+import ResourceHeader from './resource-header.vue';
 import ThumbnailFilterControls from './thumbnail-filter-controls.vue';
 
 import { thumbnailUrlFor } from '../image.js';
@@ -164,7 +164,7 @@ export default {
         },
     },
     components: {
-        'Resource-Header': ReasourceHeader,
+        ResourceHeader,
         ThumbnailFilterControls,
         InfiniteLoading,
     },
