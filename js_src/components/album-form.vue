@@ -9,7 +9,7 @@
             <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="album.cover_image_id" />
         </template>
     </Form-Section>
-    <div class="container" v-if="isEditForm">
+    <div class="container" v-if="isEditForm && this.tags.length > 0">
         <h3>Tags</h3>
         <div class="form-group">
             <ul class="spread-content">
@@ -18,7 +18,7 @@
                     <label :for="idForTag(tag)">{{tag.name}}</label>
                 </li>
             </ul>
-            <div class="pull-right"><button class="btn btn-success">Update tags</button></div>
+            <div class="pull-right"><button class="btn btn-success" @click="updateTags()">Update tags</button></div>
         </div>
     </div>
 </div>
@@ -74,6 +74,19 @@ export default {
         tagChecked(tagId){
             Vue.set(this.tagsActive, tagId, !this.tagsActive[tagId]);
         },
+        updateTags(){
+            const tag_ids = this.tags.reduce((tagIds, tag)=>{
+                if(this.tagsActive[tag.id]){
+                    tagIds.push(tag.id);
+                }
+                return tagIds;
+            }, [])
+            this.sendJson(`${API_URL_BASE}/albums/${this.album.id}/tags`, 'PUT', {tag_ids}).then((res)=>{
+                if(!res.error){
+                    this.saveSuccessful(this.album);
+                }
+            });
+        },
         setupModel(album=null){
             //edit form
             if(album){
@@ -87,7 +100,7 @@ export default {
                     description: album.description,
                     cover_image_id: album.cover_image.id,
                 };
-                
+
                 this.tagsActive = album.tags.reduce((tagsActive, tag)=>{
                     tagsActive[tag.id] = true;
                     return tagsActive;
