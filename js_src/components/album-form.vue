@@ -1,4 +1,5 @@
 <template>
+<div>
     <Form-Section :heading="headingText" :back-link="backLink" :save="save" v-if="isInitialLoadComplete">
         <template v-slot:inputs>
             <Form-Input :id="idForField('name')" label="Name" v-model="album.name" :errors="errors.name" />
@@ -8,9 +9,24 @@
             <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="album.cover_image_id" />
         </template>
     </Form-Section>
+    <div class="container">
+        <h3>Tags</h3>
+        <div class="form-group">
+            <ul class="spread-content">
+                <li v-for="tag in tags" :key="tag.id">
+                    <input type="checkbox" :id="idForTag(tag)" :checked="tagsActive[tag.id]" @change="tagChecked(tag.id)" />
+                    <label :for="idForTag(tag)">{{tag.name}}</label>
+                </li>
+            </ul>
+            <div class="pull-right"><button class="btn btn-success">Update tags</button></div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
+import Vue from 'vue';
+
 import { formMixinBuilder } from './mixins/form-mixin.js';
 import { albumAndPersonFormMixinBuilder } from './mixins/album-and-person-form-mixin.js';
 import { toApiResource } from '../form-helpers.js';
@@ -22,12 +38,18 @@ export default {
         modelId: {
             type: Number,
         },
+        getModel: {
+            type: Function,
+            required: true,
+        },
     },
     mixins: [formMixinBuilder(), albumAndPersonFormMixinBuilder()],
     data() {
         return {
             //album is for our edits, model is the immutable album response from the api
             album: {},
+            tags: [],
+            tagsActive: {},
             resourceApiUrlBase: `${API_URL_BASE}/albums`,
         }
     },
@@ -46,7 +68,17 @@ export default {
         },
     },
     methods: {
+        idForTag(tag){
+            return `album_tag_${tag.id}_checkbox_id`;
+        },
+        tagChecked(tagId){
+            Vue.set(this.tagsActive, tagId, !this.tagsActive[tagId]);
+        },
         setupModel(album=null){
+            this.getModel('/tags').then((tags)=>{
+                this.tags = tags;
+            });
+
             //edit form
             if(album){
                 this.album = {
@@ -55,6 +87,15 @@ export default {
                     description: album.description,
                     cover_image_id: album.cover_image.id,
                 };
+                if(album.tags){
+                    this.tagsActive = album.tags.reduce((tagsActive, tag)=>{
+                        tagsActive[tag.id] = true;
+                        return tagsActive;
+                    }, {});
+                }
+                else{
+                    this.tagsActive = {};
+                }
             }
             //new form
             else{
