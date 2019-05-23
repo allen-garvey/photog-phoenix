@@ -358,6 +358,21 @@ defmodule Photog.Api do
   end
 
   @doc """
+  Replaces the current tags for an album with given list of tag ids
+  """
+  def replace_tags_for_album(album_id, tag_ids) when is_list(tag_ids) do
+    Repo.transaction(fn ->
+      {_, nil} = from(album_tag in AlbumTag, where: album_tag.album_id == ^album_id)
+        |> Repo.delete_all
+
+      for tag_id <- tag_ids do
+        create_album_tag!(%{album_id: album_id, tag_id: tag_id})
+      end
+
+    end)
+  end
+
+  @doc """
   Returns the list of persons.
 
   ## Examples
@@ -1064,6 +1079,15 @@ defmodule Photog.Api do
 
   """
   def create_album_tag(attrs \\ %{}) do
+    %AlbumTag{}
+    |> AlbumTag.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a album_tag with exception on error
+  """
+  def create_album_tag!(attrs \\ %{}) do
     %AlbumTag{}
     |> AlbumTag.changeset(attrs)
     |> Repo.insert()

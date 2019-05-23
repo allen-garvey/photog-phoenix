@@ -56,6 +56,16 @@ defmodule PhotogWeb.AlbumController do
     send_resp(conn, 200, "{\"data\": \"ok\"}")
   end
 
+  @doc """
+  Replaces an album's tags with given list of tags
+  """
+  def replace_tags(conn,  %{"id" => id, "tag_ids" => tag_ids}) when is_list(tag_ids) do
+    case Api.replace_tags_for_album(id, tag_ids) do
+      {:ok, _} -> send_resp(conn, 200, "{\"data\": \"ok\"}")
+      {:error, _} -> send_resp(conn, 400, "{\"error\": \"Error saving tags for album #{id}\"}")
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     album = Api.get_album!(id)
     render(conn, "show.json", album: album)
