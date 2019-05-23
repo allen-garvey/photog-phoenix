@@ -8,7 +8,7 @@
         <!-- 
             * Related fields list
         -->
-        <Related-Fields-List :items="model[relatedFieldsKey]" v-if="relatedFieldsKey" />
+        <Related-Fields-List :items="model[relatedFieldsKey]" v-if="relatedFieldsKey && isInitialLoadComplete" />
         
         <!-- 
             * Filtering controls 
