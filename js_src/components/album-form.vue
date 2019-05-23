@@ -9,7 +9,7 @@
             <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="album.cover_image_id" />
         </template>
     </Form-Section>
-    <div class="container">
+    <div class="container" v-if="isEditForm">
         <h3>Tags</h3>
         <div class="form-group">
             <ul class="spread-content">
@@ -75,27 +75,23 @@ export default {
             Vue.set(this.tagsActive, tagId, !this.tagsActive[tagId]);
         },
         setupModel(album=null){
-            this.getModel('/tags').then((tags)=>{
-                this.tags = tags;
-            });
-
             //edit form
             if(album){
+                this.getModel('/tags').then((tags)=>{
+                    this.tags = tags;
+                });
+
                 this.album = {
                     id: album.id,
                     name: album.name,
                     description: album.description,
                     cover_image_id: album.cover_image.id,
                 };
-                if(album.tags){
-                    this.tagsActive = album.tags.reduce((tagsActive, tag)=>{
-                        tagsActive[tag.id] = true;
-                        return tagsActive;
-                    }, {});
-                }
-                else{
-                    this.tagsActive = {};
-                }
+                
+                this.tagsActive = album.tags.reduce((tagsActive, tag)=>{
+                    tagsActive[tag.id] = true;
+                    return tagsActive;
+                }, {});
             }
             //new form
             else{
