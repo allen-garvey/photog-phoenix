@@ -1,7 +1,7 @@
 <template>
     <div class="spread-content resource-header-container">
         <div>
-            <h2 class="resource-header-title" v-if="title">{{title}}</h2>
+            <h1 class="resource-header-title" v-if="title">{{title}}</h1>
             <p v-if="description" class="resource-header-description">{{description}}</p>
         </div>
         <div class="pull-right" v-if="newItemLink || editItemLink">
