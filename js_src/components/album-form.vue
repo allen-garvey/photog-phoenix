@@ -9,8 +9,8 @@
             <Cover-Image-Form-Input :id="idForField('cover_image_id')" :errors="[errors.cover_image, errors.cover_image_id]" :images="imagesInModel" v-model="album.cover_image_id" />
         </template>
     </Form-Section>
-    <div class="container" v-if="isEditForm && this.tags.length > 0">
-        <h3>Tags</h3>
+    <div class="album-form-tags-container container" v-if="isEditForm && this.tags.length > 0">
+        <h2>Tags</h2>
         <div class="form-group">
             <ul class="spread-content">
                 <li v-for="tag in tags" :key="tag.id">
@@ -18,7 +18,7 @@
                     <label :for="idForTag(tag)">{{tag.name}}</label>
                 </li>
             </ul>
-            <div class="pull-right"><button class="btn btn-success" @click="updateTags()">Update tags</button></div>
+            <div class="pull-right btn-container"><button class="btn btn-success" @click="updateTags()">Update tags</button></div>
         </div>
     </div>
 </div>
