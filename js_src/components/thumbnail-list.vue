@@ -68,7 +68,10 @@
                 </h3>
             </li>
         </ul>
-        <infinite-loading @infinite="loadMoreThumbnails" spinner="waveDots" v-if="isInitialLoadComplete"></infinite-loading>
+        <infinite-loading @infinite="loadMoreThumbnails" spinner="waveDots" v-if="isInitialLoadComplete">
+            <template v-slot:no-results><div></div></template>
+            <template v-slot:no-more><div></div></template>
+        </infinite-loading>
     </main>
 </template>
 

@@ -6,7 +6,10 @@
                 <slot name="item" :item="item" :index="i"></slot>
             </li>
         </ul>
-        <infinite-loading @infinite="loadMoreItemsCallback" spinner="waveDots" v-if="isInitialLoadComplete && loadMoreItemsCallback"></infinite-loading>
+        <infinite-loading @infinite="loadMoreItemsCallback" spinner="waveDots" v-if="isInitialLoadComplete && loadMoreItemsCallback">
+            <template v-slot:no-results><div></div></template>
+            <template v-slot:no-more><div></div></template>
+        </infinite-loading>
     </main>
 </template>
 
