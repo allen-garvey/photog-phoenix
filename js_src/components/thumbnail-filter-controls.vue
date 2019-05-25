@@ -1,26 +1,20 @@
 <template>
 <div class="thumbnail-filter-controls-container">
     <fieldset v-if="enableAlbumFilter">
-        <legend>Album</legend>
-        <label for="album_filter_mode_all">All</label>
-        <input id="album_filter_mode_all" type="radio" value="1" v-model="albumFilterMode" />
-        
-        <label for="album_filter_mode_no_albums">Uncategorized</label>
-        <input id="album_filter_mode_no_albums" type="radio" value="2" v-model="albumFilterMode" />
-        
-        <label for="album_filter_mode_has_albums">Categorized</label>
-        <input id="album_filter_mode_has_albums" type="radio" value="3" v-model="albumFilterMode" />
+        <label for="album_filter_mode_select">Album</label>
+        <select class="form-control" id="album_filter_mode_select" v-model="localAlbumFilterMode">
+            <option :value="1">All</option>
+            <option :value="2">Uncategorized</option>
+            <option :value="3">Categorized</option>
+        </select>
     </fieldset>
     <fieldset v-if="enablePersonFilter">
-        <legend>Person</legend>
-        <label for="persons_filter_mode_all">All</label>
-        <input id="persons_filter_mode_all" type="radio" value="1" v-model="personFilterMode" />
-        
-        <label for="persons_filter_mode_no_persons">Uncategorized</label>
-        <input id="persons_filter_mode_no_persons" type="radio" value="2" v-model="personFilterMode" />
-        
-        <label for="persons_filter_mode_has_persons">Categorized</label>
-        <input id="persons_filter_mode_has_persons" type="radio" value="3" v-model="personFilterMode" />
+        <label for="person_filter_mode_select">Person</label>
+        <select class="form-control" id="person_filter_mode_select" v-model="localPersonFilterMode">
+            <option :value="1">All</option>
+            <option :value="2">Uncategorized</option>
+            <option :value="3">Categorized</option>
+        </select>
     </fieldset>
 </div>
 </template>
@@ -46,14 +40,39 @@ export default {
             default: false,
         },
     },
-    methods: {
-        albumFilterModeChanged(e){
-            this.$emit('albumFilterModeChanged', e.target.value);
+    data(){
+        return {
+            localAlbumFilterMode: -1,
+            localPersonFilterMode: -1,
+        };
+    },
+    watch: {
+        albumFilterMode(newValue, oldValue){
+            if(newValue != oldValue){
+                this.localAlbumFilterMode = newValue;
+            }
         },
-        personFilterModeChanged(e){
-            this.$emit('personFilterModeChanged', e.target.value);
+        personFilterMode(newValue, oldValue){
+            if(newValue != oldValue){
+                this.localPersonFilterMode = newValue;
+            }
+        },
+        localAlbumFilterMode(newValue, oldValue){
+            if(newValue != oldValue){
+                this.$emit('album-filter-mode-changed', newValue);
+            }
+        },
+        localPersonFilterMode(newValue, oldValue){
+            if(newValue != oldValue){
+                this.$emit('person-filter-mode-changed', newValue);
+            }
         },
     },
+    created(){
+        //since watch is not called when component created
+        this.localAlbumFilterMode = this.albumFilterMode;
+        this.localPersonFilterMode = this.personFilterMode;
+    }
 }
 </script>
 
